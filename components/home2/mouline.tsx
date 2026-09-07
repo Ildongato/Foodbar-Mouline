@@ -518,8 +518,8 @@ export default function MoulineHome2() {
           <section id="over-ons" className="about-section container">
             <div className="about-photo chapter-reveal">
               <img
-                src={assetPath('/images/aangenaam-mouline-941.webp')}
-                srcSet={`${assetPath('/images/aangenaam-mouline-640.webp')} 640w, ${assetPath('/images/aangenaam-mouline-941.webp')} 941w`}
+                src={assetPath('/images/aangenaam-mouline-128dae27-941.webp')}
+                srcSet={`${assetPath('/images/aangenaam-mouline-128dae27-640.webp')} 640w, ${assetPath('/images/aangenaam-mouline-128dae27-941.webp')} 941w`}
                 sizes="(max-width: 800px) 100vw, (max-width: 1440px) 50vw, 690px"
                 width="941"
                 height="1672"
