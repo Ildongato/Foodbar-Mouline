@@ -34,15 +34,15 @@ import { type Intent } from '@/lib/contact';
 import { assetPath } from '@/lib/hosting';
 
 const links = [
-  ['Kaart', 'menu'],
-  ['Over ons', 'over-ons'],
+  ['Menu', 'menu'],
+  ['Over', 'over-ons'],
   ['Reviews', 'reviews'],
   ['Foto’s', 'fotos'],
   ['Catering', 'catering'],
   ['Contact', 'contact'],
 ];
 const primaryLinks = links.filter(([, id]) =>
-  ['menu', 'catering', 'contact'].includes(id),
+  ['menu', 'over-ons', 'catering', 'contact'].includes(id),
 );
 const photos = [
   {

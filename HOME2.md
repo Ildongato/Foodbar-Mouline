@@ -9,7 +9,7 @@ Google-reviewselectie, bedrijfsgegevens en contactlogica.
 ## Redactionele cover — navigatie en hero, 7 september 2026
 
 De actuele bovenkant heeft een vaste navigatie met drie gelijke uitlijnzones:
-Kaart, Catering en Contact links, het bestaande logo exact in het midden van
+Menu, Over, Catering en Contact links, het bestaande logo exact in het midden van
 de viewport, en Takeaway rechts. Het grid gebruikt gelijke buitenkolommen.
 De header is 84 px hoog op desktop en 72 px op mobiel. Onder 360 px staat
 Takeaway alleen in het geopende menu, zodat logo en aanraakvlakken ruim blijven.
