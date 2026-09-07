@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/dialog';
 import MenuSection from './menu-section';
 import ContactForm from '../contact-form';
-import Reviews from '../reviews';
+import GuestReviews from './guest-reviews';
 import {
   business,
   todayHours,
@@ -527,7 +527,7 @@ export default function MoulineHome2() {
             </a>
           </div>
         </section>
-        <Reviews />
+        <GuestReviews />
         <div className="gallery-chapter">
           <section id="fotos" className="gallery-section container">
             <div className="section-heading">
@@ -624,7 +624,7 @@ export default function MoulineHome2() {
           className="location-section container"
           aria-label="Locatie en route"
         >
-          <div>
+          <div className="location-copy">
             <h2>{business.street}</h2>
             {business.addressVerified &&
               business.postalCode &&
@@ -634,15 +634,59 @@ export default function MoulineHome2() {
                 </p>
               )}
             <p>Parking voor de deur.</p>
+            <a
+              className="text-link"
+              href={business.googleMapsUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Route in Google Maps <ArrowUpRight size={18} />
+            </a>
           </div>
-          <a
-            className="text-link"
-            href={business.googleMapsUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Open in Google Maps <ArrowUpRight size={18} />
-          </a>
+          <div className="location-map">
+            <a
+              className="location-map-link"
+              href={business.googleMapsUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Bekijk Foodbar Mouline, ${business.street}, in Google Maps (nieuw tabblad)`}
+            >
+              <picture>
+                <source
+                  media="(max-width: 650px)"
+                  srcSet={assetPath('/maps/mouline-mobile.svg')}
+                />
+                <img
+                  src={assetPath('/maps/mouline-desktop.svg')}
+                  width="1000"
+                  height="460"
+                  loading="lazy"
+                  decoding="async"
+                  alt="Stratenkaart rond Mouline, aan de Kapelsesteenweg vlak bij de kruising met de Molenweg en Schriek"
+                />
+              </picture>
+              <span className="map-marker" aria-hidden="true">
+                <span>Mouline</span>
+                <svg width="28" height="36" viewBox="0 0 28 36">
+                  <path
+                    d="M14 34C11 28 2 20 2 14a12 12 0 0 1 24 0c0 6-9 14-12 20Z"
+                    fill="currentColor"
+                    stroke="#f4f0e7"
+                    strokeWidth="2"
+                  />
+                  <circle cx="14" cy="14" r="4" fill="#f4f0e7" />
+                </svg>
+              </span>
+            </a>
+            <a
+              className="map-attribution"
+              href="https://www.openstreetmap.org/copyright"
+              target="_blank"
+              rel="noreferrer"
+            >
+              © OpenStreetMap-bijdragers
+            </a>
+          </div>
         </section>
       </main>
       <footer className="site-footer">

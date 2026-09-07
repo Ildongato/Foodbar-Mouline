@@ -654,119 +654,45 @@ textarea {
   margin-top: 24px;
 }
 .reviews-section {
-  padding-block: 40px 64px;
-  border-top: 1px solid var(--line);
+  padding-block: 44px 36px;
+  background: var(--taupe);
+  color: var(--ink);
 }
-.reviews-heading {
+.reviews-section h2 {
+  font-size: 32px;
+}
+.review-excerpts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 56px;
+  margin-top: 28px;
+}
+.review-excerpts figure {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 32px;
-}
-.reviews-intro .eyebrow {
-  margin-bottom: 12px;
-  color: var(--muted);
-}
-.reviews-intro h2 {
-  font-size: 40px;
-}
-.rating-summary {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-shrink: 0;
-}
-.rating-summary > strong {
-  font-family: var(--display);
-  font-size: 60px;
-  line-height: 1;
-  font-weight: 400;
-}
-.rating-summary p {
-  font-size: 12px;
-  line-height: 1.4;
-  margin-top: 5px;
-}
-.google-attribution {
-  height: 16px;
-  width: auto;
-  margin-top: 6px;
+  flex-direction: column;
 }
 .review-stars {
   display: flex;
   gap: 3px;
   color: var(--accent);
 }
-.review-star {
-  position: relative;
-  display: block;
-  width: 16px;
-  height: 16px;
-}
-.review-star > svg:last-child {
-  position: absolute;
-  inset: 0;
-}
-.review-excerpts {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr;
-  gap: 48px;
-  margin-top: 32px;
-}
-.review-excerpts article {
-  display: flex;
-  flex-direction: column;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-}
 .review-excerpts blockquote {
   flex: 1;
-  font-family: var(--display);
-  font-size: 27px;
-  line-height: 1.25;
-  margin: 20px 0;
+  font: 400 clamp(23px, 2vw, 28px)/1.3 var(--display);
+  margin-block: 14px 8px;
+  max-width: 30ch;
 }
-.review-excerpts article:first-child blockquote {
-  font-size: 32px;
-}
-.review-author {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-}
-.review-author p {
-  color: var(--muted);
+.review-excerpts figcaption {
   font-size: 12px;
 }
-.review-source {
+.review-excerpts figcaption a {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  line-height: 1.5;
   min-height: 44px;
-  color: var(--muted);
-}
-.review-source:hover,
-.review-author a:hover {
-  color: var(--accent);
-  text-decoration: underline;
   text-underline-offset: 4px;
 }
-.reviews-foot {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 32px;
-  margin-top: 28px;
-}
-.review-order {
-  font-size: 12px;
-  color: var(--muted);
-}
-.reviews-foot .text-link {
-  font-size: 13px;
+.review-excerpts figcaption a:hover {
+  text-decoration: underline;
 }
 
 /* Six photographs on one consistent grid. */
@@ -1071,10 +997,10 @@ textarea {
   clip-path: inset(50%);
 }
 .location-section {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
   align-items: center;
-  gap: 32px;
+  gap: 48px;
   border-top: 1px solid var(--line);
   padding-block: 32px 48px;
 }
@@ -1086,6 +1012,62 @@ textarea {
   font-size: 14px;
   color: var(--muted);
   margin-top: 4px;
+}
+.location-copy .text-link {
+  margin-top: 16px;
+}
+.location-map {
+  position: relative;
+  height: clamp(240px, 23vw, 310px);
+  overflow: hidden;
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+.location-map-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.location-map-link:focus-visible {
+  outline-offset: -4px;
+}
+.location-map picture,
+.location-map img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.location-map img {
+  object-fit: cover;
+}
+.map-marker {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--accent);
+  pointer-events: none;
+}
+.map-marker > span {
+  padding: 2px 10px 5px;
+  background: var(--paper);
+  font: 400 28px/1 var(--display);
+}
+.map-attribution {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 6px 8px;
+  font-size: 10px;
+  line-height: 1.4;
+  background: var(--paper);
+  color: var(--muted);
+}
+.map-attribution:hover {
+  text-decoration: underline;
 }
 .site-footer {
   background: var(--ink);
@@ -1413,25 +1395,8 @@ textarea {
     justify-self: start;
     margin-top: 16px;
   }
-  .reviews-intro h2 {
-    font-size: 36px;
-  }
   .review-excerpts {
-    grid-template-columns: 1fr 1fr;
     gap: 28px;
-  }
-  .review-excerpts article:first-child {
-    grid-column: 1/-1;
-  }
-  .review-excerpts article:first-child blockquote {
-    max-width: 620px;
-  }
-  .reviews-foot {
-    align-items: flex-start;
-    gap: 24px;
-  }
-  .reviews-foot .text-link {
-    flex-shrink: 0;
   }
   .photo-grid {
     gap: 20px;
@@ -1696,46 +1661,39 @@ textarea {
     margin-top: 16px;
   }
   .reviews-section {
-    padding-block: 32px 44px;
+    padding-block: 32px 24px;
   }
-  .reviews-heading {
-    display: block;
-  }
-  .reviews-intro h2 {
-    font-size: 36px;
-  }
-  .reviews-intro .eyebrow {
-    font-size: 11px;
-  }
-  .rating-summary {
-    display: inline-flex;
-    margin-top: 20px;
-  }
-  .rating-summary > strong {
-    font-size: 52px;
+  .reviews-section h2 {
+    font-size: 30px;
   }
   .review-excerpts {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 16px;
     margin-top: 24px;
   }
-  .review-excerpts article {
+  .review-excerpts figure + figure {
+    border-top: 1px solid var(--line);
     padding-top: 16px;
   }
+  .review-excerpts figure {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 14px;
+  }
+  .review-excerpts .review-stars {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: center;
+  }
+  .review-excerpts figcaption {
+    grid-column: 1;
+    grid-row: 2;
+  }
   .review-excerpts blockquote {
-    font-size: 27px;
-    margin-block: 12px;
-  }
-  .review-excerpts article:first-child blockquote {
-    font-size: 30px;
-  }
-  .reviews-foot {
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 20px;
-  }
-  .review-order {
-    line-height: 1.6;
+    grid-column: 1 / -1;
+    grid-row: 1;
+    font-size: 24px;
+    margin-block: 0;
   }
   .gallery-section h2,
   .gallery-section .section-heading h2 {
@@ -1839,11 +1797,15 @@ textarea {
     width: 100%;
   }
   .location-section {
-    display: block;
+    grid-template-columns: 1fr;
+    gap: 20px;
     padding-block: 28px 36px;
   }
-  .location-section .text-link {
-    margin-top: 12px;
+  .location-copy .text-link {
+    margin-top: 8px;
+  }
+  .location-map {
+    height: 250px;
   }
   .footer-inner {
     flex-wrap: wrap;

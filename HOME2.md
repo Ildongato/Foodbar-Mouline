@@ -24,6 +24,30 @@ catering op tablet en de contactcompositie tussen 651 en 800 px. Tijdens de inte
 zijn de mobiele dialoogpositie en de scrollpositie na een categoriewissel hersteld.
 De motionregels gebruiken centrale tijdsduren en expliciete reduced-motionregels.
 
+## Compacte reviews en locatiekaart — 7 september 2026
+
+De aanvullende verfijning gebruikt een compact taupe reviewvlak met uitsluitend de
+drie bestaande, geverifieerde citaten, sterren en auteurs. De namen linken discreet
+naar hun individuele Google-review. Het gemiddelde, aantal beoordelingen, bovenlabel,
+de aparte Google-CTA's en voetinformatie zijn verwijderd uit home2. De raadpleegdatum
+en bronverantwoording blijven in de gedeelde JSON bewaard. Op mobiel staan sterren en
+naam op één regel; op desktop blijven de drie citaten naast elkaar staan.
+
+Naast het adres staat een lokaal geladen, geografisch correct kaartbeeld in ivoor en
+taupe, met een bourgondische Mouline-markering. Mobiel gebruikt een aparte uitsnede.
+De kaart opent de bestaande Google Maps-bestemming en voegt geen live kaartservice,
+API-sleutel, tracking of dependency toe. Het straatbeeld komt uit OpenStreetMap;
+de brongeometrie, ODbL-vermelding en reproduceerbare renderer zijn meegeleverd in
+`public/maps/` en `scripts/render-location-map.mjs`.
+
+De gewijzigde secties zijn visueel gecontroleerd op 320, 360, 390, 768, 1024 en 1440 px.
+De kaartlabels zijn in een tweede pass aangepast aan de mobiele uitsnede. Geen
+horizontale overloop in de gecontroleerde breedtes. De kaartlink is met het toetsenbord
+geopend en komt uit op de juiste Google-vermelding; de focusrand blijft zichtbaar.
+De statische preview heeft geen consolewaarschuwingen of fouten gemeld.
+TypeScript, gerichte lint, reguliere build, Pages-build en diffcontrole slagen.
+De oorspronkelijke homepage en gedeelde bedrijfs-, menu- en reviewgegevens zijn niet gewijzigd.
+
 ## Bestanden
 
 - `components/home2/mouline.tsx`: nieuwe compositie, handmatige hero, galerij en navigatie.
