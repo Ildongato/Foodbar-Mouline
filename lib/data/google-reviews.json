@@ -1,0 +1,48 @@
+{
+  "checkedAt": "2026-09-07",
+  "rating": 4.4,
+  "count": 136,
+  "url": "https://www.google.com/maps/place/Foodbar+Mouline/@51.2911049,4.4446165,17z/data=!4m8!3m7!1s0x47c409bab058dcf9:0x9e49ad2e650958d9!8m2!3d51.2911049!4d4.4446165!9m1!1b1!16s%2Fg%2F11h4cg2cqh?hl=nl",
+  "verification": "Handmatig gelezen op Google Maps en visueel gecontroleerd op 7 september 2026. Elk citaat is een letterlijk fragment; sterren en auteurs zijn per review gecontroleerd. Dit is een gedateerde selectie, geen live API-resultaat.",
+  "reviews": [
+    {
+      "name": "yati-matthyssens",
+      "rating": 5,
+      "text": {
+        "text": "Je merkt dat er met zorg en passie gewerkt wordt."
+      },
+      "authorAttribution": {
+        "displayName": "Yati Matthyssens"
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/8wqYZwdc9diE9njx8",
+      "excerpt": true,
+      "observedRelativeDate": "7 maanden geleden"
+    },
+    {
+      "name": "wendy-braem",
+      "rating": 5,
+      "text": {
+        "text": "Lekkere broodjes, vriendelijke medewerkers, leuke muziek."
+      },
+      "authorAttribution": {
+        "displayName": "Wendy Braem"
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/ojrQ8nXVJR3LDDFT9",
+      "excerpt": true,
+      "observedRelativeDate": "3 maanden geleden"
+    },
+    {
+      "name": "kasper-vanpoucke",
+      "rating": 5,
+      "text": {
+        "text": "Prijs-kwaliteit onklopbaar en altijd een vriendelijke service!"
+      },
+      "authorAttribution": {
+        "displayName": "Kasper Vanpoucke"
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/sMtnJBw38pHN3AmK9",
+      "excerpt": true,
+      "observedRelativeDate": "2 jaar geleden"
+    }
+  ]
+}

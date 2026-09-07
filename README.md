@@ -31,7 +31,8 @@ pnpm preview:pages
 Open de preview op `http://127.0.0.1:4173/Foodbar-Mouline/`.
 `dist-pages/` bevat uitsluitend de openbare statische website.
 GitHub Pages ondersteunt geen serverroutes: het formulier maakt een e-mailaanvraag klaar
-om zelf te versturen en de reviewsectie verwijst naar Google Maps. API-sleutels worden niet
+om zelf te versturen. De reviewsectie toont drie handmatig gecontroleerde Google-citaten
+met sterren, directe bronlinks en een raadpleegdatum. API-sleutels worden niet
 meegebouwd. De bestaande serverroutes blijven beschikbaar bij hosting met serverondersteuning.
 
 ## Inhoud aanpassen
@@ -40,6 +41,7 @@ meegebouwd. De bestaande serverroutes blijven beschikbaar bij hosting met server
 - `lib/data/onsite.json`: menu ter plaatse, inclusief ontbijt, lunch, zoet en dranken.
 - `lib/data/takeaway.json`: afzonderlijke takeawaykaart en supplementen.
 - `lib/data/photo-sources.json`: herkomst van de originele Mouline-fotografie.
+- `lib/data/google-reviews.json`: drie letterlijke reviewfragmenten met hun Google-bronlinks, vijfsterrenbeoordelingen en controledatum. De algemene score (4,4 uit 136 beoordelingen) is op 7 september 2026 op Google Maps gecontroleerd. Werk deze gedateerde selectie handmatig bij wanneer nodig.
 - `components/`: navigatie, carrousel, menu, contactformulier, reviews en galerij. De inhoudelijke menugegevens blijven gescheiden van de vormgeving.
 - `app/globals.css`: vormgeving en alle responsive regels.
 
@@ -58,7 +60,7 @@ Bronnen:
 
 1. **Adres bevestigen.** `postalCode`, `city` en `addressVerified` moeten door de klant worden bevestigd. De opdracht noemt conflicterende gegevens: 2180 Ekeren en 2930 Brasschaat. Tot dan staat alleen de straat in de adresblokken; het volledige adres is nog niet opgenomen in JSON-LD. Het woord Ekeren in de redactionele tekst komt uit de aangeleverde briefing.
 2. **Zondag en uitzonderingen bevestigen.** Maandag 9–16u, dinsdag tot vrijdag 8–16u en zaterdag gesloten komen van de officiële contactpagina. Zondag wordt niet als open of gesloten aangenomen. De dagweergave gebruikt de tijdzone Europe/Brussels en de reguliere openingsuren.
-3. **Google-reviews koppelen.** Kopieer `.env.example` naar `.dev.vars` en voeg `GOOGLE_PLACES_API_KEY` en `GOOGLE_PLACE_ID` toe. De server haalt Place Details (New) op zonder de sleutel aan de browser bloot te stellen. Reviews worden niet gecachet en worden met auteursinformatie, datum, individuele bronlink en het officiële Google Maps-logo getoond. Zonder configuratie verschijnt een afgewerkt verwijzingsblok, geen verzonnen score of reviews. Ontwikkelnotities zijn alleen zichtbaar in development.
+3. **Live Google-reviews koppelen (optioneel).** Kopieer `.env.example` naar `.dev.vars` en voeg `GOOGLE_PLACES_API_KEY` en `GOOGLE_PLACE_ID` toe. De server haalt Place Details (New) op zonder de sleutel aan de browser bloot te stellen. API-reviews worden niet gecachet en worden met auteursinformatie, datum, individuele bronlink en het officiële Google Maps-logo getoond. Zonder configuratie, bij een fout en op GitHub Pages blijft de handmatig gecontroleerde selectie uit `lib/data/google-reviews.json` zichtbaar. De zichtbare raadpleegdatum maakt duidelijk dat deze selectie niet live wordt bijgewerkt. Bij een werkende serverkoppeling worden drie beschikbare reviews uit de API gebruikt.
 4. **E-mailverzending activeren.** Configureer `RESEND_API_KEY` en `CONTACT_FROM_EMAIL` met een geverifieerd verzenddomein. De ontvanger is centraal `info@mouline.be`. Zonder koppeling geeft de server 503 en biedt het formulier een mailprogramma-link met de ingevulde aanvraag. Het formulier simuleert geen succesvolle verzending. Een reservatie is nooit automatisch bevestigd.
 5. **Twee menudetails bevestigen.** De takeawaytoeslag voor bruin brood vermeldt twee ongelabelde bedragen. Die worden niet geraden. De maat bij vers fruitsap is in de bron onduidelijk en wordt daarom weggelaten. Beide hebben een `todo` naast de bronwaarde. De Ice Tea-prijs gebruikt de takeawaypagina (€ 2,90), niet de afwijkende homepagevermelding (€ 2,80).
 6. **Indexering activeren na controle.** De canonical is al https://www.mouline.be/. De tijdelijke Pages-versie en de lokale versie staan op `noindex, follow` in `app/layout.tsx` en `static-site/index.html`. Zet `index: true` pas voor de goedgekeurde productieversie. Laat de tijdelijke Lovable-preview buiten de index. Controleer het privacybeleid en de voorwaarden voor de geactiveerde diensten.
@@ -80,4 +82,4 @@ De optionele WebMCP-bedieningen `show_mouline_menu` en `start_mouline_contact` o
 
 De productiebuild en TypeScript-controle slagen. Na de herontwerppass zijn de beeldcompositie, typografische hiërarchie, menu’s, mobiele navigatie en het contactformulier opnieuw visueel gecontroleerd op desktop en mobiel. De browsercontrole omvatte 320, 360, 390, 430, 768, 1024, 1280, 1440 en 1728 pixels: geen horizontale pagina-overloop of botsende namen/prijzen in het geteste menu. Mobiele navigatie, Escape en focusherstel, fotolightbox, cateringselectie, verschil tussen ter-plaatse- en takeawayprijzen, formulierfouten en de twee WebMCP-bedieningen zijn gecontroleerd. De API-controles bevestigen validatie, honeypot, oorsprongscontrole en eerlijke 503-foutmelding zonder verzendconfiguratie.
 
-Google-reviews en echte e-mailbezorging kunnen pas met de juiste configuratie live worden getest. De Core Web Vitals-doelen en volledige WCAG 2.2 AA-conformiteit zijn geen gecertificeerde meetresultaten; meet deze aanvullend op de uiteindelijke productiehosting.
+De automatische Google-koppeling en echte e-mailbezorging kunnen pas met de juiste configuratie live worden getest. De drie statische Google-citaten zijn rechtstreeks in Google Maps gelezen en met screenshots gecontroleerd; de sterren, namen en reviewlinks zijn overgenomen uit die bron. De Core Web Vitals-doelen en volledige WCAG 2.2 AA-conformiteit zijn geen gecertificeerde meetresultaten; meet deze aanvullend op de uiteindelijke productiehosting.
