@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { ArrowUpRight, ArrowRight, Plus, Check } from 'lucide-react';
+import { ArrowUpRight, ArrowRight, Plus } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { menus, type MenuMode, type MenuItem } from '@/lib/menu';
 import { business } from '@/lib/business';
@@ -48,11 +48,6 @@ function CategoryMenu({ mode }: { mode: MenuMode }) {
         >
           <div className="category-heading">
             <div>
-              <p className="small-label">
-                {mode === 'onsite'
-                  ? 'Aan tafel bij Mouline'
-                  : 'Om mee te nemen'}
-              </p>
               <h3>{c.label}</h3>
             </div>
             <p>{c.tagline}</p>
@@ -100,8 +95,7 @@ export default function MenuSection({
           </h2>
         </div>
         <p>
-          Tijd om rustig te ontbijten, of een lunch voor onderweg? Kies je
-          moment. Wij zorgen voor de rest.
+          Een rustig ontbijt, een lunch aan tafel of iets lekkers voor onderweg.
         </p>
       </div>
       <Tabs
@@ -117,18 +111,12 @@ export default function MenuSection({
             <TabsTrigger value="onsite">
               <span>
                 <strong>Ter plaatse</strong>
-                <small>Ontbijt en lunch aan tafel</small>
               </span>
-              <Check className="selected-check" size={22} />
-              <ArrowUpRight className="unselected-arrow" size={22} />
             </TabsTrigger>
             <TabsTrigger value="takeaway">
               <span>
                 <strong>Takeaway</strong>
-                <small>Klaar om mee te nemen</small>
               </span>
-              <Check className="selected-check" size={22} />
-              <ArrowUpRight className="unselected-arrow" size={22} />
             </TabsTrigger>
           </TabsList>
         </div>

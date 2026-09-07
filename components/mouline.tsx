@@ -44,13 +44,6 @@ const links = [
 ];
 const heroSlides = [
   {
-    name: 'interieur',
-    alt: 'Tafels en zitbanken in het interieur van Foodbar Mouline',
-    caption: 'Een plek voor jouw dagelijkse pauze.',
-    large: 1600,
-    small: 800,
-  },
-  {
     name: 'ontbijt',
     alt: 'Ontbijtbord met kaas, ham en noten bij Mouline',
     caption: 'De ochtend mag even duren.',
@@ -58,9 +51,23 @@ const heroSlides = [
     small: 640,
   },
   {
+    name: 'interieur',
+    alt: 'Tafels en zitbanken in het interieur van Foodbar Mouline',
+    caption: 'Een plek voor jouw dagelijkse pauze.',
+    large: 1600,
+    small: 800,
+  },
+  {
     name: 'broodjes',
-    alt: 'Vers belegde broodjes klaargezet op de toonbank bij Mouline',
+    alt: 'Vers belegde broodjes op de toonbank bij Mouline',
     caption: 'Klaargemaakt op de Kapelsesteenweg.',
+    large: 1280,
+    small: 640,
+  },
+  {
+    name: 'koffie',
+    alt: 'Koffiekopjes op de plank bij Mouline',
+    caption: 'Nog een koffie?',
     large: 1280,
     small: 640,
   },
@@ -147,12 +154,11 @@ export default function Mouline() {
   const [mode, setMode] = useState<MenuMode>('onsite');
   const [intent, setIntent] = useState<Intent>('Reservatie');
   const [slide, setSlide] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [paused, setPaused] = useState(true);
   const [motionReduced, setMotionReduced] = useState(true);
   const [allowAutoplay, setAllowAutoplay] = useState(false);
   const [pageVisible, setPageVisible] = useState(true);
   const [heroVisible, setHeroVisible] = useState(true);
-  const [loader, setLoader] = useState(false);
   const [today, setToday] = useState<ReturnType<typeof todayHours>>();
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [privacy, setPrivacy] = useState(false);
@@ -172,16 +178,6 @@ export default function Mouline() {
       !connection?.saveData &&
         !['slow-2g', '2g'].includes(connection?.effectiveType ?? ''),
     );
-    let loaderTimer: ReturnType<typeof setTimeout> | undefined;
-    try {
-      if (!media.matches && !sessionStorage.getItem('mouline-intro')) {
-        setLoader(true);
-        sessionStorage.setItem('mouline-intro', 'played');
-        loaderTimer = setTimeout(() => setLoader(false), 700);
-      }
-    } catch {
-      /* Content works when storage is disabled. */
-    }
     const update = () => setScrolled(window.scrollY > 40);
     update();
     window.addEventListener('scroll', update, { passive: true });
@@ -203,28 +199,13 @@ export default function Mouline() {
       setHeroVisible(entries[0].isIntersecting),
     );
     if (heroRef.current) heroObserver.observe(heroRef.current);
-    const revealObserver = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('is-visible');
-            revealObserver.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.06 },
-    );
-    document
-      .querySelectorAll('.reveal')
-      .forEach((el) => revealObserver.observe(el));
     return () => {
       window.removeEventListener('scroll', update);
       media.removeEventListener('change', motion);
       document.removeEventListener('visibilitychange', visibility);
-      clearTimeout(loaderTimer);
       clearInterval(clock);
       observer.disconnect();
       heroObserver.disconnect();
-      revealObserver.disconnect();
     };
   }, []);
   const auto =
@@ -347,17 +328,6 @@ export default function Mouline() {
       <a href="#main" className="skip-link">
         Ga naar de inhoud
       </a>
-      {loader && (
-        <div className="page-loader" aria-hidden="true">
-          <img
-            src={assetPath('/images/logo.svg')}
-            width="142"
-            height="100"
-            alt=""
-          />
-          <span />
-        </div>
-      )}
       <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
         <a className="brand" href="#home" aria-label="Mouline, naar boven">
           <img
@@ -463,7 +433,7 @@ export default function Mouline() {
                 key={s.name}
                 src={assetPath(`/images/${s.name}-${s.large}.webp`)}
                 srcSet={`${assetPath(`/images/${s.name}-${s.small}.webp`)} ${s.small}w, ${assetPath(`/images/${s.name}-${s.large}.webp`)} ${s.large}w`}
-                sizes="100vw"
+                sizes="(max-width: 800px) 100vw, 75vw"
                 className={`hero-slide ${i === slide ? 'is-active' : ''}`}
                 fetchPriority={i === 0 ? 'high' : 'low'}
                 loading={i === 0 ? 'eager' : 'lazy'}
@@ -492,7 +462,7 @@ export default function Mouline() {
               <a
                 href="#menu"
                 onClick={() => chooseMenu('onsite')}
-                className="button button-ink"
+                className="text-link hero-menu-link"
               >
                 Menu ter plaatse <ArrowDown size={17} />
               </a>
@@ -526,16 +496,39 @@ export default function Mouline() {
             </div>
           </div>
           <div className="hero-caption">
+            <button
+              className="sequence-lens"
+              onClick={() => changeSlide(1)}
+              aria-label={`Bekijk de volgende foto: ${heroSlides[(slide + 1) % heroSlides.length].caption}`}
+            >
+              <img
+                src={assetPath(
+                  `/images/${heroSlides[(slide + 1) % heroSlides.length].name}-${heroSlides[(slide + 1) % heroSlides.length].small}.webp`,
+                )}
+                alt=""
+                width="54"
+                height="54"
+              />
+            </button>
             <span>{heroSlides[slide].caption}</span>
             <div className="slide-controls" aria-label="Fotocarrousel">
               <button onClick={() => changeSlide(-1)} aria-label="Vorige foto">
                 <ChevronLeft size={18} />
               </button>
-              <div className="slide-progress">
-                {heroSlides.map((s, i) => (
-                  <span className={i === slide ? 'current' : ''} key={s.name} />
-                ))}
-              </div>
+              <span
+                className="slide-count"
+                aria-label={`Foto ${slide + 1} van ${heroSlides.length}`}
+              >
+                {String(slide + 1).padStart(2, '0')}{' '}
+                <span>/ {String(heroSlides.length).padStart(2, '0')}</span>
+              </span>
+              <span className="slide-rule" aria-hidden="true">
+                <span
+                  style={{
+                    width: `${((slide + 1) / heroSlides.length) * 100}%`,
+                  }}
+                />
+              </span>
               <button onClick={() => changeSlide(1)} aria-label="Volgende foto">
                 <ChevronRight size={18} />
               </button>
@@ -558,16 +551,21 @@ export default function Mouline() {
             <p>Elke ochtend opnieuw belegd, gebakken en klaargezet.</p>
           </div>
           <div className="daily-details">
-            <div>
-              <span className="small-label">Openingstijden</span>
-              <p>{compactOpeningHours}</p>
-            </div>
-            <div>
-              <span className="small-label">Bestellen</span>
-              <p>Voor 11u, afhalen op afspraak</p>
-            </div>
-            <a href="#contact" className="text-link">
-              {business.street} <ArrowUpRight size={16} />
+            <a href="#menu" onClick={() => chooseMenu('onsite')}>
+              <span>Ontbijt</span>
+              <p>Tot 11u</p>
+            </a>
+            <a href="#menu" onClick={() => chooseMenu('onsite')}>
+              <span>Lunch</span>
+              <p>Vanaf 11u</p>
+            </a>
+            <a href="#menu" onClick={() => chooseMenu('takeaway')}>
+              <span>Takeaway</span>
+              <p>Bestel voor 11u</p>
+            </a>
+            <a href="#catering">
+              <span>Catering</span>
+              <p>Op maat</p>
             </a>
           </div>
         </section>
@@ -576,6 +574,14 @@ export default function Mouline() {
           onModeChange={setMode}
           onReserve={() => openContact('Reservatie')}
         />
+        <figure className="menu-interlude">
+          <Photo
+            name="wrap"
+            alt="Een vers bereide wrap op een bord bij Mouline"
+            sizes="100vw"
+          />
+          <figcaption>Van onze keuken naar jouw tafel.</figcaption>
+        </figure>
         <section id="over-ons" className="about-section">
           <div className="about-photo reveal">
             <Photo
@@ -584,22 +590,26 @@ export default function Mouline() {
               sizes="100vw"
             />
           </div>
-          <div className="about-copy reveal">
-            <p className="eyebrow">Aangenaam, Mouline</p>
-            <h2>
-              Hier begint
-              <br />
-              elke ochtend vers.
-            </h2>
-            <p>
-              Mouline is een foodbar op de Kapelsesteenweg in Ekeren, voor
-              ontbijt, lunch en dagverse gerechten. Vanuit de eigen keuken wordt
-              elke ochtend voorbereid wat later op je bord of in je takeawayzak
-              belandt.
-            </p>
-            <a href="#contact" className="text-link">
-              Kom gerust langs <ArrowUpRight size={16} />
-            </a>
+          <div className="about-copy">
+            <div className="about-intro">
+              <p className="eyebrow">Aangenaam, Mouline</p>
+              <h2>
+                Hier begint
+                <br />
+                elke ochtend vers.
+              </h2>
+            </div>
+            <div className="about-text">
+              <p>
+                Mouline is een foodbar op de Kapelsesteenweg in Ekeren, voor
+                ontbijt, lunch en dagverse gerechten. Vanuit de eigen keuken
+                wordt elke ochtend voorbereid wat later op je bord of in je
+                takeawayzak belandt.
+              </p>
+              <a href="#contact" className="text-link">
+                Kom gerust langs <ArrowUpRight size={16} />
+              </a>
+            </div>
           </div>
         </section>
         <Reviews />
@@ -629,9 +639,11 @@ export default function Mouline() {
                     name={p.name}
                     alt={p.alt}
                     sizes={
-                      i === 0
-                        ? '(max-width: 700px) 100vw, 60vw'
-                        : '(max-width: 700px) 70vw, 40vw'
+                      i === 5
+                        ? '(max-width: 800px) 100vw, 80vw'
+                        : i < 2
+                          ? '(max-width: 700px) 100vw, 60vw'
+                          : '(max-width: 700px) 50vw, 25vw'
                     }
                   />
                   <span className="photo-expand">
@@ -659,7 +671,7 @@ export default function Mouline() {
               <a
                 href="#contact"
                 onClick={() => openContact('Catering')}
-                className="button button-ink"
+                className="text-link catering-link"
               >
                 Vraag catering aan <ArrowUpRight size={18} />
               </a>
@@ -733,12 +745,8 @@ export default function Mouline() {
               </a>
             </div>
             <div className="parking">
-              <span className="parking-letter" aria-hidden="true">
-                P
-              </span>
               <div>
                 <h3>Parking voor de deur.</h3>
-                <p>Je bent er zo.</p>
               </div>
             </div>
           </div>

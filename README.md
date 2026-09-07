@@ -1,6 +1,6 @@
 # Foodbar Mouline
 
-Een Nederlandse onepage voor Foodbar Mouline, met het bestaande Mouline-logo en echte fotografie van mouline.be. De lokale versie staat op **http://localhost:3000/**.
+Een Nederlandse onepage voor Foodbar Mouline, met het bestaande Mouline-logo en echte fotografie van mouline.be. De visuele richting combineert Instrument Serif en DM Sans met ivoor, espresso en een enkel bourgondisch cateringmoment. De lokale versie staat op **http://localhost:3000/**.
 
 Er was geen lokale Lovable-broncode of repository beschikbaar in deze werkmap. Daarom staat hier een zelfstandige, onderhoudbare lokale implementatie van de gevraagde verfijning. De gepubliceerde Lovable-site is niet gewijzigd.
 
@@ -40,7 +40,7 @@ meegebouwd. De bestaande serverroutes blijven beschikbaar bij hosting met server
 - `lib/data/onsite.json`: menu ter plaatse, inclusief ontbijt, lunch, zoet en dranken.
 - `lib/data/takeaway.json`: afzonderlijke takeawaykaart en supplementen.
 - `lib/data/photo-sources.json`: herkomst van de originele Mouline-fotografie.
-- `components/`: navigatie, carrousel, menu, contactformulier, reviews en galerij.
+- `components/`: navigatie, carrousel, menu, contactformulier, reviews en galerij. De inhoudelijke menugegevens blijven gescheiden van de vormgeving.
 - `app/globals.css`: vormgeving en alle responsive regels.
 
 Elke menuregel behoudt `source`, `sourceName` en `sourcePrice`. De prijzen zijn overgenomen uit de officiële categoriepagina's, geraadpleegd op 7 september 2026. Er zijn geen prijzen uit de twee menustanden samengevoegd.
@@ -67,8 +67,8 @@ Bronnen:
 
 - Desktop en mobiel: aparte menustanden, eigen categorieën, prijzen in gewone HTML.
 - Grote mobiele navigatie met focusbeheer en Escape; toegankelijke tabs met toetsenbordbediening.
-- Visuele hero-carrousel met vaste headline, handmatige bediening, pauze en swipe.
-- Reduced motion schakelt autoplay, intro en decoratieve animaties uit. De intro speelt hoogstens 700 ms en maar één keer per sessie.
+- Redactionele fotoreeks met vaste headline, vier echte foto’s, een kleine lens als preview, teller, toetsenbordbediening en swipe. Automatisch afspelen staat standaard uit en kan bewust worden gestart.
+- Reduced motion schakelt afspelen en overgangen uit. Er is geen intro-loader, scrollanimatie of parallax. Navigatie reageert direct.
 - Catering selecteert automatisch het bijbehorende formulier. Er zijn afzonderlijke velden voor reservatie, catering en andere vragen.
 - Servervalidatie, oorsprongscontrole, honeypot, beperkte berichtlengte, timeout en idempotente e-mailaanvragen.
 - Alle foto's zijn lokaal geoptimaliseerd naar WebP met responsive formaten. Lettertypen zijn lokaal opgeslagen als WOFF2.
@@ -78,6 +78,6 @@ De optionele WebMCP-bedieningen `show_mouline_menu` en `start_mouline_contact` o
 
 ### Uitgevoerde controle
 
-De productiebuild en TypeScript-controle slagen. De browsercontrole omvatte 320, 360, 390, 430, 768, 1024, 1280, 1440 en 1728 pixels: geen horizontale pagina-overloop of botsende namen/prijzen in het geteste menu. Mobiele navigatie, Escape en focusherstel, fotolightbox, cateringselectie, verschil tussen ter-plaatse- en takeawayprijzen, formulierfouten en de twee WebMCP-bedieningen zijn gecontroleerd. De API-controles bevestigen validatie, honeypot, oorsprongscontrole en eerlijke 503-foutmelding zonder verzendconfiguratie.
+De productiebuild en TypeScript-controle slagen. Na de herontwerppass zijn de beeldcompositie, typografische hiërarchie, menu’s, mobiele navigatie en het contactformulier opnieuw visueel gecontroleerd op desktop en mobiel. De browsercontrole omvatte 320, 360, 390, 430, 768, 1024, 1280, 1440 en 1728 pixels: geen horizontale pagina-overloop of botsende namen/prijzen in het geteste menu. Mobiele navigatie, Escape en focusherstel, fotolightbox, cateringselectie, verschil tussen ter-plaatse- en takeawayprijzen, formulierfouten en de twee WebMCP-bedieningen zijn gecontroleerd. De API-controles bevestigen validatie, honeypot, oorsprongscontrole en eerlijke 503-foutmelding zonder verzendconfiguratie.
 
 Google-reviews en echte e-mailbezorging kunnen pas met de juiste configuratie live worden getest. De Core Web Vitals-doelen en volledige WCAG 2.2 AA-conformiteit zijn geen gecertificeerde meetresultaten; meet deze aanvullend op de uiteindelijke productiehosting.

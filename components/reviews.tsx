@@ -68,22 +68,24 @@ export default function Reviews() {
   }, []);
   const hasData = data.status === 'ready' && typeof data.rating === 'number';
   return (
-    <section id="reviews" className="reviews-section container" ref={ref}>
+    <section
+      id="reviews"
+      className={`reviews-section container ${hasData ? '' : 'reviews-invitation'}`}
+      ref={ref}
+    >
       <div className="reviews-intro reveal">
         <p className="eyebrow">Aan tafel verteld</p>
-        <h2>
-          Wat onze
-          <br />
-          gasten zeggen.
-        </h2>
-        <a
-          className="text-link"
-          href={data.url || business.googleMapsUrl}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Bekijk alle reviews op Google <ArrowUpRight size={16} />
-        </a>
+        <h2>Wat onze gasten zeggen.</h2>
+        {hasData && (
+          <a
+            className="text-link"
+            href={data.url || business.googleMapsUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Bekijk alle reviews op Google <ArrowUpRight size={16} />
+          </a>
+        )}
       </div>
       {hasData ? (
         <div className="google-content">
@@ -158,23 +160,17 @@ export default function Reviews() {
         </div>
       ) : (
         <div className="reviews-unconfigured">
-          <p>Al eens aangeschoven?</p>
-          <h3>
-            Jouw ervaring
-            <br />
-            telt mee.
-          </h3>
           <p>
             Lees de ervaringen van onze gasten op Google Maps. Of vertel er over
             jouw bezoek.
           </p>
           <a
-            className="button button-outline"
+            className="text-link"
             href={business.googleMapsUrl}
             target="_blank"
             rel="noreferrer"
           >
-            Naar Google Maps <ArrowUpRight size={16} />
+            Bekijk de reviews op Google <ArrowUpRight size={16} />
           </a>
           {process.env.NODE_ENV !== 'production' && (
             <details className="developer-note">

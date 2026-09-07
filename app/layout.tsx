@@ -43,9 +43,9 @@ export default function RootLayout({
         <link
           rel="preload"
           as="image"
-          href="/images/interieur-1600.webp"
-          imageSrcSet="/images/interieur-800.webp 800w, /images/interieur-1600.webp 1600w"
-          imageSizes="100vw"
+          href="/images/ontbijt-1280.webp"
+          imageSrcSet="/images/ontbijt-640.webp 640w, /images/ontbijt-1280.webp 1280w"
+          imageSizes="(max-width: 800px) 100vw, 75vw"
         />
       </head>
       <body>{children}</body>
