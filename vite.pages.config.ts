@@ -16,5 +16,14 @@ export default defineConfig({
     'process.env.NEXT_PUBLIC_BASE_PATH': JSON.stringify('/Foodbar-Mouline'),
   },
   css: { postcss: { plugins: [tailwindcss({ base: project })] } },
-  build: { outDir: `${project}dist-pages`, emptyOutDir: true },
+  build: {
+    outDir: `${project}dist-pages`,
+    emptyOutDir: true,
+    rolldownOptions: {
+      input: {
+        home: `${project}static-site/index.html`,
+        home2: `${project}static-site/home2/index.html`,
+      },
+    },
+  },
 });

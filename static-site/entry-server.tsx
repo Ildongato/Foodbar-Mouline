@@ -1,6 +1,7 @@
 import { renderToString } from 'react-dom/server';
 import Mouline from '@/components/mouline';
+import MoulineHome2 from '@/components/home2/mouline';
 
-export function render() {
-  return renderToString(<Mouline />);
+export function render(variant = 'home') {
+  return renderToString(variant === 'home2' ? <MoulineHome2 /> : <Mouline />);
 }

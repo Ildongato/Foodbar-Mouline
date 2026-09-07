@@ -19,6 +19,12 @@ pnpm dev --host 127.0.0.1
 
 Live: [ildongato.github.io/Foodbar-Mouline](https://ildongato.github.io/Foodbar-Mouline/).
 
+Tweede ontwerp: [tijdelijke home2](https://ildongato.github.io/Foodbar-Mouline/home2/).
+De oorspronkelijke homepage blijft op de hoofdlink staan. Lokaal is de tweede variant
+beschikbaar op `http://localhost:3000/home2`; de statische preview op
+`http://127.0.0.1:4173/Foodbar-Mouline/home2/`.
+Zie [HOME2.md](HOME2.md) voor de ontwerpkeuzes, gewijzigde bestanden en controlebeperkingen.
+
 Elke push naar `main` bouwt en publiceert automatisch via `.github/workflows/pages.yml`.
 De Pages-build gebruikt dezelfde React-componenten en rendert de inhoud vooraf naar HTML.
 Foto’s, lettertypen en scripts gebruiken het pad `/Foodbar-Mouline/`.

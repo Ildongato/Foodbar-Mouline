@@ -284,8 +284,7 @@ export default function ContactForm({
                 )}
               </button>
               <p>
-                Je gegevens gebruiken we alleen
-                <br />
+                Je gegevens gebruiken we alleen <br />
                 om je aanvraag te beantwoorden.
               </p>
             </div>

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.mouline.be'),
@@ -39,15 +38,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="nl-BE">
-      <head>
-        <link
-          rel="preload"
-          as="image"
-          href="/images/ontbijt-1280.webp"
-          imageSrcSet="/images/ontbijt-640.webp 640w, /images/ontbijt-1280.webp 1280w"
-          imageSizes="(max-width: 800px) 100vw, 75vw"
-        />
-      </head>
       <body>{children}</body>
     </html>
   );
