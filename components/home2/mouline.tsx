@@ -509,9 +509,15 @@ export default function MoulineHome2() {
         </div>
         <section id="over-ons" className="about-section container">
           <div className="about-photo chapter-reveal">
-            <Photo
-              name="sfeer"
-              alt="Zitbank met kleurrijke kussens in het interieur van Mouline"
+            <img
+              src={assetPath('/images/aangenaam-mouline-941.webp')}
+              srcSet={`${assetPath('/images/aangenaam-mouline-640.webp')} 640w, ${assetPath('/images/aangenaam-mouline-941.webp')} 941w`}
+              sizes="(max-width: 800px) 100vw, (max-width: 1440px) 50vw, 690px"
+              width="941"
+              height="1672"
+              loading="lazy"
+              decoding="async"
+              alt="Een vrouw begroet je met een glimlach en een opgestoken hand bij Mouline"
             />
           </div>
           <div className="about-copy">

@@ -24,6 +24,13 @@ catering op tablet en de contactcompositie tussen 651 en 800 px. Tijdens de inte
 zijn de mobiele dialoogpositie en de scrollpositie na een categoriewissel hersteld.
 De motionregels gebruiken centrale tijdsduren en expliciete reduced-motionregels.
 
+De aangeleverde portretfoto vervangt het sfeerbeeld bij ‘Aangenaam, Mouline’.
+Twee lokale WebP-formaten behouden het volledige origineel; de browser bepaalt de
+uitsnede. Een vaste beeldverhouding van 4:3 en focus op `50% 18%` houden gezicht en
+begroetende hand in beeld op desktop, tablet en mobiel. De eerdere brede tabletuitsnede
+is hiervoor verwijderd. Visueel gecontroleerd op 390, 768 en 1440 px; Pages-build,
+TypeScript, gerichte lint en diffcontrole slagen.
+
 ## Compacte reviews en locatiekaart — 7 september 2026
 
 De aanvullende verfijning gebruikt een compact taupe reviewvlak met uitsluitend de

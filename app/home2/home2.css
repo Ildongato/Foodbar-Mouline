@@ -641,7 +641,8 @@ textarea {
   width: 100%;
   aspect-ratio: 4/3;
   object-fit: cover;
-  object-position: 42% center;
+  /* Preserve the full width for the greeting hand; anchor the crop above the face. */
+  object-position: 50% 18%;
 }
 .about-copy h2 {
   font-size: clamp(42px, 3.8vw, 54px);
@@ -1375,9 +1376,6 @@ textarea {
     gap: 32px;
     padding-bottom: 48px;
   }
-  .about-photo img {
-    aspect-ratio: 16/9;
-  }
   .about-copy {
     display: grid;
     grid-template-columns: 0.9fr 1.1fr;
@@ -1644,9 +1642,6 @@ textarea {
   .about-section {
     gap: 28px;
     padding-block: 52px 40px;
-  }
-  .about-photo img {
-    aspect-ratio: 4/3;
   }
   .about-copy {
     display: block;
