@@ -31,7 +31,7 @@
   --radius: 0px;
   --content: 1280px;
   --gutter: clamp(20px, 4vw, 64px);
-  --header: 76px;
+  --header: 84px;
   --space-1: 8px;
   --space-2: 16px;
   --space-3: 24px;
@@ -233,31 +233,36 @@ textarea {
   height: var(--header);
   background: var(--paper);
   z-index: 40;
+  border-bottom: 1px solid var(--line);
 }
-.site-header.scrolled {
-  box-shadow: 0 1px 0 var(--line);
-}
+/* Equal outer tracks keep the real logo centred on the viewport. */
 .header-inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   height: 100%;
   gap: 28px;
 }
 .brand {
-  flex-shrink: 0;
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
 }
 .brand img {
-  width: 80px;
-  height: 56px;
+  width: 88px;
+  height: 62px;
   object-fit: contain;
 }
 .site-header nav {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
   display: flex;
   align-items: center;
   gap: 25px;
-  margin-left: auto;
 }
 .site-header nav a {
+  min-width: 44px;
   font-size: 14px;
   padding-block: 14px;
   text-decoration: underline;
@@ -265,12 +270,14 @@ textarea {
   text-underline-offset: 6px;
   transition: text-decoration-color var(--interaction);
 }
-.site-header nav a:hover,
+.site-header nav a:is(:hover, :focus-visible),
 .site-header nav a[aria-current] {
   text-decoration-color: var(--accent);
 }
 .header-cta {
-  flex-shrink: 0;
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
   min-height: 44px;
   padding: 11px 18px;
   gap: 15px;
@@ -278,125 +285,45 @@ textarea {
 .mobile-trigger {
   display: none;
 }
+/* A quiet title page and one full-width photograph form the cover. */
 .hero {
-  position: relative;
-  isolation: isolate;
-  min-height: 580px;
-  height: clamp(580px, 45vw, 660px);
-  background: var(--ink);
-  color: var(--white);
+  background: var(--paper);
 }
-.hero-photo {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  z-index: -1;
-}
-.hero-photo::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgb(33 29 27 / 75%) 0%,
-    rgb(33 29 27 / 66%) 36%,
-    rgb(33 29 27 / 20%) 80%,
-    rgb(33 29 27 / 10%)
-  );
-}
-.hero-slide {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 56%;
-  opacity: 0;
-  transition: opacity var(--reveal) var(--ease);
-}
-.hero-slide.is-active {
-  opacity: 1;
-}
-.hero-inner {
-  position: relative;
-  height: 100%;
-  display: flex;
+.hero-title {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
   align-items: center;
-  padding-block: 64px;
-}
-.hero-copy {
-  max-width: 850px;
-}
-.hero-kicker {
-  font-size: 13px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 24px;
+  column-gap: clamp(32px, 4vw, 64px);
+  padding-block: 44px 48px;
 }
 .hero h1 {
-  font-size: clamp(64px, 6.2vw, 92px);
-  line-height: 1.03;
+  color: var(--accent);
+  font-size: clamp(64px, 7.1vw, 104px);
+  line-height: 1.02;
   letter-spacing: -0.025em;
 }
 .hero h1 span {
-  display: block;
+  white-space: nowrap;
 }
 .hero-description {
-  font-size: 18px;
+  max-width: 34ch;
+  font-size: 16px;
   line-height: 1.6;
-  max-width: 405px;
-  margin-top: 24px;
 }
-.hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  margin-top: 32px;
+.hero-support .text-link {
+  min-height: 44px;
+  margin-top: 10px;
+  gap: 16px;
 }
-.hero .button-primary {
-  border-color: rgb(255 255 255 / 25%);
+.hero-photo {
+  height: clamp(340px, 58svh, 640px);
+  overflow: hidden;
 }
-.hero .text-link {
-  text-decoration-color: rgb(255 255 255 / 55%);
-}
-.hero .text-link:hover {
-  color: var(--white);
-  text-decoration-color: var(--white);
-}
-.hero :focus-visible {
-  outline-color: var(--white);
-}
-.slide-controls {
-  display: flex;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  align-items: center;
-  gap: 6px;
-  position: absolute;
-  right: 0;
-  bottom: 24px;
-  background: rgb(33 29 27 / 65%);
-}
-.slide-controls button {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  transition: background var(--interaction);
-}
-.slide-controls button:hover {
-  background: rgb(255 255 255 / 15%);
-}
-.slide-count {
-  min-width: 58px;
-  font-size: 12px;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
+.hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 54%;
 }
 .practical {
   display: flex;
@@ -1376,14 +1303,6 @@ textarea {
     transform: none;
   }
 }
-@keyframes quiet-in {
-  from {
-    opacity: 0.65;
-  }
-  to {
-    opacity: 1;
-  }
-}
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -1391,9 +1310,6 @@ textarea {
 }
 .chapter-reveal.is-revealed {
   animation: chapter-in var(--reveal) var(--ease) both;
-}
-.hero-kicker {
-  animation: quiet-in var(--reveal) var(--ease);
 }
 .spin {
   animation: spin 1s linear infinite;
@@ -1432,17 +1348,17 @@ textarea {
 }
 @media (max-width: 800px) {
   :root {
-    --header: 68px;
+    --header: 72px;
     --gutter: 28px;
     --chapter: 64px;
   }
   .site-header nav {
     display: none;
   }
-  .header-cta {
-    margin-left: auto;
-  }
   .mobile-trigger {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
     display: grid;
     place-items: center;
     flex-shrink: 0;
@@ -1453,18 +1369,22 @@ textarea {
     border: 0;
   }
   .brand img {
-    width: 72px;
-    height: 50px;
+    width: 76px;
+    height: 54px;
   }
-  .hero {
-    min-height: 560px;
-    height: 560px;
+  .hero-title {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding-block: 36px;
   }
   .hero h1 {
-    font-size: clamp(54px, 7.8vw, 64px);
+    font-size: clamp(56px, 9vw, 72px);
   }
-  .hero-copy {
-    max-width: 640px;
+  .hero-photo {
+    height: clamp(400px, 58svh, 600px);
+  }
+  .hero-photo img {
+    object-position: 40% 52%;
   }
   .practical {
     flex-wrap: wrap;
@@ -1581,93 +1501,34 @@ textarea {
 @media (max-width: 650px) {
   :root {
     --gutter: 20px;
-    --header: 64px;
+    --header: 72px;
     --chapter: 52px;
   }
   .header-inner {
     gap: 12px;
   }
-  .brand img {
-    width: 65px;
-    height: 46px;
-  }
   .header-cta {
-    padding: 10px 13px;
-    gap: 12px;
+    padding: 10px 12px;
+    gap: 8px;
     font-size: 12px;
   }
-  .hero {
-    height: auto;
-    min-height: 0;
-    background: var(--paper);
-    color: var(--ink);
-  }
-  .hero-photo {
-    position: relative;
-    inset: auto;
-    height: auto;
-    aspect-ratio: 4/3;
-    z-index: 0;
-  }
-  .hero-photo::after {
-    content: none;
-  }
-  .hero-slide {
-    object-position: 54% 50%;
-  }
-  .hero-inner {
-    position: static;
-    height: auto;
-    padding-block: 28px 32px;
-  }
-  .hero-copy {
-    width: 100%;
-  }
-  .hero-kicker {
-    font-size: 11px;
-    margin-bottom: 16px;
+  .hero-title {
+    gap: 20px;
+    padding-block: 32px;
   }
   .hero h1 {
-    font-size: clamp(40px, 10.8vw, 62px);
-    line-height: 1.06;
+    font-size: clamp(40px, 11.8vw, 56px);
+    line-height: 1.04;
   }
   .hero-description {
+    max-width: 34ch;
     font-size: 16px;
-    max-width: 36ch;
-    margin-top: 16px;
   }
-  .hero-actions {
-    gap: 22px;
-    flex-wrap: wrap;
-    margin-top: 24px;
+  .hero-photo {
+    height: clamp(320px, 92vw, 480px);
   }
-  .hero-actions .button {
-    padding-inline: 16px;
-    gap: 16px;
-    font-size: 13px;
-  }
-  .hero .text-link {
-    color: var(--ink);
-    text-decoration-color: var(--taupe);
-    font-size: 13px;
-    gap: 14px;
-  }
-  .hero .text-link:hover {
-    color: var(--accent);
-  }
-  .hero :focus-visible {
-    outline-color: var(--accent);
-  }
-  .slide-controls {
-    top: calc(75vw - 56px);
-    bottom: auto;
-    right: 12px;
-    color: var(--white);
-    gap: 0;
-  }
-  .slide-controls :focus-visible {
-    outline-color: var(--white);
-    outline-offset: -4px;
+  .hero-photo img {
+    object-position: 38% 50%;
   }
   .practical {
     padding-block: 18px;
@@ -1961,6 +1822,16 @@ textarea {
     padding-inline: 8px;
   }
 }
+@media (min-width: 801px) and (max-height: 700px) {
+  .hero-title {
+    padding-block: 24px;
+  }
+}
+@media (max-width: 359px) {
+  .header-cta {
+    display: none;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   :root {
     --interaction: 0ms;
@@ -1975,7 +1846,6 @@ textarea {
     scroll-behavior: auto;
   }
   .chapter-reveal.is-revealed,
-  .hero-kicker,
   .spin {
     animation: none;
   }

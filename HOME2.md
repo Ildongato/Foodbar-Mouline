@@ -6,6 +6,63 @@ Het oorspronkelijke ontwerp blijft op https://ildongato.github.io/Foodbar-Moulin
 Beide pagina’s worden vooraf als HTML gerenderd en gebruiken dezelfde bestaande menugegevens,
 Google-reviewselectie, bedrijfsgegevens en contactlogica.
 
+## Redactionele cover — navigatie en hero, 7 september 2026
+
+De actuele bovenkant heeft een vaste navigatie met drie gelijke uitlijnzones:
+Kaart, Catering en Contact links, het bestaande logo exact in het midden van
+de viewport, en Takeaway rechts. Het grid gebruikt gelijke buitenkolommen.
+De header is 84 px hoog op desktop en 72 px op mobiel. Onder 360 px staat
+Takeaway alleen in het geopende menu, zodat logo en aanraakvlakken ruim blijven.
+De overige sectielinks blijven in de mobiele navigatie beschikbaar.
+
+‘Van ontbijt tot lunch.’ staat in bourgondische Instrument Serif op ivoor,
+naast de bestaande korte toelichting en ‘Bekijk de kaart’. Daaronder staat
+één statische, heldere interieurfoto over de volle viewportbreedte. De bestaande
+800/1600 px WebP-bronnen en preload blijven behouden. Overlay, carrouselteller,
+pijlen, swipegedrag en achterhaalde hero-CSS zijn verwijderd. De galerij behoudt
+haar eigen beelden en bediening. Er is bewust geen titeloverlap: de strakke
+scheiding houdt het interieurbeeld rustig en de titel volledig leesbaar.
+
+Mobiel volgen titel, toelichting, kaartlink en een hogere foto-uitsnede elkaar
+op. Een lage desktopviewport krijgt minder titelpadding; de foto blijft groot.
+De titel en foto zijn direct zichtbaar, zonder entreeanimatie. De bestaande
+hover-, focus- en reduced-motionregels blijven de bediening verzorgen.
+
+De tweede visuele pass controleerde de beeldverhoudingen, regelafbrekingen en
+uitlijning; het desktopklikvlak van Kaart is daarbij minimaal 44 px breed gemaakt.
+Kaart en de hero-link openen ter plaatse; Takeaway opent daadwerkelijk de
+takeawaystand. Alle ankers blijven onder de vaste navigatie zichtbaar.
+
+### Controle van de cover
+
+- Screenshots vóór en na op desktop en mobiel; definitieve visuele controle
+  op 360, 390, 768, 1024 en 1440 px, plus 320 px en 1440 × 650 px.
+  De logomiddellijn wijkt op alle vijf standaardbreedtes 0 CSS-pixels af van
+  het viewportmidden. Eén h1, één heroafbeelding, geen horizontale overloop.
+- Bij 1440 × 1000 px is de titelzone 197 px en de foto 580 px hoog.
+  Bij 1440 × 650 px is dat 153 en 377 px. Op 390 px blijft de foto 359 px hoog.
+- Desktopnavigatie, beide menustanden, alle zes mobiele sectieankers, de
+  Takeaway-actie op 320 px, toetsenbordactivatie, tabfocus binnen het mobiele
+  menu, Escape en focusherstel zijn getest. Sticky categoriebediening blijft
+  op 72 px onder de mobiele header; na een toetsenbordwissel op circa 80 px.
+- De hoverpijl schuift gemeten 3 px op; het knopvlak verandert niet van positie
+  of grootte. De galerij opent, wisselt met de pijltjestoets en sluit met
+  Escape met focusherstel. Geen consolewaarschuwingen of fouten in de preview.
+- Inhoud, breedtes en hoogtes van alle overige secties zijn op de vijf breedtes
+  gelijk aan de nulmeting. De componentcode vanaf de praktische strook en de
+  bestaande hoofdsectiestyling zijn ongewijzigd. De oorspronkelijke homepage
+  heeft dezelfde bronbestanden en dezelfde SSR-inhoud na normalisatie van
+  gegenereerde assetnamen. Gedeelde menu-, review- en bedrijfsdata zijn gelijk.
+- `pnpm build`, `pnpm build:pages`, `pnpm exec tsc --noEmit`,
+  `pnpm exec oxlint components/home2` en `git diff --check` slagen.
+  Volledige lint: dezelfde 32 bestaande diagnostieken.
+- De browserbediening biedt geen systeememulatie voor reduced motion.
+  De bestaande mediaregels, nulduur-tokens en uitgeschakelde pijltransforms zijn
+  in CSS gecontroleerd; omschakelen van de systeemvoorkeur is niet getest.
+
+Gewijzigd: `components/home2/mouline.tsx`, `app/home2/home2.css` en dit document.
+Geen nieuwe fonts, foto's, dependencies of hostingwijzigingen.
+
 ## Bistrodetails — gerichte verfijning, 7 september 2026
 
 Alleen home2 is verfijnd. Het compacte taupe reviewvlak draagt een statisch paar
@@ -65,9 +122,9 @@ hostingconfiguratie of de oorspronkelijke bronbestanden toegevoegd.
 ## Ontwerp
 
 De oorspronkelijke compositie combineerde een zeer grote kop met een losse fotolens,
-veel lichte hoofdstukken en een grillige galerij. Home2 gebruikt een brede interieurfoto,
-een vaste boodschap en twee eerlijke kaartacties. Op mobiel staan tekst en acties onder
-de foto. De vier foto’s wisselen alleen op verzoek.
+veel lichte hoofdstukken en een grillige galerij. Home2 gebruikt een gecentreerd logo,
+een bourgondische titel op ivoor en één statische, brede interieurfoto. Op mobiel
+staan titel, toelichting en kaartlink boven de foto.
 
 De witte menukaart heeft een duidelijke hiërarchie tussen menustand, categorie en gerecht.
 Alleen de categorieën blijven tijdens het lezen vaststaan. Instrument Serif draagt de
@@ -113,7 +170,7 @@ De oorspronkelijke homepage en gedeelde bedrijfs-, menu- en reviewgegevens zijn 
 
 ## Bestanden
 
-- `components/home2/mouline.tsx`: nieuwe compositie, handmatige hero, galerij en navigatie.
+- `components/home2/mouline.tsx`: compositie, statische cover, galerij en navigatie.
 - `components/home2/menu-section.tsx`: aparte presentatie van de gedeelde menukaarten.
 - `app/home2/page.tsx` en `app/home2/home2.css`: lokale route en zelfstandig stylesysteem.
 - `app/layout.tsx` en `app/page.tsx`: verplaatsen van de oorspronkelijke CSS en fotopreload
@@ -128,7 +185,7 @@ De bestaande `components/mouline.tsx`, `app/globals.css`, menuprijzen, reviewdat
 bedrijfsgegevens, API-routes, dependencies en hostingconfiguratie zijn inhoudelijk behouden.
 Noindex, canonical en bestaande verificatienotities zijn niet geactiveerd of ingevuld.
 
-## Controle op 7 september 2026
+## Eerdere controle op 7 september 2026, vóór de statische cover
 
 - De volledige compositie is in de browser bekeken op 320, 360, 390, 768, 1024, 1440
   en 1728 px. Geen horizontale pagina-overloop op deze breedtes.

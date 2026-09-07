@@ -1,9 +1,10 @@
 'use client';
 /* oxlint-disable nextjs/no-img-element -- Local WebP srcsets and SVGs must also work in the static Pages entry without an image server. */
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { flushSync } from 'react-dom';
 import {
   ArrowUpRight,
+  ArrowRight,
   ArrowUp,
   ChevronLeft,
   ChevronRight,
@@ -33,39 +34,16 @@ import { type Intent } from '@/lib/contact';
 import { assetPath } from '@/lib/hosting';
 
 const links = [
-  ['Menu', 'menu'],
+  ['Kaart', 'menu'],
   ['Over ons', 'over-ons'],
   ['Reviews', 'reviews'],
   ['Foto’s', 'fotos'],
   ['Catering', 'catering'],
   ['Contact', 'contact'],
 ];
-const heroSlides = [
-  {
-    name: 'interieur',
-    alt: 'Tafels en zitbanken in het interieur van Foodbar Mouline',
-    large: 1600,
-    small: 800,
-  },
-  {
-    name: 'ontbijt',
-    alt: 'Een ontbijt met kazen, ham en noten bij Mouline',
-    large: 1280,
-    small: 640,
-  },
-  {
-    name: 'broodjes',
-    alt: 'Vers belegde broodjes op de toonbank bij Mouline',
-    large: 1280,
-    small: 640,
-  },
-  {
-    name: 'terras',
-    alt: 'Tafels en stoelen op het terras van Mouline',
-    large: 1280,
-    small: 640,
-  },
-];
+const primaryLinks = links.filter(([, id]) =>
+  ['menu', 'catering', 'contact'].includes(id),
+);
 const photos = [
   {
     name: 'ontbijt',
@@ -139,20 +117,14 @@ function Hours() {
   );
 }
 export default function MoulineHome2() {
-  const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState('home');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mode, setMode] = useState<MenuMode>('onsite');
   const [intent, setIntent] = useState<Intent>('Reservatie');
-  const [slide, setSlide] = useState(0);
   const [today, setToday] = useState<ReturnType<typeof todayHours>>();
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [privacy, setPrivacy] = useState(false);
-  const touchX = useRef<number | null>(null);
   useEffect(() => {
-    const update = () => setScrolled(window.scrollY > 16);
-    update();
-    window.addEventListener('scroll', update, { passive: true });
     const updateToday = () => setToday(todayHours());
     updateToday();
     const clock = setInterval(updateToday, 60000);
@@ -180,21 +152,11 @@ export default function MoulineHome2() {
       .querySelectorAll('.chapter-reveal')
       .forEach((element) => reveal.observe(element));
     return () => {
-      window.removeEventListener('scroll', update);
       clearInterval(clock);
       observer.disconnect();
       reveal.disconnect();
     };
   }, []);
-  function changeSlide(direction: number) {
-    setSlide((s) => (s + direction + heroSlides.length) % heroSlides.length);
-  }
-  function slideKeys(event: KeyboardEvent<HTMLButtonElement>) {
-    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-      event.preventDefault();
-      changeSlide(event.key === 'ArrowLeft' ? -1 : 1);
-    }
-  }
   function chooseMenu(next: MenuMode) {
     setMode(next);
     setMobileOpen(false);
@@ -301,34 +263,20 @@ export default function MoulineHome2() {
       <a href="#main" className="skip-link">
         Ga naar de inhoud
       </a>
-      <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
+      <header className="site-header">
         <div className="header-inner container">
-          <a className="brand" href="#home" aria-label="Mouline, naar boven">
-            <img
-              src={assetPath('/images/logo.svg')}
-              width="85"
-              height="60"
-              alt="Foodbar Mouline"
-            />
-          </a>
           <nav aria-label="Hoofdnavigatie">
-            {links.map(([label, id]) => (
+            {primaryLinks.map(([label, id]) => (
               <a
                 key={id}
                 href={`#${id}`}
+                onClick={id === 'menu' ? () => chooseMenu('onsite') : undefined}
                 aria-current={active === id ? 'location' : undefined}
               >
                 {label}
               </a>
             ))}
           </nav>
-          <a
-            className="button header-cta"
-            href="#menu"
-            onClick={() => chooseMenu('takeaway')}
-          >
-            Takeawaykaart <ArrowUpRight size={16} />
-          </a>
           <Dialog open={mobileOpen} onOpenChange={setMobileOpen}>
             <DialogTrigger
               className="mobile-trigger"
@@ -363,7 +311,10 @@ export default function MoulineHome2() {
                   <a
                     href={`#${id}`}
                     key={id}
-                    onClick={() => setMobileOpen(false)}
+                    onClick={() => {
+                      if (id === 'menu') chooseMenu('onsite');
+                      else setMobileOpen(false);
+                    }}
                   >
                     {label}
                     <ArrowUpRight size={25} />
@@ -383,92 +334,54 @@ export default function MoulineHome2() {
               </div>
             </DialogContent>
           </Dialog>
+          <a className="brand" href="#home" aria-label="Mouline, naar boven">
+            <img
+              src={assetPath('/images/logo.svg')}
+              width="85"
+              height="60"
+              alt="Foodbar Mouline"
+            />
+          </a>
+          <a
+            className="button header-cta"
+            href="#menu"
+            onClick={() => chooseMenu('takeaway')}
+          >
+            Takeaway <ArrowUpRight size={16} />
+          </a>
         </div>
       </header>
       <main id="main">
         <section className="hero" id="home" aria-label="Welkom bij Mouline">
-          <div
-            className="hero-photo"
-            onTouchStart={(e) => {
-              touchX.current = e.touches[0].clientX;
-            }}
-            onTouchEnd={(e) => {
-              if (touchX.current !== null) {
-                const dx = e.changedTouches[0].clientX - touchX.current;
-                if (Math.abs(dx) > 45) changeSlide(dx > 0 ? -1 : 1);
-                touchX.current = null;
-              }
-            }}
-          >
-            {heroSlides.map((s, i) => (
-              <img
-                key={s.name}
-                src={assetPath(`/images/${s.name}-${s.large}.webp`)}
-                srcSet={`${assetPath(`/images/${s.name}-${s.small}.webp`)} ${s.small}w, ${assetPath(`/images/${s.name}-${s.large}.webp`)} ${s.large}w`}
-                sizes="100vw"
-                width="1600"
-                height="1067"
-                className={`hero-slide ${i === slide ? 'is-active' : ''}`}
-                alt={s.alt}
-                aria-hidden={i !== slide}
-                fetchPriority={i === 0 ? 'high' : 'low'}
-                loading={i === 0 ? 'eager' : 'lazy'}
-              />
-            ))}
-          </div>
-          <div className="hero-inner container">
-            <div className="hero-copy">
-              <p className="hero-kicker">Foodbar Mouline · Ekeren</p>
-              <h1>
-                Dagvers in Ekeren.<span>Van ontbijt tot lunch.</span>
-              </h1>
+          <div className="hero-title container">
+            <h1>
+              <span>Van ontbijt</span> <span>tot lunch.</span>
+            </h1>
+            <div className="hero-support">
               <p className="hero-description">
                 Ontbijt, lunch en broodjes uit onze keuken op de
                 Kapelsesteenweg.
               </p>
-              <div className="hero-actions">
-                <a
-                  className="button button-primary"
-                  href="#menu"
-                  onClick={() => chooseMenu('onsite')}
-                >
-                  Menu ter plaatse <ArrowUpRight size={17} />
-                </a>
-                <a
-                  className="text-link"
-                  href="#menu"
-                  onClick={() => chooseMenu('takeaway')}
-                >
-                  Takeawaykaart <ArrowUpRight size={17} />
-                </a>
-              </div>
+              <a
+                className="text-link"
+                href="#menu"
+                onClick={() => chooseMenu('onsite')}
+              >
+                Bekijk de kaart <ArrowRight size={17} />
+              </a>
             </div>
-            <fieldset className="slide-controls">
-              <legend className="sr-only">Fotocarrousel</legend>
-              <button
-                aria-label="Vorige foto"
-                onClick={() => changeSlide(-1)}
-                onKeyDown={slideKeys}
-              >
-                <ChevronLeft size={20} />
-              </button>
-              <span
-                className="slide-count"
-                aria-live="polite"
-                aria-atomic="true"
-                aria-label={`Foto ${slide + 1} van ${heroSlides.length}`}
-              >
-                {String(slide + 1).padStart(2, '0')} /{' '}
-                {String(heroSlides.length).padStart(2, '0')}
-              </span>
-              <button
-                aria-label="Volgende foto"
-                onClick={() => changeSlide(1)}
-                onKeyDown={slideKeys}
-              >
-                <ChevronRight size={20} />
-              </button>
-            </fieldset>
+          </div>
+          <div className="hero-photo">
+            <img
+              src={assetPath('/images/interieur-1600.webp')}
+              srcSet={`${assetPath('/images/interieur-800.webp')} 800w, ${assetPath('/images/interieur-1600.webp')} 1600w`}
+              sizes="100vw"
+              width="1600"
+              height="1067"
+              alt="Tafels en zitbanken in het interieur van Foodbar Mouline"
+              fetchPriority="high"
+              loading="eager"
+            />
           </div>
         </section>
         <aside
