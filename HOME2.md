@@ -6,6 +6,62 @@ Het oorspronkelijke ontwerp blijft op https://ildongato.github.io/Foodbar-Moulin
 Beide pagina’s worden vooraf als HTML gerenderd en gebruiken dezelfde bestaande menugegevens,
 Google-reviewselectie, bedrijfsgegevens en contactlogica.
 
+## Bistrodetails — gerichte verfijning, 7 september 2026
+
+Alleen home2 is verfijnd. Het compacte taupe reviewvlak draagt een statisch paar
+bourgondische haarlijnen: 1 px breed, tweede lijn op 4 px, herhaald om de 24 px,
+met 7% dekking. Dezelfde geometrie keert eenmaal terug in een 16 px hoge strook
+bovenaan de footer, daar in ivoor op espresso. Beide sectiehoogtes blijven gelijk.
+
+Een lokaal, naadloos SVG-papiertile ligt met 2,5% dekking uitsluitend onder de
+inhoud van ‘Aangenaam, Mouline’. De bestaande portretuitsnede blijft behouden.
+De zes eigen culinaire SVG-tekeningen delen een 24-punts viewBox en 1,5-punts
+ronde penlijn. Ze staan op desktop op 22 px naast de categorietabs; op mobiel
+blijven de tabs tekstueel en verschijnt één icoon van 30 px bij de actieve titel.
+De mapping gebruikt bestaande categorie-ID’s en wijzigt geen menugegevens.
+
+Twee dubbele haarlijnen sluiten het menublok af. In de tweede visuele pass zijn
+concurrerende randen verwijderd, de broodjesillustratie platter gemaakt en de
+mobiele tabs op minimaal 44 × 48 px gebracht. Actiepijlen schuiven bij hover
+3 px op via het bestaande motiontoken; reduced-motion schakelt dit uit.
+De echte logogeometrie is bekeken voor catering, maar een watermerk zou de vrije
+ruimte vullen en het vlak drukker maken. Daarom blijft catering effen.
+
+Gewijzigd voor deze verfijning: `app/home2/home2.css`,
+`components/home2/culinary-icon.tsx`, `components/home2/menu-section.tsx`,
+`components/home2/mouline.tsx`, `public/images/home2-paper.svg` en dit document.
+Er zijn geen dependencies of wijzigingen aan gedeelde data, contactlogica,
+hostingconfiguratie of de oorspronkelijke bronbestanden toegevoegd.
+
+### Controle van deze verfijning
+
+- Nulmeting van desktop en mobiel vastgelegd. De volledige nieuwe pagina is
+  visueel gecontroleerd op 360, 390, 768, 1024 en 1440 px; reflow ook op 320 px.
+  Geen horizontale pagina-overloop. Reviewhoogte op desktop blijft 293,35 px.
+- Alle zes categorieën ter plaatse en alle vijf takeawaycategorieën doorlopen
+  op 390 en 1440 px. Geen botsingen tussen namen en prijzen; iconen hebben de
+  bedoelde formaten en staan op mobiel niet dubbel in beeld.
+- Supplementen, horizontale categoriebediening, sticky positie, native
+  pijltjestoets/Enter-bediening, mobiele navigatie, Escape en focusherstel getest.
+- Alle zes lightboxbeelden geladen. Cateringselectie, lege formuliervalidatie,
+  andere vraag, reservatie en het aanmaken van een mailto-concept gecontroleerd.
+  Er is geen e-mail verstuurd. De route opent de juiste Foodbar Mouline-vermelding.
+- De oorspronkelijke homepage is voor en na visueel vergeleken op desktop en
+  mobiel. De vooraf gerenderde inhoud is gelijk na normalisatie van gegenereerde
+  assetnamen; checksums van de oorspronkelijke bronbestanden en gedeelde data
+  zijn gelijk. Menuwissels, supplementen, mobiele navigatie, lightbox en catering
+  werken ook op de oorspronkelijke pagina.
+- Op de samengestelde reviewachtergrond is het laagste gemeten tekstcontrast
+  6,93:1; de bourgondische sterren komen op 4,54:1. Inactieve categorietekst op
+  wit haalt 5,28:1. Decoratieve lagen onderscheppen geen klikken.
+- `pnpm build`, `pnpm build:pages`, `pnpm exec tsc --noEmit`,
+  `pnpm exec oxlint components/home2` en `git diff --check` slagen.
+  De volledige `pnpm lint` blijft dezelfde 32 bestaande fouten melden.
+  De gecontroleerde statische browserpreview meldt geen consolefouten.
+- 200% tekstvergroting en het omschakelen van de systeemvoorkeur voor minder
+  beweging zijn niet ondersteund door de beschikbare browserbediening en dus
+  niet als geslaagde praktijktest aangemerkt. De bijbehorende CSS is nagekeken.
+
 ## Ontwerp
 
 De oorspronkelijke compositie combineerde een zeer grote kop met een losse fotolens,

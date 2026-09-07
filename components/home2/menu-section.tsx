@@ -5,6 +5,7 @@ import { ArrowUpRight, ArrowRight, Plus } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { menus, type MenuMode, type MenuItem } from '@/lib/menu';
 import { business } from '@/lib/business';
+import CulinaryIcon from './culinary-icon';
 
 function Item({ item }: { item: MenuItem }) {
   return (
@@ -58,6 +59,7 @@ function CategoryMenu({ mode }: { mode: MenuMode }) {
       >
         {menus[mode].map((c) => (
           <TabsTrigger value={c.id} key={c.id}>
+            <CulinaryIcon categoryId={c.id} />
             {c.label}
           </TabsTrigger>
         ))}
@@ -70,7 +72,8 @@ function CategoryMenu({ mode }: { mode: MenuMode }) {
           className="category-content"
         >
           <div className="category-heading">
-            <div>
+            <div className="category-title">
+              <CulinaryIcon categoryId={c.id} />
               <h3>{c.label}</h3>
             </div>
             <p>{c.tagline}</p>

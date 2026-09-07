@@ -507,32 +507,41 @@ export default function MoulineHome2() {
             onReserve={() => openContact('Reservatie')}
           />
         </div>
-        <section id="over-ons" className="about-section container">
-          <div className="about-photo chapter-reveal">
-            <img
-              src={assetPath('/images/aangenaam-mouline-941.webp')}
-              srcSet={`${assetPath('/images/aangenaam-mouline-640.webp')} 640w, ${assetPath('/images/aangenaam-mouline-941.webp')} 941w`}
-              sizes="(max-width: 800px) 100vw, (max-width: 1440px) 50vw, 690px"
-              width="941"
-              height="1672"
-              loading="lazy"
-              decoding="async"
-              alt="Een vrouw begroet je met een glimlach en een opgestoken hand bij Mouline"
-            />
-          </div>
-          <div className="about-copy">
-            <h2>Aangenaam, Mouline.</h2>
-            <p>
-              Mouline is een foodbar op de Kapelsesteenweg in Ekeren, voor
-              ontbijt, lunch en dagverse gerechten. Vanuit de eigen keuken wordt
-              elke ochtend voorbereid wat later op je bord of in je takeawayzak
-              belandt.
-            </p>
-            <a href="#contact" className="text-link">
-              Kom gerust langs <ArrowUpRight size={16} />
-            </a>
-          </div>
-        </section>
+        <div className="about-chapter">
+          <span
+            className="paper-texture"
+            aria-hidden="true"
+            style={{
+              backgroundImage: `url("${assetPath('/images/home2-paper.svg')}")`,
+            }}
+          />
+          <section id="over-ons" className="about-section container">
+            <div className="about-photo chapter-reveal">
+              <img
+                src={assetPath('/images/aangenaam-mouline-941.webp')}
+                srcSet={`${assetPath('/images/aangenaam-mouline-640.webp')} 640w, ${assetPath('/images/aangenaam-mouline-941.webp')} 941w`}
+                sizes="(max-width: 800px) 100vw, (max-width: 1440px) 50vw, 690px"
+                width="941"
+                height="1672"
+                loading="lazy"
+                decoding="async"
+                alt="Een vrouw begroet je met een glimlach en een opgestoken hand bij Mouline"
+              />
+            </div>
+            <div className="about-copy">
+              <h2>Aangenaam, Mouline.</h2>
+              <p>
+                Mouline is een foodbar op de Kapelsesteenweg in Ekeren, voor
+                ontbijt, lunch en dagverse gerechten. Vanuit de eigen keuken
+                wordt elke ochtend voorbereid wat later op je bord of in je
+                takeawayzak belandt.
+              </p>
+              <a href="#contact" className="text-link">
+                Kom gerust langs <ArrowUpRight size={16} />
+              </a>
+            </div>
+          </section>
+        </div>
         <GuestReviews />
         <div className="gallery-chapter">
           <section id="fotos" className="gallery-section container">
