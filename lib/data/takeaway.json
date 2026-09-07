@@ -1,0 +1,375 @@
+[
+  {
+    "id": "broodjes",
+    "label": "Broodjes",
+    "tagline": "Vers belegd, klaar om mee te nemen.",
+    "source": "https://www.mouline.be/m-takeaway.html",
+    "items": [
+      {
+        "name": "Kaas of hesp",
+        "price": "€ 4,50",
+        "sourceName": "Kaas of Hesp",
+        "sourcePrice": "€4,50",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Kaas en hesp",
+        "price": "€ 4,70",
+        "sourceName": "Kaas en Hesp",
+        "sourcePrice": "€4,70",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Prepare",
+        "price": "€ 4,70",
+        "sourceName": "Prepare",
+        "sourcePrice": "€4,70",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Martino",
+        "price": "€ 4,90",
+        "sourceName": "Martino",
+        "sourcePrice": "€4,90",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Tonijn",
+        "price": "€ 5,20",
+        "sourceName": "Tonijn",
+        "sourcePrice": "€5,20",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Tonijntino",
+        "price": "€ 5,50",
+        "sourceName": "Tonijntino",
+        "sourcePrice": "€5,50",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Vleessla",
+        "price": "€ 4,80",
+        "sourceName": "Vleessla",
+        "sourcePrice": "€4,80",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Kip curry",
+        "price": "€ 4,90",
+        "sourceName": "Kip Curry",
+        "sourcePrice": "€4,90",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Krabsla",
+        "price": "€ 5,20",
+        "sourceName": "Krabsla",
+        "sourcePrice": "€5,20",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Spek",
+        "price": "€ 5,70",
+        "sourceName": "Spek",
+        "sourcePrice": "€5,70",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Kip",
+        "price": "€ 5,70",
+        "sourceName": "Kip",
+        "sourcePrice": "€5,70",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Special brie",
+        "price": "€ 6,00",
+        "sourceName": "SPECIAL Brie",
+        "sourcePrice": "€6,00",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Special zalm",
+        "price": "€ 6,20",
+        "sourceName": "SPECIAL Zalm",
+        "sourcePrice": "€6,20",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Special Italienne",
+        "price": "€ 6,20",
+        "sourceName": "SPECIAL Italliene",
+        "sourcePrice": "€6,20",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Special Caesar",
+        "price": "€ 6,80",
+        "sourceName": "SPECIAL Caeser",
+        "sourcePrice": "€6,80",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Special kip spek BBQ",
+        "price": "€ 7,20",
+        "sourceName": "SPECIAL Kip SPEK BBQ",
+        "sourcePrice": "€7,20",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      }
+    ],
+    "extras": [
+      {
+        "name": "+ smos",
+        "price": "€ 1,00",
+        "sourceName": "+ SMOS",
+        "sourcePrice": "€1,00",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "+ avocado",
+        "price": "€ 1,00",
+        "sourceName": "+ AVOCADO",
+        "sourcePrice": "€1,00",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "+ spek",
+        "price": "€ 1,00",
+        "sourceName": "+ SPEK",
+        "sourcePrice": "€1,00",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "+ bruin",
+        "price": null,
+        "sourceName": "+ BRUIN",
+        "sourcePrice": "€0,30/0,40",
+        "source": "https://www.mouline.be/m-takeaway.html",
+        "todo": "CLIENT VERIFICATION: takeaway bruin supplement has two unlabelled prices €0,30/0,40. Confirm applicable variants."
+      }
+    ]
+  },
+  {
+    "id": "salades",
+    "label": "Salades",
+    "tagline": "Je lunch, klaar voor onderweg.",
+    "source": "https://www.mouline.be/m-takeaway.html",
+    "items": [
+      {
+        "name": "Zalm en avocado",
+        "price": "€ 15,00",
+        "sourceName": "Zalm en Advocado",
+        "sourcePrice": "€15,00",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Quinoa veggie / kip / zalm",
+        "price": "€ 11 / 13 / 15",
+        "sourceName": "Quinoa Veggie/kip/zalm",
+        "sourcePrice": "€11/13/15",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Kip",
+        "price": "€ 14,00",
+        "sourceName": "Kip",
+        "sourcePrice": "€14,00",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Caeser",
+        "price": "€ 15,00",
+        "sourceName": "Caeser",
+        "sourcePrice": "€15,00",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Tomaat mozza veggie / ham",
+        "price": "€ 12 / 14",
+        "sourceName": "Tomaat Mozza Veggie/Ham",
+        "sourcePrice": "€12/14",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Geitenkaas",
+        "price": "€ 15,00",
+        "sourceName": "Geitenkaas",
+        "sourcePrice": "€15,00",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Tonijnsla + brood",
+        "price": "€ 14,00",
+        "sourceName": "Tonijnsla + Brood",
+        "sourcePrice": "€14,00",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      }
+    ]
+  },
+  {
+    "id": "warm",
+    "label": "Wraps & warm",
+    "tagline": "Wraps, pasta en dagsoep om mee te nemen.",
+    "source": "https://www.mouline.be/m-takeaway.html",
+    "items": [
+      {
+        "name": "Wrap kip",
+        "price": "€ 8,50",
+        "sourceName": "Wrap Kip",
+        "sourcePrice": "€8,50",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Wrap zalm",
+        "price": "€ 8,50",
+        "sourceName": "Wrap Zalm",
+        "sourcePrice": "€8,50",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Wrap italienne",
+        "price": "€ 8,50",
+        "sourceName": "Wrap Italienne",
+        "sourcePrice": "€8,50",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Pasta bolognaise",
+        "price": "€ 12,00",
+        "sourceName": "Pasta Bolognaise",
+        "sourcePrice": "€12,00",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "1 l bolognaisesaus + gemalen kaas",
+        "price": "€ 14,00",
+        "sourceName": "1L Bolognaisesaus + Gemalen Kaas",
+        "sourcePrice": "€14,00",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Verse dagsoep 1 l / 0,5 l",
+        "price": "€ 6 / 3,50",
+        "sourceName": "Verse Dagsoep 1L/0,5L",
+        "sourcePrice": "€6/€3,50",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      }
+    ]
+  },
+  {
+    "id": "zoet",
+    "label": "Zoet",
+    "tagline": "Iets kleins voor erbij.",
+    "source": "https://www.mouline.be/m-takeaway.html",
+    "items": [
+      {
+        "name": "Gebak van de dag",
+        "price": "€ 3,20",
+        "sourceName": "Gebak van de dag",
+        "sourcePrice": "€3,20",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Havermoutkoekjes",
+        "price": "€ 3,00",
+        "sourceName": "Havermoutkoekjes",
+        "sourcePrice": "€3,00",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Worstenbroodje",
+        "price": "€ 2,20",
+        "sourceName": "Worstenbroodje",
+        "sourcePrice": "€2,20",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Rijsttaartje",
+        "price": "€ 3,20",
+        "sourceName": "Rijsttaartje",
+        "sourcePrice": "€3,20",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      }
+    ]
+  },
+  {
+    "id": "dranken",
+    "label": "Dranken",
+    "tagline": "Voor onderweg of op je werk.",
+    "source": "https://www.mouline.be/m-takeaway.html",
+    "items": [
+      {
+        "name": "Mokka",
+        "price": "€ 2,80",
+        "sourceName": "Mokka",
+        "sourcePrice": "€2,80",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Koffie",
+        "price": "€ 2,80",
+        "sourceName": "Koffie",
+        "sourcePrice": "€2,80",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Latte",
+        "price": "€ 3,20",
+        "sourceName": "Latte",
+        "sourcePrice": "€3,20",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Latte macchiato",
+        "price": "€ 3,20",
+        "sourceName": "Latte Macchiato",
+        "sourcePrice": "€3,20",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Cappuccino",
+        "price": "€ 3,20",
+        "sourceName": "Cappuccino",
+        "sourcePrice": "€3,20",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Plat / bruis water",
+        "price": "€ 2,80",
+        "sourceName": "Plat/Bruis Water",
+        "sourcePrice": "€2,80",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Cola / cola zero",
+        "price": "€ 2,80",
+        "sourceName": "Cola/Cola Zero",
+        "sourcePrice": "€2,80",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Ice tea / ice tea green",
+        "price": "€ 2,90",
+        "sourceName": "Ice Tea/Ice Tea Green",
+        "sourcePrice": "€2,90",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Bionina",
+        "price": "€ 3,40",
+        "sourceName": "Bionina",
+        "sourcePrice": "€3,40",
+        "source": "https://www.mouline.be/m-takeaway.html"
+      },
+      {
+        "name": "Vers fruitsap",
+        "price": "€ 4,20",
+        "sourceName": "Vers fruitsap (0,25cl)",
+        "sourcePrice": "€4,20",
+        "source": "https://www.mouline.be/m-takeaway.html",
+        "todo": "CLIENT VERIFICATION: source says 0,25cl. Serving size omitted until verified; price retained."
+      }
+    ]
+  }
+]

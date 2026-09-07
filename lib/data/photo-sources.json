@@ -1,0 +1,98 @@
+[
+  {
+    "source_url": "https://www.mouline.be/assets/images/backgrounds/2.jpg",
+    "width": 2048,
+    "height": 1365,
+    "role": "Interior hero",
+    "description": "Warm café tables, gray-blue chairs, bench cushions. Best wide hero; no faces.",
+    "recommended_object_position": "center center"
+  },
+  {
+    "source_url": "https://www.mouline.be/assets/images/backgrounds/5.jpg",
+    "width": 2048,
+    "height": 1470,
+    "role": "Catering",
+    "description": "Fresh open baguettes across prep counter; authentic generous food spread.",
+    "recommended_object_position": "center center"
+  },
+  {
+    "source_url": "https://www.mouline.be/assets/images/backgrounds/17.jpg",
+    "width": 2048,
+    "height": 1365,
+    "role": "Breakfast",
+    "description": "Breakfast board with cheese, ham, nuts, small bowls; bright table scene.",
+    "recommended_object_position": "60% center"
+  },
+  {
+    "source_url": "https://www.mouline.be/assets/images/backgrounds/19.jpg",
+    "width": 2048,
+    "height": 1365,
+    "role": "Lunch wrap",
+    "description": "Closeup of full wrap with crisp greens, carrots and sprouts.",
+    "recommended_object_position": "55% center"
+  },
+  {
+    "source_url": "https://www.mouline.be/assets/images/backgrounds/21.jpg",
+    "width": 2048,
+    "height": 1365,
+    "role": "Salmon salad",
+    "description": "Colorful plated salad with salmon, avocado and sprouts.",
+    "recommended_object_position": "55% center"
+  },
+  {
+    "source_url": "https://www.mouline.be/assets/images/backgrounds/16.jpg",
+    "width": 2048,
+    "height": 1365,
+    "role": "Breakfast box",
+    "description": "Full breakfast spread with juices, jars, fruit, meat and cheese.",
+    "recommended_object_position": "center center"
+  },
+  {
+    "source_url": "https://www.mouline.be/assets/images/backgrounds/20.jpg",
+    "width": 2048,
+    "height": 1365,
+    "role": "Bread detail",
+    "description": "Basket of rustic sliced bread with warm cafe background.",
+    "recommended_object_position": "center center"
+  },
+  {
+    "source_url": "https://www.mouline.be/assets/images/backgrounds/12.jpg",
+    "width": 2048,
+    "height": 1365,
+    "role": "Pastry detail",
+    "description": "Golden rolled pastries on counter with soft background.",
+    "recommended_object_position": "45% center"
+  },
+  {
+    "source_url": "https://www.mouline.be/assets/images/backgrounds/4.jpg",
+    "width": 2048,
+    "height": 1365,
+    "role": "Terrace",
+    "description": "Sunlit gravel patio, metal chairs, wood fencing and greenery.",
+    "recommended_object_position": "center center"
+  },
+  {
+    "source_url": "https://www.mouline.be/assets/images/backgrounds/9.jpg",
+    "width": 2048,
+    "height": 1365,
+    "role": "Interior detail",
+    "description": "Bench with tactile colorful cushions; foreground rich warm textures.",
+    "recommended_object_position": "38% center"
+  },
+  {
+    "source_url": "https://www.mouline.be/assets/images/gallery/13.jpg",
+    "width": 700,
+    "height": 700,
+    "role": "Takeaway salad",
+    "description": "Paper bowl of fresh salad on dark rustic wooden table; good 4:5 crop.",
+    "recommended_object_position": "center center"
+  },
+  {
+    "source_url": "https://www.mouline.be/assets/images/backgrounds/13.jpg",
+    "width": 2048,
+    "height": 1410,
+    "role": "Coffee detail",
+    "description": "Shelves of black Chouffe cups, shallow focus, warm background.",
+    "recommended_object_position": "65% center"
+  }
+]
