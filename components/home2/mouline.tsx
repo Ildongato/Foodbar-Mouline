@@ -525,26 +525,30 @@ export default function MoulineHome2() {
         </section>
         <section id="contact" className="contact-section container">
           <div className="contact-info">
-            <h2>Tot straks?</h2>
-            <p className="contact-intro">
-              Een tafel, een vraag of plannen voor een volle tafel? Laat iets
-              van je horen.
-            </p>
-            <div className="contact-links">
-              <a href={business.phoneHref}>
-                {business.phone} <ArrowUpRight size={20} />
-              </a>
-              <a href={`mailto:${business.email}`}>
-                {business.email} <ArrowUpRight size={20} />
-              </a>
+            <div className="contact-primary">
+              <h2>Tot straks?</h2>
+              <p className="contact-intro">
+                Een tafel, een vraag of plannen voor een volle tafel? Laat iets
+                van je horen.
+              </p>
+              <div className="contact-links">
+                <a href={business.phoneHref}>
+                  {business.phone} <ArrowUpRight size={20} />
+                </a>
+                <a href={`mailto:${business.email}`}>
+                  {business.email} <ArrowUpRight size={20} />
+                </a>
+              </div>
             </div>
-            <div className="contact-hours">
-              <h3>Openingsuren</h3>
-              <Hours />
+            <div className="contact-secondary">
+              <div className="contact-hours">
+                <h3>Openingsuren</h3>
+                <Hours />
+              </div>
+              <p className="contact-urgent">
+                Voor een aanvraag voor vandaag bel je ons het best even.
+              </p>
             </div>
-            <p className="contact-urgent">
-              Voor een aanvraag voor vandaag bel je ons het best even.
-            </p>
           </div>
           <ContactForm intent={intent} onIntentChange={setIntent} />
         </section>

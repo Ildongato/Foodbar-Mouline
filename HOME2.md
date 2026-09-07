@@ -168,6 +168,26 @@ De statische preview heeft geen consolewaarschuwingen of fouten gemeld.
 TypeScript, gerichte lint, reguliere build, Pages-build en diffcontrole slagen.
 De oorspronkelijke homepage en gedeelde bedrijfs-, menu- en reviewgegevens zijn niet gewijzigd.
 
+## Compacter contactformulier — 7 september 2026
+
+Het contactgedeelte heeft kleinere telefoon- en e-maillinks (18 px), minder verticale
+tussenruimte en compacte velden met een rustige, rechte omlijning. Labels staan
+4 px boven hun veld; invoervelden blijven 44 px hoog met 16 px invoertekst. Naam,
+contactgegevens en aanvraagdetails zijn logisch gegroepeerd, met behoud van de
+bestaande DOM- en toetsenbordvolgorde. Op mobiel krijgen naam, e-mail, telefoon en
+datum de volle breedte. Tablet toont de contactgegevens en openingsuren naast elkaar,
+met het formulier daaronder. Alle CSS blijft beperkt tot home2.
+
+De reservatievorm is op 1440 px van 708 naar 575 px hoog gegaan (circa 19% korter),
+op 390 px van 1029 naar 856 px (circa 17%). Gecontroleerd op 320, 360, 390, 768, 1024
+en 1440 px zonder horizontale pagina-overloop. Reservatie, catering en andere vraag
+gecontroleerd; een leeg cateringformulier toont leesbare fouten en focust Naam.
+Een geldige lokale aanvraag bereidt het bestaande mailto-concept voor; niets verzonden.
+De gedeelde formulierlogica, contactgegevens en oorspronkelijke homepage zijn ongewijzigd.
+
+TypeScript, gerichte home2-lint, reguliere build, Pages-build en diffcontrole slagen.
+De browser meldt geen consolewaarschuwingen of fouten tijdens deze controle.
+
 ## Bestanden
 
 - `components/home2/mouline.tsx`: compositie, statische cover, galerij en navigatie.
