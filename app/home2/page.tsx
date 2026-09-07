@@ -6,8 +6,8 @@ export default function Home2() {
       <link
         rel="preload"
         as="image"
-        href="/images/interieur-1600.webp"
-        imageSrcSet="/images/interieur-800.webp 800w, /images/interieur-1600.webp 1600w"
+        href="/images/header-salade-b3624dd6-1280.webp"
+        imageSrcSet="/images/header-salade-b3624dd6-640.webp 640w, /images/header-salade-b3624dd6-1280.webp 1280w"
         imageSizes="100vw"
       />
       <MoulineHome2 />

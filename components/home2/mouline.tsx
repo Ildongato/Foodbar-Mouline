@@ -373,12 +373,12 @@ export default function MoulineHome2() {
           </div>
           <div className="hero-photo">
             <img
-              src={assetPath('/images/interieur-1600.webp')}
-              srcSet={`${assetPath('/images/interieur-800.webp')} 800w, ${assetPath('/images/interieur-1600.webp')} 1600w`}
+              src={assetPath('/images/header-salade-b3624dd6-1280.webp')}
+              srcSet={`${assetPath('/images/header-salade-b3624dd6-640.webp')} 640w, ${assetPath('/images/header-salade-b3624dd6-1280.webp')} 1280w`}
               sizes="100vw"
-              width="1600"
-              height="1067"
-              alt="Tafels en zitbanken in het interieur van Foodbar Mouline"
+              width="1280"
+              height="853"
+              alt="Salade met zalm, avocado en verse groenten bij Foodbar Mouline"
               fetchPriority="high"
               loading="eager"
             />

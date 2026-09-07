@@ -188,6 +188,13 @@ De gedeelde formulierlogica, contactgegevens en oorspronkelijke homepage zijn on
 TypeScript, gerichte home2-lint, reguliere build, Pages-build en diffcontrole slagen.
 De browser meldt geen consolewaarschuwingen of fouten tijdens deze controle.
 
+## Headerfoto vervangen — 7 september 2026
+
+De door de gebruiker aangeleverde saladefoto vervangt het interieurbeeld in de home2-cover.
+De foto is als WebP op 640 en 1280 px opgeslagen, met passend srcset, preload en alttekst.
+De uitsnede houdt het gerecht centraal; gecontroleerd op desktop (1440 px) en mobiel
+(390 px). Titel, navigatie en overige secties zijn behouden. Pages-build en diffcontrole slagen.
+
 ## Bestanden
 
 - `components/home2/mouline.tsx`: compositie, statische cover, galerij en navigatie.
