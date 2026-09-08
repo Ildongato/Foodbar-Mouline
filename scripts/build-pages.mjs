@@ -1,6 +1,7 @@
 import { build } from 'vite';
 import { readFile, writeFile, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
+import './generate-home3-colour-assets.mjs';
 
 process.env.NODE_ENV = 'production';
 const root = new URL('../', import.meta.url);
@@ -25,6 +26,7 @@ try {
   for (const [variant, path] of [
     ['home', 'index.html'],
     ['home2', 'home2/index.html'],
+    ['home3', 'home3/index.html'],
   ]) {
     const index = new URL(`dist-pages/${path}`, root);
     const template = await readFile(index, 'utf8');

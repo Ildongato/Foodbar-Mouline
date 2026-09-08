@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720" width="720" height="720">
+  <title>Mouline — abstracte molen in drukinkt</title>
+  <desc>Vier brede, asymmetrische wieken rondom een kleine as en een taps toelopend vlak. Een geometrisch merkteken met vaste droge-inktsporen; zonder ramen, metselwerk of realistische details. De pagina kleurt het silhouet via een CSS-masker.</desc>
+  <defs>
+    <mask id="impression" maskUnits="userSpaceOnUse" x="0" y="0" width="720" height="720">
+      <path fill="white" d="M0 0H720V720H0Z"/>
+      <!-- Short unprinted marks belong to the drawing, not a noise filter. -->
+      <g fill="none" stroke="black" stroke-linecap="square">
+        <path stroke-width="2" d="m89 66 21 8m-3 13 31 12m51 74 36 14M491 100l-7 29m59 17-5 23M593 473l-23-8m-11 39-37-15M168 440l-6 24m49-77-6 27M338 505l-2 27m55 47 17-1m-91 86 29-1"/>
+        <path stroke-width="1" d="m142 116 25 9m-14 26 11 4M511 145l-3 14m44 73-4 17M596 493l-17-7m-73-15-15-6M200 475l-3 17m-47 22-3 13M362 574l-2 34m13 41 25-1m-86 20 11-1"/>
+      </g>
+      <path fill="black" d="m118 126 7 2-1 3-8-3Zm95 65 4 2-2 6-3-2ZM539 161l3 1-1 6-3-2ZM565 492l6 1-2 4-5-1ZM183 493l4-1-2 6-4 2ZM337 606l6-1-1 3-5 1Zm46 49 4-1 1 5-4 1Z"/>
+    </mask>
+  </defs>
+  <g fill="currentColor" mask="url(#impression)">
+    <!-- Unequal quadrilaterals retain the cadence of turning sails. -->
+    <path d="M60 41 238 76 352 288 309 325 201 225 130 164Z"/>
+    <path d="m521 37 94 155-221 142-42-39 63-129 51-67Z"/>
+    <path d="m405 334 246 102-37 167-94-67-149-153Z"/>
+    <path d="m308 350 47 38-105 226-171-89 112-81Z"/>
+    <!-- One compact hub and an open-ended tapered mass imply the mill. -->
+    <path d="m332 294 40-4 30 33-1 43-35 30-42-5-27-34 4-38Z"/>
+    <path d="m330 402 49 3 46 117 38 165-176 5 19-147Z"/>
+  </g>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 800" width="720" height="800">
+  <title>Mouline — molen in droge inkt</title>
+  <desc>Eigen, bewerkbare drukillustratie. Brede diagonale wieken, een schuin dak en ronde vensters sluiten aan bij het bestaande merkbeeld. Dit is decoratief artwork, geen vervanging van het logo.</desc>
+  <defs>
+    <!-- Static gaps cut through the ink, without runtime noise or filters. -->
+    <mask id="dry-ink" maskUnits="userSpaceOnUse" x="0" y="0" width="720" height="800">
+      <path fill="#fff" d="M0 0H720V800H0Z"/>
+      <g fill="none" stroke="#000" stroke-linecap="round">
+        <path stroke-width="2" d="m103 88 24 20m-10-8 36 30m357-31 16-13M478 156l36-34M183 464l27-20m-6 5 24-20m313 29 38 27M300 517l-2 37m168 63 3 27M289 668l-4 54m122 25 42-1M320 613l12-1M443 479l16 1M357 696l10-1M518 501l13 12M219 212l17 16M457 384l19 22"/>
+        <path stroke-width="3" d="m259 371 31 1m171 6 19 1M301 590l-1 19m148 101 2 21M369 758l25-1M406 578l12 1M98 496l20-14M599 115l-22 13M163 122l12 16"/>
+        <path stroke-width="1.5" d="m334 476 17 1m53 34 12-2m27 56 6 1m-117 84 10-1m33 70 8 1m-87 37 18-1M98 76l13 9M167 159l19 19M546 106l26-21M539 463l23 17M155 470l-25 18"/>
+      </g>
+      <path fill="#000" d="m290 444 5-3 2 5-6 2Zm151 93 4 1-1 5-4-2Zm-98 27 5-2-1 4-4 1Zm80 104 4-1 1 5-5-1ZM218 191l4 2-2 4-3-3Zm327-64 5-2-2 4-4 1ZM140 458l3-1 2 4-5 1Z"/>
+    </mask>
+  </defs>
+  <g fill="#211d1b" mask="url(#dry-ink)">
+    <!-- Slightly uneven tower silhouette, with a round window and open doorway. -->
+    <path fill-rule="evenodd" d="M279 389C307 386 344 391 373 389L456 390C459 458 464 515 469 578L483 750L482 768C451 770 419 766 388 769L264 771C263 744 269 709 269 682L277 485ZM346 438C328 438 319 451 320 467C321 483 333 493 349 492C364 491 374 480 374 464C373 447 362 438 346 438ZM349 660C331 658 321 670 320 687L317 749L371 748L369 688C369 671 363 662 349 660Z"/>
+    <!-- Low, generous roof: a graphic print rather than an architectural diagram. -->
+    <path d="M282 250C307 247 335 251 357 249L423 250C442 279 461 310 480 341L516 399C470 401 433 397 390 401L215 402C234 366 256 332 273 294Z"/>
+    <!-- Four individually drawn sails; contours are intentionally not duplicates. -->
+    <path fill-rule="evenodd" d="M63 83L130 22C161 57 191 93 219 131L319 257L277 298C241 267 206 233 173 204ZM88 84C121 116 155 142 185 174L280 277L300 257L211 145L130 47Z"/>
+    <path fill-rule="evenodd" d="M403 260C443 224 475 192 510 161L592 86L640 161C606 181 572 199 539 220L444 277L421 295ZM424 264L437 278L525 224L620 165L589 109L523 171Z"/>
+    <path fill-rule="evenodd" d="M405 346L447 313C481 343 510 374 545 405L651 501L594 563C566 530 538 495 512 460ZM429 347L511 446L595 538L629 502L535 418L447 335Z"/>
+    <path fill-rule="evenodd" d="M269 334L305 377C273 406 240 432 206 460L105 544L58 472C93 451 128 430 162 407ZM82 477L108 520L197 447L283 375L267 353L171 421Z"/>
+    <!-- Solid central spars and hub give the distant crop its recognisable rhythm. -->
+    <path d="m291 277 12-11 56 68 173 201-13 11-174-201ZM121 476l-8-13 235-145 243-144 8 13-242 146Z"/>
+    <path fill-rule="evenodd" d="M350 296C367 295 381 308 381 325C382 343 367 357 350 357C332 357 319 343 319 326C318 309 332 297 350 296ZM350 309C340 309 332 316 332 326C332 337 340 344 350 344C361 344 369 336 368 326C368 316 360 309 350 309Z"/>
+    <!-- Short, irregular ground marks finish the master, cropped away in use. -->
+    <path d="m231 780 104-3 88 1 78-3 25 4-1 5-93 3-104-2-97 2Z"/>
+  </g>
+</svg>
