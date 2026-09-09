@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { flushSync } from 'react-dom';
 import {
   ArrowUpRight,
-  ArrowRight,
   ArrowUp,
   ChevronLeft,
   ChevronRight,
@@ -25,13 +24,12 @@ import ContactForm from '../contact-form';
 import GuestReviews from './guest-reviews';
 import MillArtwork from './mill-artwork';
 import HeaderMill from './header-mill';
+import TodayHours from './today-hours';
+import CulinaryIcon from './culinary-icon';
 import { usePageMotion } from './use-page-motion';
-import {
-  business,
-  todayHours,
-  restaurantSchema,
-  compactOpeningHours,
-} from '@/lib/business';
+import { useHeroScroll } from './use-hero-scroll';
+import { useHeroFit } from './use-hero-fit';
+import { business, restaurantSchema } from '@/lib/business';
 import { type MenuMode } from '@/lib/menu';
 import { type Intent } from '@/lib/contact';
 import { assetPath } from '@/lib/hosting';
@@ -45,7 +43,7 @@ const links = [
   ['Contact', 'contact'],
 ];
 const primaryLinks = links.filter(([, id]) =>
-  ['menu', 'over-ons', 'catering', 'contact'].includes(id),
+  ['menu', 'over-ons', 'fotos', 'catering'].includes(id),
 );
 const photos = [
   {
@@ -115,17 +113,15 @@ function Hours() {
 }
 export default function MoulineHome3() {
   usePageMotion();
+  const { navSlotRef, millRef, wordmarkRef, slotRef } = useHeroScroll();
+  const { heroRef, informationRef } = useHeroFit();
   const [active, setActive] = useState('home');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mode, setMode] = useState<MenuMode>('onsite');
   const [intent, setIntent] = useState<Intent>('Reservatie');
-  const [today, setToday] = useState<ReturnType<typeof todayHours>>();
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [privacy, setPrivacy] = useState(false);
   useEffect(() => {
-    const updateToday = () => setToday(todayHours());
-    updateToday();
-    const clock = setInterval(updateToday, 60000);
     // Navigation observation is optional; content never depends on an observer.
     const observer =
       typeof IntersectionObserver === 'undefined'
@@ -141,7 +137,6 @@ export default function MoulineHome3() {
       .querySelectorAll('main section[id]')
       .forEach((section) => observer?.observe(section));
     return () => {
-      clearInterval(clock);
       observer?.disconnect();
     };
   }, []);
@@ -282,7 +277,7 @@ export default function MoulineHome3() {
                   aria-label="Mouline, naar boven"
                   onClick={() => setMobileOpen(false)}
                 >
-                  <HeaderMill />
+                  Mouline
                 </a>
                 <DialogClose
                   className="icon-button"
@@ -323,46 +318,48 @@ export default function MoulineHome3() {
               </div>
             </DialogContent>
           </Dialog>
-          <a className="brand" href="#home" aria-label="Mouline, naar boven">
+          <span className="brand-slot" ref={navSlotRef} aria-hidden="true" />
+          <a
+            className="brand"
+            ref={millRef}
+            href="#home"
+            aria-label="Mouline, naar boven"
+          >
             <HeaderMill />
           </a>
-          <a
-            className="button header-cta"
-            href="#menu"
-            onClick={() => chooseMenu('takeaway')}
-          >
-            Takeaway <ArrowUpRight size={16} />
+          <a className="button header-cta" href="#contact">
+            Contact <ArrowUpRight size={16} />
           </a>
         </div>
       </header>
       <main id="main">
-        <section className="hero" id="home" aria-label="Welkom bij Mouline">
-          <div className="hero-title container">
-            <h1>
-              <span>Van ontbijt</span> <span>tot lunch.</span>
-            </h1>
-            <div className="hero-support">
-              <p className="hero-description">
-                Ontbijt, lunch en broodjes op de Kapelsesteenweg.
-              </p>
-              <a
-                className="text-link"
-                href="#menu"
-                onClick={() => chooseMenu('onsite')}
-              >
-                Bekijk de kaart <ArrowRight size={17} />
-              </a>
-            </div>
-          </div>
-          <div className="hero-photo">
+        <section
+          className="hero"
+          id="home"
+          ref={heroRef}
+          aria-label="Welkom bij Mouline"
+        >
+          <h1
+            className="hero-wordmark container"
+            ref={wordmarkRef}
+            aria-label="Mouline Foodbar"
+          >
+            <span className="hero-word hero-word-left" aria-hidden="true">
+              Mouline
+            </span>
+            <span className="hero-mill-slot" ref={slotRef} aria-hidden="true" />
+            <span className="hero-word hero-word-right" aria-hidden="true">
+              Foodbar
+            </span>
+          </h1>
+          <p className="hero-founded container">(Est. 2018)</p>
+          <div className="hero-plate">
             <img
-              src={assetPath(
-                '/home3/images/header-salade-transparent-a403bb83-1280.webp',
-              )}
-              srcSet={`${assetPath('/home3/images/header-salade-transparent-a403bb83-640.webp')} 640w, ${assetPath('/home3/images/header-salade-transparent-a403bb83-1280.webp')} 1280w`}
-              sizes="100vw"
-              width="1280"
-              height="853"
+              src={assetPath('/home3/images/bordheader-1280.webp')}
+              srcSet={`${assetPath('/home3/images/bordheader-640.webp')} 640w, ${assetPath('/home3/images/bordheader-1280.webp')} 1280w, ${assetPath('/home3/images/bordheader-2048.webp')} 2048w`}
+              sizes="(max-width: 650px) 140vw, 100vw"
+              width="2048"
+              height="1364"
               alt="Salade met zalm, avocado en verse groenten bij Foodbar Mouline"
               fetchPriority="high"
               loading="eager"
@@ -370,33 +367,28 @@ export default function MoulineHome3() {
           </div>
         </section>
         <aside
+          ref={informationRef}
           className="practical container"
           aria-label="Praktische informatie"
         >
           <p>
             Ontbijt <strong>tot 11u</strong>
-            <span>Lunch vanaf 11u</span>
+            <span className="meal-separator" aria-hidden="true">
+              •
+            </span>
+            Lunch vanaf 11u
           </p>
-          <a href="#menu" onClick={() => chooseMenu('takeaway')}>
-            Takeaway <strong>bestel voor 11u</strong>
+          <a
+            className="takeaway-detail"
+            href="#menu"
+            onClick={() => chooseMenu('takeaway')}
+          >
+            <CulinaryIcon categoryId="link" />
+            <span>
+              Takeaway <strong>bestel voor 11u</strong>
+            </span>
           </a>
-          <p className="today-hours">
-            {today ? (
-              today.opens ? (
-                <>
-                  Vandaag <strong>{today.display}</strong>
-                </>
-              ) : today.unverified ? (
-                <a href={business.phoneHref}>
-                  Vandaag: bel voor de openingsuren
-                </a>
-              ) : (
-                <strong>Vandaag gesloten</strong>
-              )
-            ) : (
-              compactOpeningHours
-            )}
-          </p>
+          <TodayHours />
         </aside>
         <div className="menu-chapter">
           <MenuSection

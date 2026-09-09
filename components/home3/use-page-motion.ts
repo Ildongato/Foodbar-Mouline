@@ -27,16 +27,6 @@ export function usePageMotion() {
       return;
 
     const elements = [...document.querySelectorAll<HTMLElement>(targets)];
-    const opening = [
-      ...document.querySelectorAll<HTMLElement>(
-        '.hero h1, .hero-support, .hero-photo img',
-      ),
-    ];
-    const finishOpening = (event: AnimationEvent) => {
-      if (opening.includes(event.target as HTMLElement)) {
-        (event.target as HTMLElement).dataset.opening = 'complete';
-      }
-    };
     const animations = new Map<HTMLElement, Animation>();
     const show = (element: HTMLElement) => {
       observer.unobserve(element);
@@ -111,12 +101,6 @@ export function usePageMotion() {
     const focus = (event: FocusEvent) => {
       if (!(event.target instanceof Element)) return;
       showWithin(event.target);
-      // Finish permanently on focus; a CSS :focus-within cancellation would
-      // restart the entrance when focus subsequently leaves the navigation.
-      for (const element of opening) {
-        if (element.contains(event.target))
-          element.dataset.opening = 'complete';
-      }
     };
     const anchor = (event: MouseEvent) => {
       if (!(event.target instanceof Element)) return;
@@ -129,11 +113,9 @@ export function usePageMotion() {
       if (preference.matches) {
         observer.disconnect();
         elements.forEach(show);
-        opening.forEach((element) => (element.dataset.opening = 'complete'));
       }
     };
     followHash();
-    document.addEventListener('animationend', finishOpening);
     document.addEventListener('focusin', focus);
     document.addEventListener('click', anchor, true);
     window.addEventListener('hashchange', followHash);
@@ -144,10 +126,6 @@ export function usePageMotion() {
       elements.forEach((element) => {
         delete element.dataset.motion;
       });
-      opening.forEach((element) => {
-        delete element.dataset.opening;
-      });
-      document.removeEventListener('animationend', finishOpening);
       document.removeEventListener('focusin', focus);
       document.removeEventListener('click', anchor, true);
       window.removeEventListener('hashchange', followHash);

@@ -6,7 +6,9 @@ type CulinaryCategory =
   | 'salades'
   | 'warm'
   | 'zoet'
-  | 'dranken';
+  | 'dranken'
+  | 'klok'
+  | 'link';
 
 // Presentation-only mapping: the two menu datasets retain their own categories.
 const categoryIcons: Record<string, CulinaryCategory> = {
@@ -16,10 +18,19 @@ const categoryIcons: Record<string, CulinaryCategory> = {
   warm: 'warm',
   zoet: 'zoet',
   dranken: 'dranken',
+  klok: 'klok',
+  link: 'link',
 };
 
 // One pen family: rounded 1.5-unit strokes, open silhouettes and a few inner lines.
 const drawings: Record<CulinaryCategory, ReactNode> = {
+  link: <path d="M6 18 18 6M6 6h12v12" />,
+  klok: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 6.5V12l3.8 2.3M12 3.5v1M20.5 12h-1M12 20.5v-1M3.5 12h1" />
+    </>
+  ),
   ontbijt: (
     <>
       <path d="M5.4 11C4.9 8.6 6 3 9.4 3s4.5 5.6 4 8M4.5 11h9.8c-.2 4-2.1 5.8-4.9 5.8S4.7 15 4.5 11ZM9.4 16.8V21M6 21h6.8" />

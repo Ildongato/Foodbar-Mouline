@@ -243,7 +243,16 @@ textarea {
   background: transparent;
 }
 
-/* Navigation and a single photographic opening. */
+/* Header content follows the same 1280px grid as the page. The rose nav
+   sits above the hero, which shares the menu's background. */
+:root {
+  --hero-width: min(var(--content), calc(100vw - 2 * var(--gutter)));
+  --hero-gap: clamp(2px, calc(var(--hero-width) * 0.006), 12px);
+  --hero-pad: clamp(18px, calc(var(--hero-width) * 0.018), 32px);
+  --hero-row: clamp(64px, calc(var(--hero-width) * 0.142), 260px);
+  --hero-mill-size: clamp(38px, calc(var(--hero-width) * 0.097), 176px);
+  --hero-mill-lift: min(calc(var(--hero-width) * 0.0065), 12px);
+}
 .site-header {
   position: sticky;
   top: 0;
@@ -252,29 +261,51 @@ textarea {
   z-index: 40;
   border-bottom: 1px solid var(--line);
 }
-/* The compact navigation follows the home2 composition. */
+/* Equal side tracks keep the mill at the viewport centre regardless of links. */
 .header-inner {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   height: 100%;
   gap: 28px;
 }
-.brand {
+.brand-slot {
   grid-column: 2;
   grid-row: 1;
   justify-self: center;
-  display: grid;
-  place-items: center;
-  min-height: 44px;
-  min-width: 44px;
+  width: 44px;
+  aspect-ratio: 50 / 58;
+}
+.brand {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--hero-mill-size);
+  aspect-ratio: 50 / 58;
+  color: var(--alizarin);
+  /* Matches the hero slot before JS measures it. At the end --mill-y is zero. */
+  --mill-y: calc(
+    var(--header) / 2 + var(--hero-pad) + var(--hero-row) / 2 -
+      var(--hero-mill-lift)
+  );
+  transform: translate3d(-50%, calc(-50% + var(--mill-y)), 0)
+    scale(var(--mill-scale, 1));
+  transform-origin: center;
+  will-change: transform;
 }
 .nav-mill {
   display: block;
-  width: 88px;
-  height: 62px;
-  color: var(--alizarin);
+  width: 100%;
+  height: 100%;
+  color: inherit;
   pointer-events: none;
+}
+.brand::after {
+  /* Keep the compact mobile home link easy to tap without enlarging its ink. */
+  content: '';
+  position: absolute;
+  inset: -8px;
 }
 .nav-mill-sails {
   /* The enclosing SVG groups place the origin precisely on the EPS hub. */
@@ -318,59 +349,84 @@ textarea {
 .mobile-trigger {
   display: none;
 }
-/* Home2 composition: a title and supporting copy above the photograph. */
+/* The plate stays in document flow; only the wordmark and shared mill move. */
 .hero {
-  background: var(--rose);
+  /* Reserve the real information-strip height and use the stable, visible
+     viewport (including mobile browser bars). Preserve a useful photo crop on
+     very short screens; the strip then follows naturally, without overlaps. */
+  max-height: max(
+    calc(100svh - var(--header) - var(--hero-info-height, 80px)),
+    calc(var(--hero-row) + var(--hero-pad) + clamp(220px, 24vw, 400px))
+  );
+  background: var(--white);
   color: var(--ink);
+  overflow: clip;
   overflow-anchor: none;
 }
-.hero-title {
+.hero-wordmark {
+  --hero-tracking: -0.045em;
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+  grid-template-columns: minmax(0, 1fr) var(--hero-mill-size) minmax(0, 1fr);
   align-items: center;
-  column-gap: clamp(32px, 4vw, 64px);
-  padding-block: 44px 48px;
-}
-.hero h1 {
-  min-width: 0;
+  gap: var(--hero-gap);
+  padding-top: var(--hero-pad);
+  height: calc(var(--hero-row) + var(--hero-pad));
   color: var(--alizarin);
-  font-size: clamp(72px, 7.1vw, 104px);
-  line-height: 1.02;
-  letter-spacing: -0.025em;
+  /* Fit both words inside the content grid, allowing for the mill and gaps. */
+  font-size: calc(
+    (var(--hero-width) - var(--hero-mill-size) - 2 * var(--hero-gap)) / 6.35
+  );
+  line-height: 0.9;
+  letter-spacing: var(--hero-tracking);
+  text-transform: uppercase;
 }
-.hero h1 span {
+.hero-word {
+  display: block;
   white-space: nowrap;
+  will-change: opacity;
 }
-.hero-description {
-  max-width: 34ch;
-  font-size: 16px;
-  line-height: 1.6;
+.hero-word-left {
+  justify-self: start;
+  /* Instrument Serif M: remove its 14/1000em leading sidebearing. */
+  margin-inline-start: -0.014em;
 }
-.hero-support .text-link {
-  min-height: 44px;
-  margin-top: 10px;
-  gap: 16px;
+.hero-word-right {
+  justify-self: end;
+  /* R overhangs its advance by 10/1000em; account for trailing tracking too. */
+  margin-inline-end: calc(0.01em - var(--hero-tracking));
 }
-.hero .text-link,
-.hero .text-link:is(:hover, :focus-visible) {
-  color: var(--ink);
-  text-decoration-color: currentColor;
+.hero-mill-slot {
+  position: relative;
+  top: calc(-1 * var(--hero-mill-lift));
+  width: var(--hero-mill-size);
+  aspect-ratio: 50 / 58;
+}
+.hero-founded {
+  position: relative;
+  z-index: 1;
+  color: var(--alizarin);
+  font-family: var(--display);
+  font-size: clamp(20px, calc(var(--hero-width) * 0.03), 40px);
+  font-style: italic;
+  line-height: 1.1;
+  /* Use the plate's transparent corner without adding a gap to the hero. */
+  height: 0;
+}
+.hero-plate {
+  /* The supplied PNG has 238 transparent rows. Bring its curved edge right
+     under the type at its original aspect ratio. On shorter screens only the
+     hero's lower edge crops the image; the transparent top stays intact. */
+  margin-top: -11.62vw;
+}
+.hero-plate img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
 }
 .hero :focus-visible,
 .reviews-section :focus-visible {
   outline-color: var(--ink);
-}
-.hero-photo {
-  height: clamp(340px, 58svh, 640px);
-  background: var(--rose);
-  overflow: hidden;
-}
-.hero-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* Keep the transparent upper edge of the plate within the hero crop. */
-  object-position: 50% 20%;
 }
 .practical {
   display: flex;
@@ -384,9 +440,24 @@ textarea {
 .practical strong {
   font-weight: 500;
 }
-.practical p:first-child span {
+.today-hours,
+.takeaway-detail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.today-hours > .culinary-icon,
+.takeaway-detail > .culinary-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--ink);
+}
+.meal-separator {
   display: inline-block;
-  margin-left: 24px;
+  margin-inline: 10px;
+  font-size: 0.72em;
+  vertical-align: 1px;
 }
 .practical a:hover {
   text-decoration: underline;
@@ -697,7 +768,7 @@ textarea {
   background-color: var(--dusty-rose);
   color: var(--ink);
 }
-/* One shared print illustration, clipped only in its non-interactive layer. */
+/* Supplied brushwork, recoloured through a mask and clipped at section edges. */
 .reviews-section,
 .catering-section {
   position: relative;
@@ -713,7 +784,7 @@ textarea {
 .mill-artwork {
   position: absolute;
   width: clamp(440px, 48vw, 740px);
-  aspect-ratio: 1;
+  aspect-ratio: 956.0287 / 1219.6094;
   top: -54%;
   right: -8%;
   color: var(--alizarin);
@@ -1257,6 +1328,10 @@ textarea {
   overflow-y: auto;
   gap: 0;
 }
+.mobile-menu-top > a {
+  font-family: var(--display);
+  font-size: 32px;
+}
 .mobile-menu-top {
   display: flex;
   justify-content: space-between;
@@ -1359,7 +1434,7 @@ textarea {
   animation: spin 1s linear infinite;
 }
 
-/* Responsive composition follows content, rather than fixed viewport height. */
+/* The information can wrap; the hero gives it room without changing the grid. */
 @media (max-width: 1100px) {
   .header-inner {
     gap: 24px;
@@ -1386,9 +1461,6 @@ textarea {
     font-size: 13px;
     gap: 20px;
   }
-  .practical p:first-child span {
-    margin-left: 16px;
-  }
 }
 @media (max-width: 1000px) {
   .contact-section {
@@ -1409,17 +1481,8 @@ textarea {
   }
 }
 @media (max-width: 800px) {
-  .brand .nav-mill {
-    width: 76px;
-    height: 54px;
-  }
-  .hero-title {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    padding-block: 36px;
-  }
-  .hero h1 {
-    font-size: clamp(56px, 9vw, 72px);
+  .brand-slot {
+    width: 32px;
   }
   .catering-section .mill-artwork {
     left: -20%;
@@ -1444,9 +1507,6 @@ textarea {
     background: transparent;
     border: 0;
   }
-  .hero-photo {
-    height: clamp(400px, 58svh, 600px);
-  }
   .practical {
     flex-wrap: wrap;
     gap: 8px 24px;
@@ -1454,9 +1514,6 @@ textarea {
   }
   .practical p:first-child {
     width: 100%;
-  }
-  .practical p:first-child span {
-    margin-left: 24px;
   }
   .section-heading {
     gap: 32px;
@@ -1510,13 +1567,10 @@ textarea {
   }
 }
 @media (max-width: 650px) {
-  .hero-title {
-    gap: 20px;
-    padding-block: 32px;
-  }
-  .hero h1 {
-    font-size: clamp(40px, 11.8vw, 56px);
-    line-height: 1.04;
+  .hero-plate {
+    width: 140%;
+    margin-left: -20%;
+    margin-top: -16.27vw;
   }
   .mill-artwork {
     width: 510px;
@@ -1547,18 +1601,12 @@ textarea {
     gap: 8px;
     font-size: 12px;
   }
-  .hero-photo {
-    height: clamp(320px, 92vw, 480px);
-  }
   .practical {
     padding-block: 18px;
     border-top: 1px solid var(--line);
     font-size: 12px;
     justify-content: flex-start;
     gap: 6px 20px;
-  }
-  .practical p:first-child span {
-    margin-left: 20px;
   }
   .section-heading {
     display: block;
@@ -1778,29 +1826,9 @@ textarea {
     padding-inline: 8px;
   }
 }
-@media (min-width: 801px) and (max-height: 700px) {
-  .hero-title {
-    padding-block: 24px;
-  }
-}
-@media (max-width: 359px) {
-  .header-cta {
-    display: none;
-  }
-}
 
-/* A brief editorial opening, followed by one reveal per chapter on approach.
-   Nothing blocks navigation; without JS, every chapter stays visible. */
+/* Existing chapter reveals remain independent of the hero scroll sequence. */
 @media (prefers-reduced-motion: no-preference) {
-  .hero h1 {
-    animation: opening-rise 600ms var(--ease) both;
-  }
-  .hero-support {
-    animation: opening-rise 600ms var(--ease) 80ms both;
-  }
-  .hero-photo img {
-    animation: opening-photo 760ms var(--ease) 80ms both;
-  }
   .category-content:not([hidden]),
   .mode-note,
   .takeaway-note {
@@ -1816,9 +1844,6 @@ textarea {
   [data-motion]:focus-within {
     opacity: 1;
   }
-  :is(.hero h1, .hero-support, .hero-photo img)[data-opening='complete'] {
-    animation: none;
-  }
 }
 @keyframes opening-fade {
   from {
@@ -1828,29 +1853,6 @@ textarea {
     opacity: 1;
   }
 }
-@keyframes opening-rise {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-@keyframes opening-photo {
-  from {
-    /* A diagonal leading edge echoes the broad, angular windmill sails. */
-    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
-  }
-  45% {
-    clip-path: polygon(0 0, 65% 0, 43% 100%, 0 100%);
-  }
-  to {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   :root {
     --interaction: 0ms;
@@ -1876,9 +1878,6 @@ textarea {
 }
 
 @media (max-width: 299px) {
-  .hero h1 {
-    font-size: 36px;
-  }
   .review-excerpts figure {
     grid-template-columns: 1fr;
   }
