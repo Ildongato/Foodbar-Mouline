@@ -356,8 +356,10 @@ export default function MoulineHome3() {
           </div>
           <div className="hero-photo">
             <img
-              src={assetPath('/images/header-salade-b3624dd6-1280.webp')}
-              srcSet={`${assetPath('/images/header-salade-b3624dd6-640.webp')} 640w, ${assetPath('/images/header-salade-b3624dd6-1280.webp')} 1280w`}
+              src={assetPath(
+                '/home3/images/header-salade-transparent-a403bb83-1280.webp',
+              )}
+              srcSet={`${assetPath('/home3/images/header-salade-transparent-a403bb83-640.webp')} 640w, ${assetPath('/home3/images/header-salade-transparent-a403bb83-1280.webp')} 1280w`}
               sizes="100vw"
               width="1280"
               height="853"
