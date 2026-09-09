@@ -29,7 +29,7 @@ export function usePageMotion() {
     const elements = [...document.querySelectorAll<HTMLElement>(targets)];
     const opening = [
       ...document.querySelectorAll<HTMLElement>(
-        '.header-inner, .hero h1, .hero-support, .hero-photo img, .practical',
+        '.hero h1, .hero-support, .hero-photo img',
       ),
     ];
     const finishOpening = (event: AnimationEvent) => {
@@ -49,7 +49,7 @@ export function usePageMotion() {
       observer.unobserve(element);
       element.dataset.motion = 'revealing';
       // Opacity only for the menu: its sticky controls keep their normal context.
-      const distance = element.matches('.menu-section') ? 0 : 14;
+      const distance = element.matches('.menu-section') ? 0 : 12;
       const frames = distance
         ? [
             { opacity: 0, transform: `translateY(${distance}px)` },
@@ -58,7 +58,7 @@ export function usePageMotion() {
         : [{ opacity: 0 }, { opacity: 1 }];
       try {
         const animation = element.animate(frames, {
-          duration: 850,
+          duration: 600,
           easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
           fill: 'backwards',
         });
@@ -114,7 +114,8 @@ export function usePageMotion() {
       // Finish permanently on focus; a CSS :focus-within cancellation would
       // restart the entrance when focus subsequently leaves the navigation.
       for (const element of opening) {
-        if (element.contains(event.target)) element.dataset.opening = 'complete';
+        if (element.contains(event.target))
+          element.dataset.opening = 'complete';
       }
     };
     const anchor = (event: MouseEvent) => {

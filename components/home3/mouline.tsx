@@ -51,32 +51,26 @@ const photos = [
   {
     name: 'ontbijt',
     alt: 'Ontbijtbord met kazen, ham en noten bij Foodbar Mouline',
-    caption: 'Een goede start.',
   },
   {
     name: 'koffie',
     alt: 'Koffiekopjes op de plank bij Foodbar Mouline',
-    caption: 'Nog een koffie?',
   },
   {
     name: 'gebak',
     alt: 'Koffiekoeken en rozijnenkoeken klaargezet bij Mouline',
-    caption: 'Iets voor erbij.',
   },
   {
     name: 'salade',
     alt: 'Salade met zalm en verse groenten bij Mouline',
-    caption: 'Kleur op je bord.',
   },
   {
     name: 'wrap',
     alt: 'Wrap met kip en groenten op een bord bij Mouline',
-    caption: 'Ook om mee te nemen.',
   },
   {
     name: 'terras',
     alt: 'Tafels met stoelen op het terras van Mouline',
-    caption: 'Even buiten zitten.',
   },
 ];
 function Photo({
@@ -312,7 +306,7 @@ export default function MoulineHome3() {
                     }}
                   >
                     {label}
-                    <ArrowUpRight size={25} />
+                    <ArrowUpRight size={20} />
                   </a>
                 ))}
               </nav>
@@ -349,8 +343,7 @@ export default function MoulineHome3() {
             </h1>
             <div className="hero-support">
               <p className="hero-description">
-                Ontbijt, lunch en broodjes uit onze keuken op de
-                Kapelsesteenweg.
+                Ontbijt, lunch en broodjes op de Kapelsesteenweg.
               </p>
               <a
                 className="text-link"
@@ -435,10 +428,8 @@ export default function MoulineHome3() {
             <div className="about-copy">
               <h2>Aangenaam, Mouline.</h2>
               <p>
-                Mouline is een foodbar op de Kapelsesteenweg in Ekeren, voor
-                ontbijt, lunch en dagverse gerechten. Vanuit de eigen keuken
-                wordt elke ochtend voorbereid wat later op je bord of in je
-                takeawayzak belandt.
+                Je vindt Mouline aan de Kapelsesteenweg in Ekeren. Schuif aan
+                voor ontbijt of lunch.
               </p>
               <a href="#contact" className="text-link">
                 Kom gerust langs <ArrowUpRight size={16} />
@@ -480,7 +471,6 @@ export default function MoulineHome3() {
                       <Plus size={18} />
                     </span>
                   </button>
-                  <figcaption>{p.caption}</figcaption>
                 </figure>
               ))}
             </div>
@@ -497,8 +487,7 @@ export default function MoulineHome3() {
                 tot volle tafel.
               </h2>
               <p>
-                Voor ontbijt, lunch, een vergadering, receptie of een tafel vol
-                hapjes. Mouline verzorgt catering op maat van het moment.
+                Ontbijt, broodjes en hapjes voor vergaderingen en recepties.
               </p>
               <a
                 href="#contact"
@@ -520,8 +509,7 @@ export default function MoulineHome3() {
             <div className="contact-primary">
               <h2>Tot straks?</h2>
               <p className="contact-intro">
-                Een tafel, een vraag of plannen voor een volle tafel? Laat iets
-                van je horen.
+                Voor een reservatie, catering of een vraag.
               </p>
               <div className="contact-links">
                 <a href={business.phoneHref}>
@@ -691,7 +679,9 @@ export default function MoulineHome3() {
                 >
                   <ChevronLeft size={24} />
                 </button>
-                <p>{photos[lightbox].caption}</p>
+                <p aria-live="polite">
+                  {lightbox + 1} / {photos.length}
+                </p>
                 <button
                   className="icon-button"
                   aria-label="Volgende galerijfoto"

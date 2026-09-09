@@ -116,7 +116,6 @@ function CategoryMenu({ mode }: { mode: MenuMode }) {
               <CulinaryIcon categoryId={c.id} />
               <h3>{c.label}</h3>
             </div>
-            <p>{c.tagline}</p>
           </div>
           <DishList items={c.items} />
           {c.extras && (
@@ -145,9 +144,6 @@ export default function MenuSection({
     <section id="menu" className="menu-section container">
       <div className="section-heading">
         <h2>De menukaart.</h2>
-        <p>
-          Een rustig ontbijt, een lunch aan tafel of iets lekkers voor onderweg.
-        </p>
       </div>
       <Tabs
         value={mode}
@@ -182,10 +178,7 @@ export default function MenuSection({
         </TabsContent>
         <TabsContent value="takeaway" keepMounted className="mode-panel">
           <div className="takeaway-note">
-            <div>
-              <strong>Bestel voor 11u.</strong>
-              <p>Dan staat je bestelling klaar op het afgesproken uur.</p>
-            </div>
+            <strong>Bestel voor 11u.</strong>
             <a className="button button-ink" href={business.phoneHref}>
               Bel {business.phone} <ArrowUpRight size={17} />
             </a>
