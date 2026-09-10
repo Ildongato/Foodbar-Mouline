@@ -1,8 +1,17 @@
 'use client';
 /* oxlint-disable nextjs/no-img-element -- Local WebP srcsets and SVGs must also work in the static Pages entry without an image server. */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { flushSync } from 'react-dom';
-import { ArrowUpRight, ArrowUp, Menu as MenuIcon, X, Plus } from 'lucide-react';
+import {
+  ArrowUpRight,
+  ArrowUp,
+  Menu as MenuIcon,
+  X,
+  Sprout,
+  Soup,
+  Croissant,
+  Heart,
+} from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -15,7 +24,8 @@ import MenuSection from './menu-section';
 import ContactForm from '../contact-form';
 import GuestReviews from './guest-reviews';
 import HeaderMill from './header-mill';
-import GalleryLightbox from './gallery-lightbox';
+import GallerySection from './gallery-section';
+import AboutTitle from './about-title';
 import TodayHours from './today-hours';
 import CulinaryIcon from './culinary-icon';
 import { usePageMotion } from './use-page-motion';
@@ -37,32 +47,6 @@ const links = [
 const primaryLinks = links.filter(([, id]) =>
   ['menu', 'over-ons', 'fotos', 'catering'].includes(id),
 );
-const photos = [
-  {
-    name: 'ontbijt',
-    alt: 'Ontbijtbord met kazen, ham en noten bij Foodbar Mouline',
-  },
-  {
-    name: 'koffie',
-    alt: 'Koffiekopjes op de plank bij Foodbar Mouline',
-  },
-  {
-    name: 'gebak',
-    alt: 'Koffiekoeken en rozijnenkoeken klaargezet bij Mouline',
-  },
-  {
-    name: 'salade',
-    alt: 'Salade met zalm en verse groenten bij Mouline',
-  },
-  {
-    name: 'wrap',
-    alt: 'Wrap met kip en groenten op een bord bij Mouline',
-  },
-  {
-    name: 'terras',
-    alt: 'Tafels met stoelen op het terras van Mouline',
-  },
-];
 function Photo({
   name,
   alt,
@@ -112,8 +96,6 @@ export default function MoulineHome3() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mode, setMode] = useState<MenuMode>('onsite');
   const [intent, setIntent] = useState<Intent>('Reservatie');
-  const [lightbox, setLightbox] = useState<number | null>(null);
-  const lightboxOpenerRef = useRef<HTMLButtonElement>(null);
   const [privacy, setPrivacy] = useState(false);
   useEffect(() => {
     // Navigation observation is optional; content never depends on an observer.
@@ -402,19 +384,16 @@ export default function MoulineHome3() {
           />
         </div>
         <div className="about-chapter">
-          <span
-            className="paper-texture"
-            aria-hidden="true"
-            style={{
-              backgroundImage: `url("${assetPath('/home3/images/paper.svg')}")`,
-            }}
-          />
-          <section id="over-ons" className="about-section container">
+          <section
+            id="over-ons"
+            className="about-section container"
+            aria-labelledby="about-title"
+          >
             <div className="about-photo">
               <img
                 src={assetPath('/images/aangenaam-mouline-128dae27-941.webp')}
                 srcSet={`${assetPath('/images/aangenaam-mouline-128dae27-640.webp')} 640w, ${assetPath('/images/aangenaam-mouline-128dae27-941.webp')} 941w`}
-                sizes="(max-width: 800px) 100vw, (max-width: 1440px) 50vw, 690px"
+                sizes="(max-width: 650px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 56px), (max-width: 1392px) 40vw, 520px"
                 width="941"
                 height="1672"
                 loading="lazy"
@@ -423,59 +402,65 @@ export default function MoulineHome3() {
               />
             </div>
             <div className="about-copy">
-              <h2>Aangenaam, Mouline.</h2>
-              <p>
-                Je vindt Mouline aan de Kapelsesteenweg in Ekeren. Schuif aan
-                voor ontbijt of lunch.
+              <AboutTitle />
+              <p className="about-intro">
+                Ik ben Caroline. Na mijn opleiding als kok en kelner aan
+                Spermali in Brugge droomde ik ervan om ooit mijn eigen zaak te
+                openen. In 2019 werd die droom werkelijkheid met Mouline.
               </p>
-              <a href="#contact" className="text-link">
-                Kom gerust langs <ArrowUpRight size={16} />
-              </a>
+              <p>
+                Elke dag staan verse producten, huisgemaakte bereidingen en een
+                warm onthaal centraal. Ook bij takeaway vinden we het belangrijk
+                dat het vlot gaat, zonder in te boeten op kwaliteit of
+                vriendelijkheid.
+              </p>
             </div>
+            <ul className="about-values">
+              <li>
+                <Sprout size={24} strokeWidth={1.5} aria-hidden="true" />
+                <div>
+                  <h3>Vers</h3>
+                  <p>
+                    Dagelijkse levering van verse producten, zorgvuldig gekozen
+                    voor onze gerechten.
+                  </p>
+                </div>
+              </li>
+              <li>
+                <Soup size={24} strokeWidth={1.5} aria-hidden="true" />
+                <div>
+                  <h3>Huisgemaakt</h3>
+                  <p>
+                    Onze smeersalades maken we zelf, met aandacht voor smaak en
+                    kwaliteit.
+                  </p>
+                </div>
+              </li>
+              <li>
+                <Croissant size={24} strokeWidth={1.5} aria-hidden="true" />
+                <div>
+                  <h3>Van bij de bakker</h3>
+                  <p>
+                    Voor onze patisserie werken we samen met een bakker die elke
+                    dag vers levert.
+                  </p>
+                </div>
+              </li>
+              <li>
+                <Heart size={24} strokeWidth={1.5} aria-hidden="true" />
+                <div>
+                  <h3>Gastvrij</h3>
+                  <p>
+                    Een vlotte uithaal, persoonlijke service en vooral een
+                    vriendelijk onthaal voor elke klant.
+                  </p>
+                </div>
+              </li>
+            </ul>
           </section>
         </div>
         <GuestReviews />
-        <div className="gallery-chapter">
-          <section id="fotos" className="gallery-section container">
-            <div className="section-heading">
-              <h2>Aan tafel en achter de toog.</h2>
-              <a
-                href={business.instagram}
-                className="text-link"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Volg ons op Instagram <ArrowUpRight size={16} />
-              </a>
-            </div>
-            <div className="photo-grid">
-              {photos.map((p, i) => (
-                <figure className={`gallery-item photo-${i}`} key={p.name}>
-                  <button
-                    onClick={(event) => {
-                      lightboxOpenerRef.current = event.currentTarget;
-                      setLightbox(i);
-                    }}
-                    aria-label={`Vergroot foto: ${p.alt}`}
-                  >
-                    <Photo
-                      name={p.name}
-                      alt={p.alt}
-                      sizes={
-                        i === 0
-                          ? '(max-width: 650px) 100vw, 65vw'
-                          : '(max-width: 650px) 50vw, 33vw'
-                      }
-                    />
-                    <span className="photo-expand">
-                      <Plus size={18} />
-                    </span>
-                  </button>
-                </figure>
-              ))}
-            </div>
-          </section>
-        </div>
+        <GallerySection />
         <section id="catering" className="catering-section">
           <div className="catering-inner container">
             <div className="catering-copy">
@@ -625,12 +610,6 @@ export default function MoulineHome3() {
           </div>
         </div>
       </footer>
-      <GalleryLightbox
-        photos={photos}
-        index={lightbox}
-        onIndexChange={setLightbox}
-        returnFocusRef={lightboxOpenerRef}
-      />
       <Dialog open={privacy} onOpenChange={setPrivacy}>
         <DialogContent className="privacy-dialog" showCloseButton={false}>
           <DialogClose

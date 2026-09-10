@@ -3,6 +3,15 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
+/* Oooh Baby, locally hosted OFL subset used only for the About title. */
+@font-face {
+  font-family: 'Mouline Handwritten';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/oooh-baby-title.woff2) format('woff2');
+}
+
 /* Match the existing Georgia fallback to Instrument Serif's narrower metrics. */
 @font-face {
   font-family: 'Mouline Serif Fallback';
@@ -17,39 +26,40 @@
   --color-popover: var(--paper);
   --color-popover-foreground: var(--ink);
   --color-primary: var(--accent);
-  --color-primary-foreground: var(--cream);
+  --color-primary-foreground: var(--white);
   --color-accent: var(--rose);
   --color-accent-foreground: var(--ink);
-  --color-secondary: var(--taupe);
+  --color-secondary: var(--blush);
   --color-secondary-foreground: var(--ink);
   --color-destructive: var(--accent);
-  --color-destructive-foreground: var(--paper);
+  --color-destructive-foreground: var(--white);
   --color-muted: var(--paper);
   --color-muted-foreground: var(--muted);
   --color-border: var(--line);
-  --color-input: var(--line);
+  --color-input: var(--control-line);
   --color-ring: var(--accent);
   --font-sans: 'DM Sans', sans-serif;
   --font-heading: 'Instrument Serif', Georgia, serif;
 }
 :root {
-  /* Five brand inks; semantic aliases keep every Home3 surface in the palette. */
-  --cream: #f7f3ef;
-  --dusty-rose: #f2c8d0;
-  --alizarin: #4d0413;
-  --deep-plum: #200d0d;
-  --muted-taupe: #c0b8b3;
-  --paper: var(--cream);
-  --white: var(--cream);
-  --rose: var(--dusty-rose);
-  --taupe: var(--muted-taupe);
-  --ink: var(--deep-plum);
-  --taupe-dark: color-mix(in srgb, var(--taupe) 45%, var(--ink));
-  --muted: var(--deep-plum);
-  --accent: var(--alizarin);
-  --accent-hover: var(--deep-plum);
-  --line: color-mix(in srgb, var(--muted-taupe) 65%, transparent);
-  --line-on-dark: color-mix(in srgb, var(--paper) 20%, transparent);
+  /* Home3 palette; semantic aliases separate surfaces, actions and decoration. */
+  --ink: #2a2220;
+  --brand: #c3052d;
+  --blush: #f7dce3;
+  --cream: #fff8f4;
+  --ivory: #faf6f2;
+  --ochre: #c49a62;
+  --ochre-dark: #8f6638;
+  --line: #d8ceca;
+  --white: #ffffff;
+  --hero-mid: #fbe8ea;
+  --paper: var(--ivory);
+  --rose: var(--blush);
+  --muted: var(--ink);
+  --accent: var(--brand);
+  --accent-hover: color-mix(in srgb, var(--brand) 85%, var(--ink));
+  --control-line: color-mix(in srgb, var(--ink) 45%, var(--line));
+  --line-on-dark: color-mix(in srgb, var(--line) 30%, transparent);
   --overlay: color-mix(in srgb, var(--ink) 75%, transparent);
   --radius: 0px;
   --content: 1280px;
@@ -72,7 +82,6 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --interaction: 180ms;
   --transition: 280ms;
-  --paper-texture-opacity: 0.025;
   --category-icon-nav: 22px;
 }
 * {
@@ -155,7 +164,7 @@ textarea {
 }
 ::selection {
   background: var(--accent);
-  color: var(--paper);
+  color: var(--white);
 }
 .container {
   width: min(var(--content), calc(100% - var(--gutter) * 2));
@@ -168,7 +177,7 @@ textarea {
   left: 20px;
   z-index: 100;
   padding: 12px 20px;
-  background: var(--white);
+  background: var(--paper);
   transform: translateY(-180%);
 }
 .skip-link:focus {
@@ -198,19 +207,25 @@ textarea {
 .button-primary,
 .header-cta,
 .button-ink {
-  color: var(--paper);
+  color: var(--white);
   background: var(--accent);
 }
-.button-primary:is(:hover, :focus-visible),
-.header-cta:is(:hover, :focus-visible),
-.button-ink:is(:hover, :focus-visible) {
+.button-primary:is(:hover, :focus-visible):not(:disabled),
+.header-cta:is(:hover, :focus-visible):not(:disabled),
+.button-ink:is(:hover, :focus-visible):not(:disabled) {
   background: var(--accent-hover);
+}
+.button:disabled {
+  color: var(--ink);
+  background: var(--line);
+  opacity: 1;
 }
 .text-link {
   display: inline-flex;
   align-items: center;
   gap: 20px;
   min-height: 44px;
+  color: var(--brand);
   font-size: 14px;
   line-height: 1.4;
   text-decoration: underline;
@@ -222,7 +237,7 @@ textarea {
     text-decoration-color var(--interaction) var(--ease);
 }
 .text-link:is(:hover, :focus-visible) {
-  color: var(--accent);
+  color: var(--accent-hover);
   text-decoration-color: currentColor;
 }
 :is(.button, .text-link, .contact-links a) > svg:not(.spin) {
@@ -306,7 +321,7 @@ textarea {
   position: absolute;
   inset: auto 0 0;
   height: 1px;
-  background: #fff;
+  background: var(--line);
   pointer-events: none;
   transition: opacity var(--nav-duration) ease;
 }
@@ -327,7 +342,7 @@ textarea {
   top: calc(50% + var(--mill-y) - var(--mill-size) * 0.58);
   width: var(--mill-size);
   aspect-ratio: 50 / 58;
-  color: var(--alizarin);
+  color: var(--brand);
   /* Matches the hero slot before JS measures it. At the end --mill-y is zero. */
   --mill-y: calc(
     var(--header) / 2 + var(--hero-pad) + var(--hero-row) / 2 -
@@ -396,8 +411,8 @@ textarea {
   pointer-events: none;
   background: linear-gradient(
     180deg,
-    var(--rose) 0%,
-    color-mix(in srgb, var(--rose) 40%, var(--cream)) 45%,
+    var(--blush) 0%,
+    var(--hero-mid) 55%,
     var(--cream) 100%
   );
 }
@@ -414,7 +429,7 @@ textarea {
   gap: var(--hero-gap);
   padding-top: var(--hero-pad);
   height: calc(var(--hero-row) + var(--hero-pad));
-  color: var(--alizarin);
+  color: var(--brand);
   /* Fit both words inside the content grid, allowing for the mill and gaps. */
   font-size: calc(
     (var(--hero-width) - var(--hero-mill-size) - 2 * var(--hero-gap)) / 6.35
@@ -449,7 +464,7 @@ textarea {
   align-items: baseline;
   gap: 16px;
   margin-top: 8px;
-  color: var(--alizarin);
+  color: var(--ink);
 }
 .hero-founded,
 .hero-location {
@@ -525,10 +540,10 @@ textarea {
 /* Cream paper connects the menu and photography, with two navigation levels. */
 .menu-chapter,
 .gallery-chapter {
-  background: var(--white);
+  background: var(--ivory);
 }
 .menu-chapter {
-  border-top: 1px solid var(--taupe);
+  border-top: 1px solid var(--line);
 }
 .menu-section {
   container: menu / inline-size;
@@ -597,7 +612,7 @@ textarea {
     color var(--interaction) ease;
 }
 .menu-switch [aria-selected='true'] {
-  color: #fff;
+  color: var(--white);
   background: var(--accent);
 }
 .menu-switch [data-slot='tabs-trigger']:hover:not([aria-selected='true']) {
@@ -657,11 +672,11 @@ textarea {
   position: sticky;
   top: var(--header);
   z-index: 20;
-  background: var(--white);
+  background: var(--ivory);
   border-bottom: 1px solid var(--line);
   overflow-x: auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--taupe) transparent;
+  scrollbar-color: var(--control-line) transparent;
   scroll-margin-top: var(--header);
 }
 .category-list [data-slot='tabs-trigger'] {
@@ -803,28 +818,19 @@ textarea {
 
 /* A human chapter, followed by compact, attributed social proof. */
 .about-chapter {
-  position: relative;
-  isolation: isolate;
-  background: var(--alizarin);
-  color: var(--cream);
-}
-.paper-texture {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background-repeat: repeat;
-  background-size: 192px 192px;
-  opacity: var(--paper-texture-opacity);
-  pointer-events: none;
+  background: var(--blush);
+  color: var(--ink);
 }
 .about-section {
-  position: relative;
-  z-index: 1;
   display: grid;
-  grid-template-columns: 1.35fr 1fr;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
   align-items: center;
-  gap: 80px;
+  gap: clamp(32px, 4vw, 64px);
   padding-block: var(--section-feature) var(--section-normal);
+}
+.about-photo,
+.about-copy {
+  min-width: 0;
 }
 .about-photo img {
   width: 100%;
@@ -834,27 +840,75 @@ textarea {
   object-position: 50% 18%;
 }
 .about-copy h2 {
-  font-size: var(--heading-expressive);
+  font-size: var(--heading-functional);
+}
+.about-copy .about-script-title {
+  /* Retain the original heading line box regardless of font loading or motion. */
+  height: 1.08em;
+  color: var(--ink);
+}
+.about-script-title > svg {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.about-script-lettering {
+  font-family: 'Mouline Handwritten', cursive;
+  font-size: 100px;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: normal;
 }
 .about-copy > p {
-  max-width: 40ch;
-  margin-top: 24px;
+  max-width: 60ch;
 }
-.about-copy .text-link {
-  margin-top: 24px;
-  color: var(--dusty-rose);
+.about-intro {
+  margin-top: clamp(20px, 2vw, 28px);
 }
-.about-copy .text-link:is(:hover, :focus-visible) {
-  color: var(--cream);
-  text-decoration-thickness: 2px;
+.about-copy > p + p {
+  margin-top: 16px;
+}
+.about-values {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(28px, 3vw, 44px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.about-values li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+.about-values li > div {
+  min-width: 0;
+}
+.about-values h3 {
+  margin-bottom: 8px;
+  font: 500 18px/1.4 var(--body);
+  letter-spacing: 0;
+}
+.about-values p {
+  max-width: 34ch;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.about-values svg {
+  flex-shrink: 0;
+  color: var(--brand);
 }
 .about-chapter :focus-visible {
-  outline-color: var(--cream);
+  outline-color: var(--ink);
 }
 .reviews-section {
-  --review-ochre: #b38a52;
   padding-block: 44px 36px;
-  background-color: color-mix(in srgb, var(--cream) 94%, var(--review-ochre));
+  background-color: var(--cream);
   color: var(--ink);
 }
 /* Supplied brushwork, recoloured through a mask and clipped at section edges. */
@@ -876,7 +930,7 @@ textarea {
   aspect-ratio: 956.0287 / 1219.6094;
   top: -54%;
   right: -8%;
-  color: var(--review-ochre);
+  color: var(--ochre);
   background: currentColor;
   mask-size: contain;
   mask-repeat: no-repeat;
@@ -891,7 +945,7 @@ textarea {
 }
 .reviews-section h2 {
   font-size: clamp(32px, 3vw, 40px);
-  color: var(--alizarin);
+  color: var(--ink);
 }
 .review-excerpts {
   display: grid;
@@ -907,7 +961,7 @@ textarea {
 .review-stars {
   display: flex;
   gap: 3px;
-  color: var(--taupe-dark);
+  color: var(--ochre-dark);
 }
 .review-excerpts blockquote {
   flex: 1;
@@ -936,6 +990,11 @@ textarea {
 .gallery-section h2 {
   font-size: clamp(40px, 3.5vw, 52px);
 }
+.gallery-more {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
 .photo-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -956,6 +1015,9 @@ textarea {
   background: var(--paper);
 }
 .gallery-item img {
+  /* Every photograph fills its slot without affecting the grid's row heights. */
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -984,9 +1046,6 @@ textarea {
 .photo-2 {
   grid-row: 2;
 }
-.photo-3 img {
-  object-position: 50% 65%;
-}
 .photo-expand {
   display: grid;
   place-items: center;
@@ -999,10 +1058,10 @@ textarea {
   height: 32px;
 }
 
-/* Two dark print inks share the catering composition without a gradient. */
+/* A light catering surface keeps the food and the brand action prominent. */
 .catering-section {
-  background: var(--alizarin);
-  color: var(--paper);
+  background: var(--cream);
+  color: var(--ink);
   padding-block: var(--section-normal);
 }
 .catering-inner {
@@ -1026,16 +1085,16 @@ textarea {
 .catering-copy .text-link {
   margin-top: 24px;
   font-size: 15px;
-  color: var(--rose);
+  color: var(--brand);
   text-decoration-color: currentColor;
 }
 .catering-copy .text-link:is(:hover, :focus-visible) {
-  color: var(--paper);
+  color: var(--accent-hover);
   text-decoration-color: currentColor;
   text-decoration-thickness: 2px;
 }
 .catering-section :focus-visible {
-  outline-color: var(--paper);
+  outline-color: var(--brand);
 }
 .catering-inner > img {
   width: 100%;
@@ -1136,10 +1195,10 @@ textarea {
   min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
-  border: 1px solid color-mix(in srgb, var(--muted) 80%, var(--paper));
+  border: 1px solid var(--control-line);
   border-radius: 0;
   box-shadow: none;
-  background: color-mix(in srgb, var(--white) 45%, var(--paper));
+  background: var(--cream);
   padding: 9px 12px;
   font-size: 1rem;
   line-height: 1.5;
@@ -1162,6 +1221,11 @@ textarea {
 .form-field :is(input, select, textarea)[aria-invalid='true'] {
   border-color: var(--accent);
   box-shadow: inset 0 0 0 1px var(--accent);
+}
+.form-field :is(input, select, textarea):disabled {
+  color: var(--ink);
+  background: var(--line);
+  opacity: 1;
 }
 .form-field input[type='date'],
 .form-field input[type='time'] {
@@ -1373,7 +1437,7 @@ textarea {
 }
 .footer-inner > p span {
   display: block;
-  color: var(--taupe);
+  color: var(--line);
   font-size: 12px;
   margin-top: 6px;
 }
@@ -1602,14 +1666,14 @@ textarea {
 
 /* The information can wrap; the hero gives it room without changing the grid. */
 @media (max-width: 1100px) {
+  .about-values {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .header-inner {
     gap: 24px;
   }
   .site-header nav {
     gap: 18px;
-  }
-  .about-section {
-    gap: 48px;
   }
   .dish-list {
     column-gap: 48px;
@@ -1685,24 +1749,8 @@ textarea {
     gap: 32px;
   }
   .about-section {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 32px;
-  }
-  .about-copy {
-    display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    gap: 0 40px;
-  }
-  .about-copy h2 {
-    grid-row: 1/3;
-  }
-  .about-copy > p {
-    margin-top: 0;
-  }
-  .about-copy .text-link {
-    grid-column: 2;
-    justify-self: start;
-    margin-top: 16px;
   }
   .review-excerpts {
     gap: 28px;
@@ -1815,14 +1863,16 @@ textarea {
   .about-section {
     gap: 28px;
   }
-  .about-copy {
-    display: block;
+  .about-values {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
   }
-  .about-copy > p {
-    margin-top: 20px;
+  .about-values li {
+    flex-direction: row;
+    gap: 16px;
   }
-  .about-copy .text-link {
-    margin-top: 16px;
+  .about-values svg {
+    margin-top: 1px;
   }
   .reviews-section {
     padding-block: var(--section-tight) var(--space-3);
@@ -1999,6 +2049,9 @@ textarea {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .about-script-mask {
+    stroke-dashoffset: 0 !important;
+  }
   :root {
     --interaction: 0ms;
     --transition: 0ms;

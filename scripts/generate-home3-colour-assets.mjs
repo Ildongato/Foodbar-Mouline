@@ -15,9 +15,9 @@ const colour = (token, seen = new Set()) => {
 };
 const replacements = new Map([
   ['#f4f0e7', colour('paper')],
-  ['#fff', colour('white')],
+  ['#fff', colour('cream')],
   ['#ffffff', colour('cream')],
-  ['#b8aea2', colour('taupe')],
+  ['#b8aea2', colour('line')],
   ['#211d1b', colour('ink')],
   ['#706b65', colour('muted')],
 ]);

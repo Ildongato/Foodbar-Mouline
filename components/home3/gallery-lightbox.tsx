@@ -10,10 +10,10 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { assetPath } from '@/lib/hosting';
+import { galleryPhotoPath, type GalleryPhoto } from '@/lib/home3-gallery';
 
-type GalleryPhoto = { name: string; alt: string };
 const photoSource = (photo: GalleryPhoto) =>
-  assetPath(`/images/${photo.name}-1280.webp`);
+  assetPath(galleryPhotoPath(photo, 'full'));
 
 function LightboxImage({ photo }: { photo: GalleryPhoto }) {
   const [ready, setReady] = useState(false);
@@ -126,7 +126,7 @@ export default function GalleryLightbox({
                   move(dx < 0 ? 1 : -1);
               }}
             >
-              <LightboxImage key={photos[index].name} photo={photos[index]} />
+              <LightboxImage key={photos[index].id} photo={photos[index]} />
             </div>
             <button
               type="button"
