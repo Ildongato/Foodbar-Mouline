@@ -1,16 +1,8 @@
 'use client';
 /* oxlint-disable nextjs/no-img-element -- Local WebP srcsets and SVGs must also work in the static Pages entry without an image server. */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
-import {
-  ArrowUpRight,
-  ArrowUp,
-  ChevronLeft,
-  ChevronRight,
-  Menu as MenuIcon,
-  X,
-  Plus,
-} from 'lucide-react';
+import { ArrowUpRight, ArrowUp, Menu as MenuIcon, X, Plus } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -22,8 +14,8 @@ import {
 import MenuSection from './menu-section';
 import ContactForm from '../contact-form';
 import GuestReviews from './guest-reviews';
-import MillArtwork from './mill-artwork';
 import HeaderMill from './header-mill';
+import GalleryLightbox from './gallery-lightbox';
 import TodayHours from './today-hours';
 import CulinaryIcon from './culinary-icon';
 import { usePageMotion } from './use-page-motion';
@@ -113,13 +105,15 @@ function Hours() {
 }
 export default function MoulineHome3() {
   usePageMotion();
-  const { navSlotRef, millRef, wordmarkRef, slotRef } = useHeroScroll();
   const { heroRef, informationRef } = useHeroFit();
+  const { headerRef, navSlotRef, millRef, wordmarkRef, slotRef } =
+    useHeroScroll(heroRef);
   const [active, setActive] = useState('home');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mode, setMode] = useState<MenuMode>('onsite');
   const [intent, setIntent] = useState<Intent>('Reservatie');
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const lightboxOpenerRef = useRef<HTMLButtonElement>(null);
   const [privacy, setPrivacy] = useState(false);
   useEffect(() => {
     // Navigation observation is optional; content never depends on an observer.
@@ -246,7 +240,8 @@ export default function MoulineHome3() {
       <a href="#main" className="skip-link">
         Ga naar de inhoud
       </a>
-      <header className="site-header">
+      <div className="header-space" aria-hidden="true" />
+      <header className="site-header" ref={headerRef}>
         <div className="header-inner container">
           <nav aria-label="Hoofdnavigatie">
             {primaryLinks.map(([label, id]) => (
@@ -339,57 +334,66 @@ export default function MoulineHome3() {
           ref={heroRef}
           aria-label="Welkom bij Mouline"
         >
-          <h1
-            className="hero-wordmark container"
-            ref={wordmarkRef}
-            aria-label="Mouline Foodbar"
-          >
-            <span className="hero-word hero-word-left" aria-hidden="true">
-              Mouline
-            </span>
-            <span className="hero-mill-slot" ref={slotRef} aria-hidden="true" />
-            <span className="hero-word hero-word-right" aria-hidden="true">
-              Foodbar
-            </span>
-          </h1>
-          <p className="hero-founded container">(Est. 2018)</p>
-          <div className="hero-plate">
+          <div className="hero-title container">
+            <h1
+              className="hero-wordmark"
+              ref={wordmarkRef}
+              aria-label="Mouline Foodbar"
+            >
+              <span className="hero-word hero-word-left" aria-hidden="true">
+                Mouline
+              </span>
+              <span
+                className="hero-mill-slot"
+                ref={slotRef}
+                aria-hidden="true"
+              />
+              <span className="hero-word hero-word-right" aria-hidden="true">
+                Foodbar
+              </span>
+            </h1>
+            <div className="hero-caption">
+              <p className="hero-founded">(Sinds 2018)</p>
+              <p className="hero-location">Ekeren</p>
+            </div>
+          </div>
+          <div className="hero-frame container">
             <img
-              src={assetPath('/home3/images/bordheader-1280.webp')}
-              srcSet={`${assetPath('/home3/images/bordheader-640.webp')} 640w, ${assetPath('/home3/images/bordheader-1280.webp')} 1280w, ${assetPath('/home3/images/bordheader-2048.webp')} 2048w`}
-              sizes="(max-width: 650px) 140vw, 100vw"
-              width="2048"
-              height="1364"
+              src={assetPath('/images/header-salade-b3624dd6-1280.webp')}
+              srcSet={`${assetPath('/images/header-salade-b3624dd6-640.webp')} 640w, ${assetPath('/images/header-salade-b3624dd6-1280.webp')} 1280w`}
+              sizes="(max-width: 650px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 56px), (max-width: 1392px) 92vw, 1280px"
+              width="1280"
+              height="853"
               alt="Salade met zalm, avocado en verse groenten bij Foodbar Mouline"
               fetchPriority="high"
               loading="eager"
             />
           </div>
-        </section>
-        <aside
-          ref={informationRef}
-          className="practical container"
-          aria-label="Praktische informatie"
-        >
-          <p>
-            Ontbijt <strong>tot 11u</strong>
-            <span className="meal-separator" aria-hidden="true">
-              •
-            </span>
-            Lunch vanaf 11u
-          </p>
-          <a
-            className="takeaway-detail"
-            href="#menu"
-            onClick={() => chooseMenu('takeaway')}
+          <aside
+            ref={informationRef}
+            className="practical container"
+            aria-label="Praktische informatie"
           >
-            <CulinaryIcon categoryId="link" />
-            <span>
-              Takeaway <strong>bestel voor 11u</strong>
-            </span>
-          </a>
-          <TodayHours />
-        </aside>
+            <p>
+              Ontbijt <strong>tot 11u</strong>
+              <span className="meal-separator" aria-hidden="true">
+                •
+              </span>
+              Lunch vanaf 11u
+            </p>
+            <a
+              className="takeaway-detail"
+              href="#menu"
+              onClick={() => chooseMenu('takeaway')}
+            >
+              <CulinaryIcon categoryId="link" />
+              <span>
+                Takeaway <strong>bestel voor 11u</strong>
+              </span>
+            </a>
+            <TodayHours />
+          </aside>
+        </section>
         <div className="menu-chapter">
           <MenuSection
             mode={mode}
@@ -398,7 +402,6 @@ export default function MoulineHome3() {
           />
         </div>
         <div className="about-chapter">
-          <MillArtwork />
           <span
             className="paper-texture"
             aria-hidden="true"
@@ -449,7 +452,10 @@ export default function MoulineHome3() {
               {photos.map((p, i) => (
                 <figure className={`gallery-item photo-${i}`} key={p.name}>
                   <button
-                    onClick={() => setLightbox(i)}
+                    onClick={(event) => {
+                      lightboxOpenerRef.current = event.currentTarget;
+                      setLightbox(i);
+                    }}
                     aria-label={`Vergroot foto: ${p.alt}`}
                   >
                     <Photo
@@ -471,7 +477,6 @@ export default function MoulineHome3() {
           </section>
         </div>
         <section id="catering" className="catering-section">
-          <MillArtwork />
           <div className="catering-inner container">
             <div className="catering-copy">
               <p className="eyebrow">Mouline op jouw locatie</p>
@@ -620,76 +625,12 @@ export default function MoulineHome3() {
           </div>
         </div>
       </footer>
-      <Dialog
-        open={lightbox !== null}
-        onOpenChange={(open) => {
-          if (!open) setLightbox(null);
-        }}
-      >
-        <DialogContent
-          className="lightbox"
-          showCloseButton={false}
-          onKeyDown={(e) => {
-            if (e.key === 'ArrowRight') {
-              e.preventDefault();
-              setLightbox((i) => ((i ?? 0) + 1) % photos.length);
-            }
-            if (e.key === 'ArrowLeft') {
-              e.preventDefault();
-              setLightbox(
-                (i) => ((i ?? 0) - 1 + photos.length) % photos.length,
-              );
-            }
-          }}
-        >
-          <DialogTitle className="sr-only">
-            {lightbox !== null ? photos[lightbox].alt : 'Foto van Mouline'}
-          </DialogTitle>
-          <DialogDescription className="sr-only">
-            Blader met de pijltjestoetsen. Sluit met Escape.
-          </DialogDescription>
-          <DialogClose
-            className="lightbox-close icon-button"
-            aria-label="Foto sluiten"
-          >
-            <X size={27} />
-          </DialogClose>
-          {lightbox !== null && (
-            <>
-              <Photo
-                name={photos[lightbox].name}
-                alt={photos[lightbox].alt}
-                sizes="90vw"
-              />
-              <div className="lightbox-bar">
-                <button
-                  className="icon-button"
-                  aria-label="Vorige galerijfoto"
-                  onClick={() =>
-                    setLightbox(
-                      (i) => ((i ?? 0) - 1 + photos.length) % photos.length,
-                    )
-                  }
-                >
-                  <ChevronLeft size={24} />
-                </button>
-                <p aria-live="polite">
-                  {lightbox + 1} / {photos.length}
-                </p>
-                <button
-                  className="icon-button"
-                  aria-label="Volgende galerijfoto"
-                  onClick={() =>
-                    setLightbox((i) => ((i ?? 0) + 1) % photos.length)
-                  }
-                >
-                  <ChevronRight size={24} />
-                </button>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+      <GalleryLightbox
+        photos={photos}
+        index={lightbox}
+        onIndexChange={setLightbox}
+        returnFocusRef={lightboxOpenerRef}
+      />
       <Dialog open={privacy} onOpenChange={setPrivacy}>
         <DialogContent className="privacy-dialog" showCloseButton={false}>
           <DialogClose

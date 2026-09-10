@@ -15,7 +15,8 @@ export default function Home3() {
         as="image"
         href="/images/header-salade-b3624dd6-1280.webp"
         imageSrcSet="/images/header-salade-b3624dd6-640.webp 640w, /images/header-salade-b3624dd6-1280.webp 1280w"
-        imageSizes="100vw"
+        imageSizes="(max-width: 650px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 56px), (max-width: 1392px) 92vw, 1280px"
+        fetchPriority="high"
       />
       <MoulineHome3 />
     </>

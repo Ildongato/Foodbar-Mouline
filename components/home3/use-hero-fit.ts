@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from 'react';
 
-/** Reserve the information strip's actual height, including wrapped text and
- * font-size changes. CSS handles the crop and the short-screen fallback. */
+/** Size the photo from the space left after the actual title and info rows.
+ * Only the photo's reserved frame changes; its image never controls layout. */
 export function useHeroFit() {
   const heroRef = useRef<HTMLElement>(null);
   const informationRef = useRef<HTMLElement>(null);
@@ -9,20 +9,27 @@ export function useHeroFit() {
   useLayoutEffect(() => {
     const hero = heroRef.current;
     const information = informationRef.current;
-    if (!hero || !information) return;
+    const title = hero?.querySelector<HTMLElement>('.hero-title');
+    if (!hero || !information || !title) return;
 
     const measure = () => {
       hero.style.setProperty(
         '--hero-info-height',
         `${information.getBoundingClientRect().height}px`,
       );
+      hero.style.setProperty(
+        '--hero-title-height',
+        `${title.getBoundingClientRect().height}px`,
+      );
     };
     measure();
     const resize = new ResizeObserver(measure);
     resize.observe(information);
+    resize.observe(title);
     return () => {
       resize.disconnect();
       hero.style.removeProperty('--hero-info-height');
+      hero.style.removeProperty('--hero-title-height');
     };
   }, []);
 

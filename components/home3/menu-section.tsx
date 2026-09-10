@@ -11,7 +11,7 @@ function Item({ item }: { item: MenuItem }) {
   return (
     <div className="menu-item">
       <div className="dish-copy">
-        <h4>{item.name}</h4>
+        <h3>{item.name}</h3>
         {item.description && <p>{item.description}</p>}
       </div>
       <span className={`dish-price ${!item.price ? 'price-question' : ''}`}>
@@ -104,6 +104,8 @@ function CategoryMenu({ mode }: { mode: MenuMode }) {
           </TabsTrigger>
         ))}
       </TabsList>
+      {/* Matching values let Base UI link each panel to its tab with
+          aria-labelledby / aria-controls, without a duplicate heading. */}
       {menus[mode].map((c) => (
         <TabsContent
           key={c.id}
@@ -111,12 +113,6 @@ function CategoryMenu({ mode }: { mode: MenuMode }) {
           keepMounted
           className="category-content"
         >
-          <div className="category-heading">
-            <div className="category-title">
-              <CulinaryIcon categoryId={c.id} />
-              <h3>{c.label}</h3>
-            </div>
-          </div>
           <DishList items={c.items} />
           {c.extras && (
             <details className="menu-extras">
@@ -142,29 +138,19 @@ export default function MenuSection({
 }) {
   return (
     <section id="menu" className="menu-section container">
-      <div className="section-heading">
-        <h2>De menukaart.</h2>
-      </div>
       <Tabs
         value={mode}
         onValueChange={(v) => onModeChange(v as MenuMode)}
         className="menu-mode"
       >
-        <div className="menu-switch-wrap">
+        <div className="menu-header">
+          <h2>De menukaart.</h2>
           <TabsList
             className="menu-switch"
             aria-label="Kies menu ter plaatse of takeaway"
           >
-            <TabsTrigger value="onsite">
-              <span>
-                <strong>Ter plaatse</strong>
-              </span>
-            </TabsTrigger>
-            <TabsTrigger value="takeaway">
-              <span>
-                <strong>Takeaway</strong>
-              </span>
-            </TabsTrigger>
+            <TabsTrigger value="onsite">Ter plaatse</TabsTrigger>
+            <TabsTrigger value="takeaway">Takeaway</TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="onsite" keepMounted className="mode-panel">
@@ -179,7 +165,7 @@ export default function MenuSection({
         <TabsContent value="takeaway" keepMounted className="mode-panel">
           <div className="takeaway-note">
             <strong>Bestel voor 11u.</strong>
-            <a className="button button-ink" href={business.phoneHref}>
+            <a className="text-link" href={business.phoneHref}>
               Bel {business.phone} <ArrowUpRight size={17} />
             </a>
           </div>

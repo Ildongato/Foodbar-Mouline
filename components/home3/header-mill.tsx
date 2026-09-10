@@ -1,8 +1,22 @@
+import { useEffect, useRef } from 'react';
+
 /** Original isolated Mouline EPS artwork, without the full logo's lettering.
  * House: copy-04. Rotor: copy-03. Alignment follows the complete copy-02.
  * The padded viewBox contains the entire rotor sweep; its pivot never changes.
  */
 export default function HeaderMill() {
+  const rotorRef = useRef<SVGAnimateTransformElement>(null);
+  useEffect(() => {
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const rotor = rotorRef.current;
+    const update = () => {
+      if (preference.matches) rotor?.endElement();
+      else rotor?.beginElement();
+    };
+    update();
+    preference.addEventListener('change', update);
+    return () => preference.removeEventListener('change', update);
+  }, []);
   return (
     <svg
       className="nav-mill"
@@ -14,6 +28,7 @@ export default function HeaderMill() {
       stroke="currentColor"
       strokeWidth="1"
       strokeLinejoin="miter"
+      shapeRendering="geometricPrecision"
     >
       <g
         className="nav-mill-house"
@@ -26,6 +41,17 @@ export default function HeaderMill() {
       </g>
       <g transform="translate(19.8236 17.9887)">
         <g className="nav-mill-sails">
+          {/* SVG-native rotation around the translated EPS hub: no raster layer. */}
+          <animateTransform
+            ref={rotorRef}
+            attributeName="transform"
+            type="rotate"
+            from="0 0 0"
+            to="360 0 0"
+            dur="48s"
+            repeatCount="indefinite"
+            begin="indefinite"
+          />
           <g transform="translate(-19.8236 -17.9887)" fill="currentColor">
             <path d="M 19.8236 16.7887 C 20.4863 16.7887 21.0236 17.3259 21.0236 17.9887 C 21.0236 18.6514 20.4863 19.1887 19.8236 19.1887 C 19.1609 19.1887 18.6236 18.6514 18.6236 17.9887 C 18.6236 17.3259 19.1609 16.7887 19.8236 16.7887 Z" />
             <path d="M 15.8236 12.6887 L 13.4236 15.1887 L .823593 4.88868 L 6.7236 .68868 L 15.8236 12.6887 Z" />

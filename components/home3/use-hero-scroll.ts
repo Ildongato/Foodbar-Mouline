@@ -1,8 +1,9 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, type RefObject } from 'react';
 
-/** One persistent SVG moves between two measured positions. The rotor's CSS
- * animation lives inside it, so scrolling never resets its rotation clock. */
-export function useHeroScroll() {
+/** One SVG moves between measured positions, at its actual rendered size.
+ * Avoid scaling a composited bitmap of the animated vector artwork. */
+export function useHeroScroll(heroRef: RefObject<HTMLElement | null>) {
+  const headerRef = useRef<HTMLElement>(null);
   const navSlotRef = useRef<HTMLSpanElement>(null);
   const millRef = useRef<HTMLAnchorElement>(null);
   const wordmarkRef = useRef<HTMLHeadingElement>(null);
@@ -13,15 +14,19 @@ export function useHeroScroll() {
     const mill = millRef.current;
     const wordmark = wordmarkRef.current;
     const slot = slotRef.current;
-    if (!navSlot || !mill || !wordmark || !slot) return;
+    const header = headerRef.current;
+    const hero = heroRef.current;
+    if (!navSlot || !mill || !wordmark || !slot || !header || !hero) return;
 
     const words = wordmark.querySelectorAll<HTMLElement>('.hero-word');
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
     let frame = 0;
     let distance = 1;
     let startY = 0;
-    let finalScale = 1;
+    let startSize = 1;
+    let finalSize = 1;
     let snapAt = 0;
+    let landingEnd = 0;
     let disposed = false;
 
     const paint = () => {
@@ -33,9 +38,12 @@ export function useHeroScroll() {
       // No easing lag: the shared element follows scroll in both directions.
       mill.style.setProperty('--mill-y', `${startY * (1 - progress)}px`);
       mill.style.setProperty(
-        '--mill-scale',
-        `${1 + (finalScale - 1) * progress}`,
+        '--mill-size',
+        `${startSize + (finalSize - startSize) * progress}px`,
       );
+      const compact = scroll >= landingEnd;
+      if (header.dataset.compact !== String(compact))
+        header.dataset.compact = String(compact);
       for (const word of words) {
         word.style.opacity = preference.matches ? '1' : `${1 - progress}`;
       }
@@ -51,8 +59,17 @@ export function useHeroScroll() {
       const originY = origin.top + window.scrollY + origin.height / 2;
       startY = originY - destinationY;
       distance = Math.max(120, startY + origin.height * 0.3);
-      finalScale = nav.width / origin.width;
+      startSize = origin.width;
+      finalSize = nav.width;
       snapAt = Math.max(1, originY - destinationY * 2);
+      // Keep navigation legible as the photo replaces the gradient behind it.
+      // Use the reserved height so compacting cannot change this threshold.
+      const reservedHeader = hero.getBoundingClientRect().top + window.scrollY;
+      const photo = hero.querySelector<HTMLElement>('.hero-frame');
+      landingEnd =
+        (photo ?? hero).getBoundingClientRect().top +
+        window.scrollY -
+        reservedHeader;
       paint();
     };
 
@@ -60,6 +77,8 @@ export function useHeroScroll() {
     const resize = new ResizeObserver(measure);
     resize.observe(navSlot);
     resize.observe(slot);
+    resize.observe(header);
+    resize.observe(hero);
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', measure);
     window.addEventListener('pageshow', measure);
@@ -76,12 +95,13 @@ export function useHeroScroll() {
       window.removeEventListener('pageshow', measure);
       preference.removeEventListener('change', measure);
       mill.style.removeProperty('--mill-y');
-      mill.style.removeProperty('--mill-scale');
+      mill.style.removeProperty('--mill-size');
+      delete header.dataset.compact;
       words.forEach((word) => {
         word.style.removeProperty('opacity');
       });
     };
-  }, []);
+  }, [heroRef]);
 
-  return { navSlotRef, millRef, wordmarkRef, slotRef };
+  return { headerRef, navSlotRef, millRef, wordmarkRef, slotRef };
 }

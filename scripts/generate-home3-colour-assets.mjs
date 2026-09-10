@@ -29,11 +29,15 @@ for (const [source, destination] of [
   ['images/logo-light.svg', 'home3/images/logo-cream.svg'],
 ]) {
   const original = await readFile(new URL(`public/${source}`, root), 'utf8');
-  const svg = original.replace(/#[0-9a-f]{3,8}\b/gi, (value) => {
+  let svg = original.replace(/#[0-9a-f]{3,8}\b/gi, (value) => {
     const replacement = replacements.get(value.toLowerCase());
     if (!replacement) throw new Error(`Unmapped colour ${value} in ${source}`);
     return replacement;
   });
+  // Keep street labels secondary to the separate Mouline marker.
+  if (source.startsWith('maps/')) {
+    svg = svg.replace('font:18px Arial,sans-serif', 'font:14px Arial,sans-serif');
+  }
   const output = new URL(`public/${destination}`, root);
   await mkdir(new URL('.', output), { recursive: true });
   await writeFile(output, svg);
