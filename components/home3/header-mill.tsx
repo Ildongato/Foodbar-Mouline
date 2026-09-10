@@ -47,7 +47,7 @@ export default function HeaderMill() {
             attributeName="transform"
             type="rotate"
             from="0 0 0"
-            to="360 0 0"
+            to="-360 0 0"
             dur="48s"
             repeatCount="indefinite"
             begin="indefinite"

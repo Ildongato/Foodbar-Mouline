@@ -1,6 +1,5 @@
 import { Star } from 'lucide-react';
 import selection from '@/lib/data/google-reviews.json';
-import MillArtwork from './mill-artwork';
 
 export default function GuestReviews() {
   return (
@@ -9,7 +8,6 @@ export default function GuestReviews() {
       className="reviews-section"
       aria-labelledby="reviews-title"
     >
-      <MillArtwork />
       <div className="container review-content">
         <h2 id="reviews-title">Wat onze gasten zeggen.</h2>
         <div className="review-excerpts">

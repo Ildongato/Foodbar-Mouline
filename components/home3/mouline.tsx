@@ -25,7 +25,6 @@ import ContactForm from '../contact-form';
 import GuestReviews from './guest-reviews';
 import HeaderMill from './header-mill';
 import GallerySection from './gallery-section';
-import AboutTitle from './about-title';
 import TodayHours from './today-hours';
 import CulinaryIcon from './culinary-icon';
 import { usePageMotion } from './use-page-motion';
@@ -389,72 +388,74 @@ export default function MoulineHome3() {
             className="about-section container"
             aria-labelledby="about-title"
           >
-            <div className="about-photo">
-              <img
-                src={assetPath('/images/aangenaam-mouline-128dae27-941.webp')}
-                srcSet={`${assetPath('/images/aangenaam-mouline-128dae27-640.webp')} 640w, ${assetPath('/images/aangenaam-mouline-128dae27-941.webp')} 941w`}
-                sizes="(max-width: 650px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 56px), (max-width: 1392px) 40vw, 520px"
-                width="941"
-                height="1672"
-                loading="lazy"
-                decoding="async"
-                alt="Een vrouw begroet je met een glimlach en een opgestoken hand bij Mouline"
-              />
-            </div>
-            <div className="about-copy">
-              <AboutTitle />
-              <p className="about-intro">
-                Ik ben Caroline. Na mijn opleiding als kok en kelner aan
-                Spermali in Brugge droomde ik ervan om ooit mijn eigen zaak te
-                openen. In 2019 werd die droom werkelijkheid met Mouline.
-              </p>
-              <p>
-                Elke dag staan verse producten, huisgemaakte bereidingen en een
-                warm onthaal centraal. Ook bij takeaway vinden we het belangrijk
-                dat het vlot gaat, zonder in te boeten op kwaliteit of
-                vriendelijkheid.
-              </p>
+            <div className="about-card">
+              <div className="about-photo">
+                <img
+                  src={assetPath('/images/aangenaam-mouline-128dae27-941.webp')}
+                  srcSet={`${assetPath('/images/aangenaam-mouline-128dae27-640.webp')} 640w, ${assetPath('/images/aangenaam-mouline-128dae27-941.webp')} 941w`}
+                  sizes="(max-width: 650px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 56px), (max-width: 1392px) 40vw, 520px"
+                  width="941"
+                  height="1672"
+                  loading="lazy"
+                  decoding="async"
+                  alt="Een vrouw begroet je met een glimlach en een opgestoken hand bij Mouline"
+                />
+              </div>
+              <div className="about-copy">
+                <h2 id="about-title">Over Mouline</h2>
+                <p className="about-intro">
+                  Ik ben Caroline. Na mijn opleiding als kok en kelner aan
+                  Spermali in Brugge droomde ik ervan om ooit mijn eigen zaak te
+                  openen. In 2019 werd die droom werkelijkheid met Mouline.
+                </p>
+                <p>
+                  Elke dag staan verse producten, huisgemaakte bereidingen en
+                  een warm onthaal centraal. Ook bij takeaway vinden we het
+                  belangrijk dat het vlot gaat, zonder in te boeten op kwaliteit
+                  of vriendelijkheid.
+                </p>
+              </div>
             </div>
             <ul className="about-values">
               <li>
-                <Sprout size={24} strokeWidth={1.5} aria-hidden="true" />
-                <div>
+                <div className="about-value-heading">
+                  <Sprout size={20} strokeWidth={1.5} aria-hidden="true" />
                   <h3>Vers</h3>
-                  <p>
-                    Dagelijkse levering van verse producten, zorgvuldig gekozen
-                    voor onze gerechten.
-                  </p>
                 </div>
+                <p>
+                  Dagelijkse levering van verse producten, zorgvuldig gekozen
+                  voor onze gerechten.
+                </p>
               </li>
               <li>
-                <Soup size={24} strokeWidth={1.5} aria-hidden="true" />
-                <div>
+                <div className="about-value-heading">
+                  <Soup size={20} strokeWidth={1.5} aria-hidden="true" />
                   <h3>Huisgemaakt</h3>
-                  <p>
-                    Onze smeersalades maken we zelf, met aandacht voor smaak en
-                    kwaliteit.
-                  </p>
                 </div>
+                <p>
+                  Onze smeersalades maken we zelf, met aandacht voor smaak en
+                  kwaliteit.
+                </p>
               </li>
               <li>
-                <Croissant size={24} strokeWidth={1.5} aria-hidden="true" />
-                <div>
+                <div className="about-value-heading">
+                  <Croissant size={20} strokeWidth={1.5} aria-hidden="true" />
                   <h3>Van bij de bakker</h3>
-                  <p>
-                    Voor onze patisserie werken we samen met een bakker die elke
-                    dag vers levert.
-                  </p>
                 </div>
+                <p>
+                  Voor onze patisserie werken we samen met een bakker die elke
+                  dag vers levert.
+                </p>
               </li>
               <li>
-                <Heart size={24} strokeWidth={1.5} aria-hidden="true" />
-                <div>
+                <div className="about-value-heading">
+                  <Heart size={20} strokeWidth={1.5} aria-hidden="true" />
                   <h3>Gastvrij</h3>
-                  <p>
-                    Een vlotte uithaal, persoonlijke service en vooral een
-                    vriendelijk onthaal voor elke klant.
-                  </p>
                 </div>
+                <p>
+                  Een vlotte uithaal, persoonlijke service en vooral een
+                  vriendelijk onthaal voor elke klant.
+                </p>
               </li>
             </ul>
           </section>
@@ -464,7 +465,7 @@ export default function MoulineHome3() {
         <section id="catering" className="catering-section">
           <div className="catering-inner container">
             <div className="catering-copy">
-              <p className="eyebrow">Mouline op jouw locatie</p>
+              <p className="eyebrow">Catering op jouw locatie</p>
               <h2>
                 Van ontbijtmeeting
                 <br />
@@ -472,6 +473,11 @@ export default function MoulineHome3() {
               </h2>
               <p>
                 Ontbijt, broodjes en hapjes voor vergaderingen en recepties.
+              </p>
+              <p className="catering-weekend">
+                Catering is ook mogelijk tijdens het weekend (zaterdag en
+                zondag), vanaf 20 personen. Contacteer ons voor verdere
+                inlichtingen.
               </p>
               <a
                 href="#contact"
@@ -488,102 +494,104 @@ export default function MoulineHome3() {
             />
           </div>
         </section>
-        <section id="contact" className="contact-section container">
-          <div className="contact-info">
-            <div className="contact-primary">
-              <h2>Tot straks?</h2>
-              <p className="contact-intro">
-                Voor een reservatie, catering of een vraag.
-              </p>
-              <div className="contact-links">
-                <a href={business.phoneHref}>
-                  {business.phone} <ArrowUpRight size={20} />
-                </a>
-                <a href={`mailto:${business.email}`}>
-                  {business.email} <ArrowUpRight size={20} />
-                </a>
-              </div>
-            </div>
-            <div className="contact-secondary">
-              <div className="contact-hours">
-                <h3>Openingsuren</h3>
-                <Hours />
-              </div>
-              <p className="contact-urgent">
-                Voor een aanvraag voor vandaag bel je ons het best even.
-              </p>
-            </div>
-          </div>
-          <ContactForm intent={intent} onIntentChange={setIntent} />
-        </section>
-        <section
-          className="location-section container"
-          aria-label="Locatie en route"
-        >
-          <div className="location-copy">
-            <h2>{business.street}</h2>
-            {business.addressVerified &&
-              business.postalCode &&
-              business.city && (
-                <p>
-                  {business.postalCode} {business.city}
+        <div className="contact-chapter">
+          <section id="contact" className="contact-section container">
+            <div className="contact-info">
+              <div className="contact-primary">
+                <h2>Tot straks?</h2>
+                <p className="contact-intro">
+                  Voor een reservatie, catering of een vraag.
                 </p>
-              )}
-            <p>Parking voor de deur.</p>
-            <a
-              className="text-link"
-              href={business.googleMapsUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Route in Google Maps <ArrowUpRight size={18} />
-            </a>
-          </div>
-          <div className="location-map">
-            <a
-              className="location-map-link"
-              href={business.googleMapsUrl}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`Bekijk Foodbar Mouline, ${business.street}, in Google Maps (nieuw tabblad)`}
-            >
-              <picture>
-                <source
-                  media="(max-width: 650px)"
-                  srcSet={assetPath('/home3/maps/mouline-mobile.svg')}
-                />
-                <img
-                  src={assetPath('/home3/maps/mouline-desktop.svg')}
-                  width="1000"
-                  height="460"
-                  loading="lazy"
-                  decoding="async"
-                  alt="Stratenkaart rond Mouline, aan de Kapelsesteenweg vlak bij de kruising met de Molenweg en Schriek"
-                />
-              </picture>
-              <span className="map-marker" aria-hidden="true">
-                <span>Mouline</span>
-                <svg width="28" height="36" viewBox="0 0 28 36">
-                  <path
-                    d="M14 34C11 28 2 20 2 14a12 12 0 0 1 24 0c0 6-9 14-12 20Z"
-                    fill="currentColor"
-                    stroke="var(--paper)"
-                    strokeWidth="2"
+                <div className="contact-links">
+                  <a href={business.phoneHref}>
+                    {business.phone} <ArrowUpRight size={20} />
+                  </a>
+                  <a href={`mailto:${business.email}`}>
+                    {business.email} <ArrowUpRight size={20} />
+                  </a>
+                </div>
+              </div>
+              <div className="contact-secondary">
+                <div className="contact-hours">
+                  <h3>Openingsuren</h3>
+                  <Hours />
+                </div>
+                <p className="contact-urgent">
+                  Voor een aanvraag voor vandaag bel je ons het best even.
+                </p>
+              </div>
+            </div>
+            <ContactForm intent={intent} onIntentChange={setIntent} />
+          </section>
+          <section
+            className="location-section container"
+            aria-label="Locatie en route"
+          >
+            <div className="location-copy">
+              <h2>{business.street}</h2>
+              {business.addressVerified &&
+                business.postalCode &&
+                business.city && (
+                  <p>
+                    {business.postalCode} {business.city}
+                  </p>
+                )}
+              <p>Parking voor de deur.</p>
+              <a
+                className="text-link"
+                href={business.googleMapsUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Route in Google Maps <ArrowUpRight size={18} />
+              </a>
+            </div>
+            <div className="location-map">
+              <a
+                className="location-map-link"
+                href={business.googleMapsUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Bekijk Foodbar Mouline, ${business.street}, in Google Maps (nieuw tabblad)`}
+              >
+                <picture>
+                  <source
+                    media="(max-width: 650px)"
+                    srcSet={assetPath('/home3/maps/mouline-mobile.svg')}
                   />
-                  <circle cx="14" cy="14" r="4" fill="var(--paper)" />
-                </svg>
-              </span>
-            </a>
-            <a
-              className="map-attribution"
-              href="https://www.openstreetmap.org/copyright"
-              target="_blank"
-              rel="noreferrer"
-            >
-              © OpenStreetMap-bijdragers
-            </a>
-          </div>
-        </section>
+                  <img
+                    src={assetPath('/home3/maps/mouline-desktop.svg')}
+                    width="1000"
+                    height="460"
+                    loading="lazy"
+                    decoding="async"
+                    alt="Stratenkaart rond Mouline, aan de Kapelsesteenweg vlak bij de kruising met de Molenweg en Schriek"
+                  />
+                </picture>
+                <span className="map-marker" aria-hidden="true">
+                  <span>Mouline</span>
+                  <svg width="28" height="36" viewBox="0 0 28 36">
+                    <path
+                      d="M14 34C11 28 2 20 2 14a12 12 0 0 1 24 0c0 6-9 14-12 20Z"
+                      fill="currentColor"
+                      stroke="var(--paper)"
+                      strokeWidth="2"
+                    />
+                    <circle cx="14" cy="14" r="4" fill="var(--paper)" />
+                  </svg>
+                </span>
+              </a>
+              <a
+                className="map-attribution"
+                href="https://www.openstreetmap.org/copyright"
+                target="_blank"
+                rel="noreferrer"
+              >
+                © OpenStreetMap-bijdragers
+              </a>
+            </div>
+          </section>
+        </div>
       </main>
       <footer className="site-footer">
         <div className="footer-inner container">
