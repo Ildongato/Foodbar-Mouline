@@ -12,7 +12,6 @@ const targets = [
   '.catering-inner > img',
   '.contact-info',
   '.form-area',
-  '.location-section',
   '.footer-inner',
 ].join(',');
 

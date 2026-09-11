@@ -13,14 +13,19 @@ import {
   type Intent,
 } from '@/lib/contact';
 import { business, localDate } from '@/lib/business';
-import { staticHosting } from '@/lib/hosting';
+import { contactEndpoint, staticHosting } from '@/lib/hosting';
 export default function ContactForm({
   intent,
   onIntentChange,
+  variant = 'default',
+  delivery = 'auto',
 }: {
   intent: Intent;
   onIntentChange: (intent: Intent) => void;
+  variant?: 'default' | 'editorial';
+  delivery?: 'auto' | 'direct';
 }) {
+  const useEmailDraft = staticHosting && delivery !== 'direct';
   const [values, setValues] = useState<ContactValues>(emptyContact);
   const [errors, setErrors] = useState<
     Partial<Record<keyof ContactValues, string>>
@@ -35,6 +40,7 @@ export default function ContactForm({
     setValues((v) => ({ ...v, intent }));
     setErrors({});
     setState('idle');
+    idempotency.current = '';
   }, [intent]);
   function update(key: keyof ContactValues, value: string) {
     setValues((v) => ({ ...v, [key]: value }));
@@ -53,7 +59,7 @@ export default function ContactForm({
         ?.focus();
       return;
     }
-    if (staticHosting) {
+    if (useEmailDraft) {
       setState('draft');
       setFeedback(
         'Je aanvraag staat klaar. Open ze in je mailprogramma en verstuur daar je e-mail.',
@@ -64,7 +70,12 @@ export default function ContactForm({
     setFeedback('');
     idempotency.current ||= crypto.randomUUID();
     try {
-      const response = await fetch('/api/contact', {
+      const endpoint = delivery === 'direct' ? contactEndpoint : '/api/contact';
+      if (!endpoint)
+        throw new Error(
+          'Online versturen is nog niet beschikbaar. Je gegevens blijven ingevuld. Bel Mouline op 03 326 06 30.',
+        );
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,9 +100,12 @@ export default function ContactForm({
     } catch (error) {
       setState('error');
       setFeedback(
-        error instanceof Error && error.name !== 'TimeoutError'
-          ? error.message
-          : 'We konden de verzending niet bevestigen. Bel ons even voordat je opnieuw verstuurt.',
+        delivery === 'direct' &&
+          (error instanceof TypeError || error instanceof SyntaxError)
+          ? 'Versturen lukt even niet. Je gegevens blijven ingevuld. Probeer opnieuw of bel Mouline.'
+          : error instanceof Error && error.name !== 'TimeoutError'
+            ? error.message
+            : 'We konden de verzending niet bevestigen. Bel ons even voordat je opnieuw verstuurt.',
       );
     }
   }
@@ -150,25 +164,52 @@ export default function ContactForm({
         onSubmit={submit}
         noValidate
         aria-label="Contactaanvraag"
+        aria-busy={state === 'sending'}
       >
-        <div className="form-field intent-field">
-          <label htmlFor="intent">Waarvoor neem je contact op?</label>
-          <NativeSelect
-            id="intent"
-            name="intent"
-            value={intent}
-            disabled={state === 'sending'}
-            onChange={(e) => onIntentChange(e.target.value as Intent)}
-          >
-            <NativeSelectOption value="Reservatie">
-              Tafel reserveren
-            </NativeSelectOption>
-            <NativeSelectOption value="Catering">Catering</NativeSelectOption>
-            <NativeSelectOption value="Andere vraag">
-              Andere vraag
-            </NativeSelectOption>
-          </NativeSelect>
-        </div>
+        {variant === 'editorial' ? (
+          <fieldset className="intent-choices" disabled={state === 'sending'}>
+            <legend>Waarvoor neem je contact op?</legend>
+            <div className="intent-options">
+              {(
+                [
+                  ['Reservatie', 'Tafel reserveren'],
+                  ['Catering', 'Catering'],
+                  ['Andere vraag', 'Andere vraag'],
+                ] as const
+              ).map(([value, label]) => (
+                <label className="intent-option" key={value}>
+                  <input
+                    type="radio"
+                    name="intent"
+                    value={value}
+                    checked={intent === value}
+                    onChange={() => onIntentChange(value)}
+                  />
+                  <span>{label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        ) : (
+          <div className="form-field intent-field">
+            <label htmlFor="intent">Waarvoor neem je contact op?</label>
+            <NativeSelect
+              id="intent"
+              name="intent"
+              value={intent}
+              disabled={state === 'sending'}
+              onChange={(e) => onIntentChange(e.target.value as Intent)}
+            >
+              <NativeSelectOption value="Reservatie">
+                Tafel reserveren
+              </NativeSelectOption>
+              <NativeSelectOption value="Catering">Catering</NativeSelectOption>
+              <NativeSelectOption value="Andere vraag">
+                Andere vraag
+              </NativeSelectOption>
+            </NativeSelect>
+          </div>
+        )}
         {state === 'success' ? (
           <div className="form-success" role="status" tabIndex={-1}>
             <Check size={30} />
@@ -242,10 +283,11 @@ export default function ContactForm({
                 ? 'Je reservatie is definitief zodra Mouline ze heeft bevestigd.'
                 : 'We nemen contact op om je aanvraag samen te bespreken.'}
             </p>
-            {staticHosting && (
+            {useEmailDraft && (
               <p className="form-note">
-                Vul je gegevens in en maak hieronder je e-mail klaar. Je
-                verstuurt de aanvraag zelf vanuit je mailprogramma.
+                {variant === 'editorial'
+                  ? 'Je verstuurt de aanvraag zelf vanuit je mailprogramma.'
+                  : 'Vul je gegevens in en maak hieronder je e-mail klaar. Je verstuurt de aanvraag zelf vanuit je mailprogramma.'}
               </p>
             )}
             {(state === 'error' || state === 'draft') && (
@@ -254,13 +296,19 @@ export default function ContactForm({
                 role={state === 'draft' ? 'status' : 'alert'}
               >
                 <p>{feedback}</p>
-                <a
-                  className="text-link"
-                  href={`mailto:${business.email}?subject=${encodeURIComponent(`${intent} via de website`)}&body=${encodeURIComponent(draft)}`}
-                >
-                  Open je aanvraag in je mailprogramma{' '}
-                  <ArrowUpRight size={16} />
-                </a>
+                {delivery === 'direct' ? (
+                  <a className="text-link" href={business.phoneHref}>
+                    Bel Mouline <ArrowUpRight size={16} />
+                  </a>
+                ) : (
+                  <a
+                    className="text-link"
+                    href={`mailto:${business.email}?subject=${encodeURIComponent(`${intent} via de website`)}&body=${encodeURIComponent(draft)}`}
+                  >
+                    Open je aanvraag in je mailprogramma{' '}
+                    <ArrowUpRight size={16} />
+                  </a>
+                )}
               </div>
             )}
             <div className="form-submit-row">
@@ -276,7 +324,7 @@ export default function ContactForm({
                   </>
                 ) : (
                   <>
-                    {staticHosting
+                    {useEmailDraft
                       ? 'Maak e-mail klaar'
                       : 'Verstuur je aanvraag'}{' '}
                     <ArrowUpRight size={17} />

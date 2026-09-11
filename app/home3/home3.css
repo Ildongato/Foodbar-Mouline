@@ -17,13 +17,13 @@
   --color-popover: var(--paper);
   --color-popover-foreground: var(--ink);
   --color-primary: var(--accent);
-  --color-primary-foreground: var(--white);
+  --color-primary-foreground: var(--cream);
   --color-accent: var(--rose);
   --color-accent-foreground: var(--ink);
   --color-secondary: var(--blush);
   --color-secondary-foreground: var(--ink);
   --color-destructive: var(--accent);
-  --color-destructive-foreground: var(--white);
+  --color-destructive-foreground: var(--cream);
   --color-muted: var(--paper);
   --color-muted-foreground: var(--muted);
   --color-border: var(--line);
@@ -33,29 +33,27 @@
   --font-heading: 'Instrument Serif', Georgia, serif;
 }
 :root {
-  /* Home3 palette; semantic aliases separate surfaces, actions and decoration. */
+  /* Four brand colours; a white hairline is reserved for the landing header. */
   --ink: #2a2220;
-  --brand: #c3052d;
-  --blush: #f7dce3;
+  --burgundy: #4d0413;
+  --blush: #f2c8d0; /* Stronger rose sampled from the supplied reference in sRGB. */
   --cream: #fff8f4;
-  --ivory: #faf6f2;
-  --ochre: #c49a62;
-  --ochre-dark: #8f6638;
-  --line: #d8ceca;
-  --white: #ffffff;
-  --hero-mid: #fbe8ea;
-  --paper: var(--ivory);
+  --brand: var(--burgundy);
+  --line: color-mix(in srgb, var(--ink) 18%, var(--cream));
+  --hero-rule: #ffffff;
+  --hero-mid: color-mix(in srgb, var(--blush) 60%, var(--cream));
+  --paper: var(--cream);
   --rose: var(--blush);
   --muted: var(--ink);
   --accent: var(--brand);
   --accent-hover: color-mix(in srgb, var(--brand) 85%, var(--ink));
   --control-line: color-mix(in srgb, var(--ink) 45%, var(--line));
-  --line-on-dark: color-mix(in srgb, var(--line) 30%, transparent);
   --overlay: color-mix(in srgb, var(--ink) 75%, transparent);
   --radius: 0px;
   --content: 1280px;
   --gutter: clamp(20px, 4vw, 64px);
   --header: 84px;
+  --header-compact: max(60px, calc(var(--header) - 12px));
   --space-1: 8px;
   --space-2: 16px;
   --space-3: 24px;
@@ -84,6 +82,16 @@ html {
 body {
   margin: 0;
   background: var(--paper);
+  /* One shared gradient keeps contact and footer seamless at every height. */
+  background-image: linear-gradient(
+    0deg,
+    var(--blush) 0%,
+    var(--hero-mid) 55%,
+    var(--cream) 100%
+  );
+  background-size: 100% clamp(560px, 70svh, 840px);
+  background-position: center bottom;
+  background-repeat: no-repeat;
   color: var(--ink);
   font: 16px/1.6 var(--body);
   -webkit-font-smoothing: antialiased;
@@ -155,7 +163,7 @@ textarea {
 }
 ::selection {
   background: var(--accent);
-  color: var(--white);
+  color: var(--cream);
 }
 .container {
   width: min(var(--content), calc(100% - var(--gutter) * 2));
@@ -198,7 +206,7 @@ textarea {
 .button-primary,
 .header-cta,
 .button-ink {
-  color: var(--white);
+  color: var(--cream);
   background: var(--accent);
 }
 .button-primary:is(:hover, :focus-visible):not(:disabled),
@@ -286,7 +294,7 @@ textarea {
   transition: opacity var(--nav-duration) ease;
 }
 .site-header[data-compact='true'] {
-  height: calc(var(--header) - 12px);
+  height: var(--header-compact);
 }
 .site-header[data-compact='true']::before {
   opacity: 1;
@@ -312,7 +320,7 @@ textarea {
   position: absolute;
   inset: auto 0 0;
   height: 1px;
-  background: var(--line);
+  background: var(--hero-rule);
   pointer-events: none;
   transition: opacity var(--nav-duration) ease;
 }
@@ -455,7 +463,7 @@ textarea {
   align-items: baseline;
   gap: 16px;
   margin-top: 8px;
-  color: var(--ink);
+  color: var(--brand);
 }
 .hero-founded,
 .hero-location {
@@ -533,7 +541,7 @@ textarea {
 /* Cream paper connects the menu and photography, with two navigation levels. */
 .menu-chapter,
 .gallery-chapter {
-  background: var(--ivory);
+  background: var(--cream);
 }
 .menu-chapter {
   border-top: 1px solid var(--line);
@@ -605,7 +613,7 @@ textarea {
     color var(--interaction) ease;
 }
 .menu-switch [aria-selected='true'] {
-  color: var(--white);
+  color: var(--cream);
   background: var(--accent);
 }
 .menu-switch [data-slot='tabs-trigger']:hover:not([aria-selected='true']) {
@@ -663,14 +671,14 @@ textarea {
   border-radius: 0;
   padding: 0;
   position: sticky;
-  top: var(--header);
+  top: var(--header-compact);
   z-index: 20;
-  background: var(--ivory);
+  background: var(--cream);
   border-bottom: 1px solid var(--line);
   overflow-x: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--control-line) transparent;
-  scroll-margin-top: var(--header);
+  scroll-margin-top: var(--header-compact);
 }
 .category-list [data-slot='tabs-trigger'] {
   flex: 0 0 auto;
@@ -816,19 +824,10 @@ textarea {
 }
 .about-section {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(32px, 4vw, 64px);
-  padding-block: var(--section-feature) var(--section-normal);
-}
-.about-card {
-  display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
   align-items: center;
-  gap: clamp(24px, 4vw, 48px);
-  min-width: 0;
-  padding: clamp(20px, 3vw, 40px);
-  border-radius: var(--hero-radius);
-  background: var(--blush);
+  gap: clamp(32px, 4vw, 64px);
+  padding-block: var(--section-feature) 0;
 }
 .about-photo,
 .about-copy {
@@ -847,16 +846,22 @@ textarea {
 }
 .about-copy > p {
   max-width: 60ch;
+  font-size: 15px;
 }
 .about-intro {
-  margin-top: clamp(20px, 2vw, 28px);
+  margin-top: clamp(16px, 1.5vw, 20px);
 }
 .about-copy > p + p {
   margin-top: 16px;
 }
+.about-values-section {
+  /* One responsive gap joins the values to Caroline's story. */
+  padding-block: clamp(36px, 3.5vw, 48px) var(--section-tight);
+  background: var(--cream);
+  color: var(--ink);
+}
 .about-values {
   display: grid;
-  grid-column: 1 / -1;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: clamp(28px, 3vw, 44px);
   margin: 0;
@@ -898,7 +903,6 @@ textarea {
 }
 .review-content {
   padding-block: 44px 36px;
-  border-block: 1px solid var(--brand);
 }
 .reviews-section h2 {
   font-size: clamp(32px, 3vw, 40px);
@@ -918,7 +922,7 @@ textarea {
 .review-stars {
   display: flex;
   gap: 3px;
-  color: var(--ochre-dark);
+  color: var(--brand);
 }
 .review-excerpts blockquote {
   flex: 1;
@@ -942,7 +946,7 @@ textarea {
 
 /* Six photographs on one consistent grid. */
 .gallery-section {
-  padding-block: var(--section-feature);
+  padding-block: var(--section-normal);
 }
 .gallery-section h2 {
   font-size: clamp(40px, 3.5vw, 52px);
@@ -1015,7 +1019,7 @@ textarea {
   height: 32px;
 }
 
-/* A light catering surface keeps the food and the brand action prominent. */
+/* Light chapters keep photography prominent; burgundy is reserved for accents. */
 .catering-section {
   background: var(--cream);
   color: var(--ink);
@@ -1031,12 +1035,12 @@ textarea {
   margin-bottom: 24px;
 }
 .catering-copy h2 {
-  font-size: var(--heading-expressive);
+  font-size: var(--heading-functional);
 }
 .catering-copy > p:not(.eyebrow) {
   margin-top: 24px;
   max-width: 42ch;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.6;
 }
 .catering-copy > .catering-weekend {
@@ -1047,7 +1051,7 @@ textarea {
 .catering-copy .text-link {
   margin-top: 24px;
   font-size: 15px;
-  color: var(--brand);
+  color: var(--accent);
   text-decoration-color: currentColor;
 }
 .catering-copy .text-link:is(:hover, :focus-visible) {
@@ -1056,7 +1060,7 @@ textarea {
   text-decoration-thickness: 2px;
 }
 .catering-section :focus-visible {
-  outline-color: var(--brand);
+  outline-color: var(--accent);
 }
 .catering-inner > img {
   width: 100%;
@@ -1065,47 +1069,49 @@ textarea {
   object-position: 50% 32%;
 }
 
-/* Functional contact and a concise colophon. */
-/* Compact field groups and quiet direct contact details. */
+/* Contact: practical details and map beside a single, quiet request form. */
 .contact-chapter {
-  /* A soft gold wash keeps brand-coloured links readable across this surface. */
-  background: linear-gradient(
-    180deg,
-    var(--cream) 0%,
-    color-mix(in srgb, var(--ochre) 12%, var(--cream)) 55%,
-    color-mix(in srgb, var(--ochre) 30%, var(--cream)) 100%
-  );
+  --control-line: color-mix(in srgb, var(--ink) 55%, var(--line));
+  background: transparent;
 }
 .contact-section {
   display: grid;
-  grid-template-columns: 0.85fr 1.15fr;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
   align-items: start;
-  gap: 64px;
+  gap: clamp(48px, 6vw, 88px);
+  border-top: 1px solid var(--line);
   padding-block: var(--section-normal) var(--section-tight);
 }
+.contact-info,
+.contact-primary,
+.contact-location,
+.contact-request {
+  min-width: 0;
+}
 .contact-intro {
-  max-width: 35ch;
-  margin-top: 16px;
-  font-size: 16px;
+  margin-top: 12px;
+  font-size: 15px;
+}
+.contact-actions,
+.contact-request-close {
+  display: none;
 }
 .contact-links {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0;
+  flex-wrap: wrap;
+  gap: 0 24px;
   margin-top: 12px;
 }
 .contact-links a {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   min-height: 44px;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.4;
 }
-.contact-links a > svg {
-  width: 16px;
-  height: 16px;
+.contact-links svg {
+  flex-shrink: 0;
 }
 .contact-links a:is(:hover, :focus-visible) {
   color: var(--accent);
@@ -1113,11 +1119,11 @@ textarea {
   text-underline-offset: 5px;
 }
 .contact-hours {
-  max-width: 360px;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 .contact-hours h3 {
   font: 500 14px/1.5 var(--body);
+  letter-spacing: 0;
   margin-bottom: 8px;
 }
 .hours {
@@ -1127,7 +1133,7 @@ textarea {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 20px;
+  gap: 16px;
   padding-block: 4px;
 }
 .hours dd {
@@ -1138,10 +1144,83 @@ textarea {
   text-underline-offset: 4px;
 }
 .contact-urgent {
-  color: var(--muted);
   font-size: 13px;
   margin-top: 12px;
-  max-width: 38ch;
+}
+.contact-request-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.contact-request {
+  /* The document already reserves the sticky header's height. */
+  scroll-margin-block: 0;
+}
+.contact-request-heading h3 {
+  font-size: clamp(28px, 2.5vw, 36px);
+}
+.contact-request:focus-visible {
+  outline: none;
+}
+.contact-request:focus-visible .contact-request-heading h3 {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+.intent-choices {
+  min-width: 0;
+  margin: 0 0 24px;
+  padding: 0;
+  border: 0;
+}
+.intent-choices legend {
+  padding: 0;
+  font-size: 13px;
+}
+.intent-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  margin-top: 4px;
+}
+.intent-option {
+  position: relative;
+  cursor: pointer;
+}
+.intent-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.intent-option span {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding-block: 9px;
+  border-bottom: 2px solid transparent;
+  font-size: 14px;
+  font-weight: 500;
+  transition:
+    color var(--interaction),
+    border-color var(--interaction);
+}
+.intent-option input:checked + span {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.intent-option:hover span {
+  color: var(--accent);
+}
+.intent-option input:focus-visible + span {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.intent-option input:disabled + span {
+  border-bottom-style: dashed;
+  cursor: wait;
 }
 .form-area {
   min-width: 0;
@@ -1166,11 +1245,12 @@ textarea {
   min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
-  border: 1px solid var(--control-line);
+  border: 0;
+  border-bottom: 1px solid var(--control-line);
   border-radius: 0;
   box-shadow: none;
-  background: var(--cream);
-  padding: 9px 12px;
+  background: transparent;
+  padding: 9px 0;
   font-size: 1rem;
   line-height: 1.5;
   transition: border-color var(--interaction);
@@ -1181,8 +1261,8 @@ textarea {
 }
 .form-field textarea {
   resize: vertical;
-  height: 96px;
-  min-height: 96px;
+  height: 76px;
+  min-height: 76px;
 }
 .form-field :is(input, select, textarea):focus-visible {
   border-color: var(--accent);
@@ -1191,7 +1271,7 @@ textarea {
 }
 .form-field :is(input, select, textarea)[aria-invalid='true'] {
   border-color: var(--accent);
-  box-shadow: inset 0 0 0 1px var(--accent);
+  border-bottom-width: 2px;
 }
 .form-field :is(input, select, textarea):disabled {
   color: var(--ink);
@@ -1211,27 +1291,17 @@ textarea {
   min-width: 0;
   text-align: left;
 }
-.intent-field {
-  margin-bottom: 20px;
-}
-.intent-field [data-slot='native-select-wrapper'] {
-  width: 100%;
-}
-.intent-field select {
-  padding-right: 36px;
-  font-size: 1rem;
-}
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: start;
-  gap: 16px 20px;
+  gap: 18px 24px;
 }
 .form-grid .form-field:last-child:nth-child(odd) {
   grid-column: 1 / -1;
 }
 /* Keep pairs readable based on the form's width, including split desktop layouts. */
-@container (max-width: 26rem) {
+@container (max-width: 24rem) {
   .form-grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 16px;
@@ -1300,29 +1370,35 @@ textarea {
   overflow: hidden;
   clip-path: inset(50%);
 }
-.location-section {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  align-items: center;
-  gap: 48px;
-  border-top: 1px solid var(--line);
-  padding-block: 32px 48px;
+.contact-location {
+  margin-top: 24px;
 }
-.location-section h2 {
-  font: 500 18px/1.5 var(--body);
+.location-copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 16px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.location-copy h3 {
+  grid-column: 1;
+  font: 500 15px/1.5 var(--body);
   letter-spacing: 0;
 }
-.location-section p {
-  font-size: 14px;
-  color: var(--muted);
-  margin-top: 4px;
+.location-copy p {
+  grid-column: 1;
+  font-size: 13px;
 }
 .location-copy .text-link {
-  margin-top: 16px;
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  min-height: 44px;
+  font-size: 13px;
+  gap: 8px;
 }
 .location-map {
   position: relative;
-  height: clamp(240px, 23vw, 310px);
+  height: 200px;
   overflow: hidden;
   background: var(--paper);
   border: 1px solid var(--line);
@@ -1375,8 +1451,8 @@ textarea {
 }
 .site-footer {
   position: relative;
-  background: var(--ink);
-  color: var(--paper);
+  background: transparent;
+  color: var(--ink);
   padding-block: var(--section-tight);
 }
 .footer-inner {
@@ -1397,7 +1473,7 @@ textarea {
 }
 .footer-inner > p span {
   display: block;
-  color: var(--line);
+  color: var(--ink);
   font-size: 12px;
   margin-top: 6px;
 }
@@ -1418,7 +1494,7 @@ textarea {
   font-size: 13px;
 }
 .site-footer :focus-visible {
-  outline-color: var(--paper);
+  outline-color: var(--accent);
 }
 .footer-links :is(a, button):is(:hover, :focus-visible) {
   text-decoration: underline;
@@ -1644,9 +1720,6 @@ textarea {
   .catering-inner {
     gap: 40px;
   }
-  .contact-section {
-    gap: 48px;
-  }
   .practical {
     font-size: 13px;
     gap: 20px;
@@ -1654,20 +1727,36 @@ textarea {
 }
 @media (max-width: 1000px) {
   .contact-section {
-    grid-template-columns: 1fr;
-    gap: 28px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
   }
   .contact-info {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 40px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 32px;
+    align-items: start;
   }
+  .contact-primary,
   .contact-hours {
+    grid-column: 1;
+  }
+  .contact-location {
+    grid-column: 2;
+    grid-row: 1 / span 2;
     margin-top: 0;
   }
-  .form-area {
+  .location-copy {
+    display: block;
+  }
+  .location-copy p {
+    margin-top: 4px;
+  }
+  .location-copy .text-link {
+    margin-top: 4px;
+  }
+  .contact-request {
     border-top: 1px solid var(--line);
-    padding-top: 24px;
+    padding-top: 28px;
   }
 }
 @media (max-width: 800px) {
@@ -1709,11 +1798,8 @@ textarea {
     gap: 32px;
   }
   .about-section {
-    gap: 32px;
-  }
-  .about-card {
     grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
+    gap: 32px;
   }
   .review-excerpts {
     gap: 28px;
@@ -1916,28 +2002,71 @@ textarea {
   .catering-inner > img {
     aspect-ratio: 3/2;
   }
+  .contact-section {
+    gap: 28px;
+  }
   .contact-info {
     display: block;
   }
-  .contact-intro {
-    margin-top: 12px;
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-top: 16px;
   }
-  .contact-hours {
+  .contact-actions :is(a, button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .contact-actions :is(a, button):hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .contact-links {
+    gap: 0 20px;
+    margin-top: 4px;
+  }
+  .contact-links a {
+    font-size: 15px;
+  }
+  .contact-hours,
+  .contact-location {
     margin-top: 20px;
   }
-  .form-submit-row .button {
-    width: 100%;
-  }
-  .location-section {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    padding-block: 28px 36px;
-  }
-  .location-copy .text-link {
-    margin-top: 8px;
-  }
   .location-map {
-    height: 250px;
+    height: 190px;
+  }
+  .contact-request[data-open='false'] {
+    display: none;
+  }
+  .contact-request-close {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--accent);
+    font-size: 13px;
+  }
+  .intent-options {
+    column-gap: 20px;
+  }
+  .intent-option span {
+    font-size: 13px;
+  }
+  .form-submit-row .button {
+    width: fit-content;
   }
   .footer-inner {
     flex-wrap: wrap;
@@ -1953,7 +2082,7 @@ textarea {
   .footer-links {
     margin-left: 0;
     width: 100%;
-    border-top: 1px solid var(--line-on-dark);
+    border-top: 1px solid var(--line);
     padding-top: 16px;
     gap: 28px;
   }

@@ -21,7 +21,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import MenuSection from './menu-section';
-import ContactForm from '../contact-form';
+import ContactSection from './contact-section';
 import GuestReviews from './guest-reviews';
 import HeaderMill from './header-mill';
 import GallerySection from './gallery-section';
@@ -68,24 +68,6 @@ function Photo({
     />
   );
 }
-function Hours() {
-  return (
-    <dl className="hours">
-      {business.openingHours.map((row) => (
-        <div key={row.label}>
-          <dt>{row.label}</dt>
-          <dd>
-            {row.unverified ? (
-              <a href={business.phoneHref}>{row.display}</a>
-            ) : (
-              row.display
-            )}
-          </dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
 export default function MoulineHome3() {
   usePageMotion();
   const { heroRef, informationRef } = useHeroFit();
@@ -95,6 +77,7 @@ export default function MoulineHome3() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mode, setMode] = useState<MenuMode>('onsite');
   const [intent, setIntent] = useState<Intent>('Reservatie');
+  const [requestOpen, setRequestOpen] = useState(false);
   const [privacy, setPrivacy] = useState(false);
   useEffect(() => {
     // Navigation observation is optional; content never depends on an observer.
@@ -109,7 +92,7 @@ export default function MoulineHome3() {
             { rootMargin: '-15% 0px -60% 0px' },
           );
     document
-      .querySelectorAll('main section[id]')
+      .querySelectorAll('main section[id]:not(#contact-request)')
       .forEach((section) => observer?.observe(section));
     return () => {
       observer?.disconnect();
@@ -120,9 +103,30 @@ export default function MoulineHome3() {
     setMobileOpen(false);
   }
   function openContact(next: Intent) {
-    setIntent(next);
-    setMobileOpen(false);
+    // Reveal the mobile panel before the link's native anchor navigation.
+    flushSync(() => {
+      setIntent(next);
+      setRequestOpen(true);
+      setMobileOpen(false);
+    });
+    requestAnimationFrame(() => {
+      document
+        .getElementById('contact-request')
+        ?.focus({ preventScroll: true });
+    });
   }
+  useEffect(() => {
+    const followRequest = () => {
+      if (window.location.hash !== '#contact-request') return;
+      setRequestOpen(true);
+      requestAnimationFrame(() => {
+        document.getElementById('contact-request')?.scrollIntoView();
+      });
+    };
+    followRequest();
+    window.addEventListener('hashchange', followRequest);
+    return () => window.removeEventListener('hashchange', followRequest);
+  }, []);
   useEffect(() => {
     type Context = {
       registerTool: (
@@ -193,9 +197,13 @@ export default function MoulineHome3() {
             throw new Error('Invalid intent');
           flushSync(() => {
             setIntent(value as Intent);
+            setRequestOpen(true);
             setMobileOpen(false);
           });
-          document.getElementById('contact')?.scrollIntoView();
+          document.getElementById('contact-request')?.scrollIntoView();
+          document
+            .getElementById('contact-request')
+            ?.focus({ preventScroll: true });
           return { intent: value, section: 'contact', submitted: false };
         },
       },
@@ -388,34 +396,36 @@ export default function MoulineHome3() {
             className="about-section container"
             aria-labelledby="about-title"
           >
-            <div className="about-card">
-              <div className="about-photo">
-                <img
-                  src={assetPath('/images/aangenaam-mouline-128dae27-941.webp')}
-                  srcSet={`${assetPath('/images/aangenaam-mouline-128dae27-640.webp')} 640w, ${assetPath('/images/aangenaam-mouline-128dae27-941.webp')} 941w`}
-                  sizes="(max-width: 650px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 56px), (max-width: 1392px) 40vw, 520px"
-                  width="941"
-                  height="1672"
-                  loading="lazy"
-                  decoding="async"
-                  alt="Een vrouw begroet je met een glimlach en een opgestoken hand bij Mouline"
-                />
-              </div>
-              <div className="about-copy">
-                <h2 id="about-title">Over Mouline</h2>
-                <p className="about-intro">
-                  Ik ben Caroline. Na mijn opleiding als kok en kelner aan
-                  Spermali in Brugge droomde ik ervan om ooit mijn eigen zaak te
-                  openen. In 2019 werd die droom werkelijkheid met Mouline.
-                </p>
-                <p>
-                  Elke dag staan verse producten, huisgemaakte bereidingen en
-                  een warm onthaal centraal. Ook bij takeaway vinden we het
-                  belangrijk dat het vlot gaat, zonder in te boeten op kwaliteit
-                  of vriendelijkheid.
-                </p>
-              </div>
+            <div className="about-photo">
+              <img
+                src={assetPath('/images/aangenaam-mouline-128dae27-941.webp')}
+                srcSet={`${assetPath('/images/aangenaam-mouline-128dae27-640.webp')} 640w, ${assetPath('/images/aangenaam-mouline-128dae27-941.webp')} 941w`}
+                sizes="(max-width: 650px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 56px), (max-width: 1392px) 40vw, 520px"
+                width="941"
+                height="1672"
+                loading="lazy"
+                decoding="async"
+                alt="Een vrouw begroet je met een glimlach en een opgestoken hand bij Mouline"
+              />
             </div>
+            <div className="about-copy">
+              <h2 id="about-title">Over Mouline</h2>
+              <p className="about-intro">
+                Ik ben Caroline. Na mijn opleiding als kok en kelner aan
+                Spermali in Brugge droomde ik ervan om ooit mijn eigen zaak te
+                openen. In 2019 werd die droom werkelijkheid met Mouline.
+              </p>
+              <p>
+                Elke dag staan verse producten, huisgemaakte bereidingen en een
+                warm onthaal centraal. Ook bij takeaway vinden we het belangrijk
+                dat het vlot gaat, zonder in te boeten op kwaliteit of
+                vriendelijkheid.
+              </p>
+            </div>
+          </section>
+        </div>
+        <div className="about-values-section">
+          <div className="container">
             <ul className="about-values">
               <li>
                 <div className="about-value-heading">
@@ -458,29 +468,29 @@ export default function MoulineHome3() {
                 </p>
               </li>
             </ul>
-          </section>
+          </div>
         </div>
-        <GuestReviews />
         <GallerySection />
+        <GuestReviews />
         <section id="catering" className="catering-section">
           <div className="catering-inner container">
             <div className="catering-copy">
-              <p className="eyebrow">Catering op jouw locatie</p>
               <h2>
                 Van ontbijtmeeting
                 <br />
                 tot volle tafel.
               </h2>
               <p>
-                Ontbijt, broodjes en hapjes voor vergaderingen en recepties.
+                Ontbijt, broodjes en hapjes voor vergaderingen, recepties en
+                andere momenten.
               </p>
               <p className="catering-weekend">
-                Catering is ook mogelijk tijdens het weekend (zaterdag en
-                zondag), vanaf 20 personen. Contacteer ons voor verdere
-                inlichtingen.
+                Ook in het weekend mogelijk vanaf 20 personen.
+                <br />
+                Neem gerust contact op voor de mogelijkheden.
               </p>
               <a
-                href="#contact"
+                href="#contact-request"
                 onClick={() => openContact('Catering')}
                 className="text-link"
               >
@@ -494,110 +504,18 @@ export default function MoulineHome3() {
             />
           </div>
         </section>
-        <div className="contact-chapter">
-          <section id="contact" className="contact-section container">
-            <div className="contact-info">
-              <div className="contact-primary">
-                <h2>Tot straks?</h2>
-                <p className="contact-intro">
-                  Voor een reservatie, catering of een vraag.
-                </p>
-                <div className="contact-links">
-                  <a href={business.phoneHref}>
-                    {business.phone} <ArrowUpRight size={20} />
-                  </a>
-                  <a href={`mailto:${business.email}`}>
-                    {business.email} <ArrowUpRight size={20} />
-                  </a>
-                </div>
-              </div>
-              <div className="contact-secondary">
-                <div className="contact-hours">
-                  <h3>Openingsuren</h3>
-                  <Hours />
-                </div>
-                <p className="contact-urgent">
-                  Voor een aanvraag voor vandaag bel je ons het best even.
-                </p>
-              </div>
-            </div>
-            <ContactForm intent={intent} onIntentChange={setIntent} />
-          </section>
-          <section
-            className="location-section container"
-            aria-label="Locatie en route"
-          >
-            <div className="location-copy">
-              <h2>{business.street}</h2>
-              {business.addressVerified &&
-                business.postalCode &&
-                business.city && (
-                  <p>
-                    {business.postalCode} {business.city}
-                  </p>
-                )}
-              <p>Parking voor de deur.</p>
-              <a
-                className="text-link"
-                href={business.googleMapsUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Route in Google Maps <ArrowUpRight size={18} />
-              </a>
-            </div>
-            <div className="location-map">
-              <a
-                className="location-map-link"
-                href={business.googleMapsUrl}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={`Bekijk Foodbar Mouline, ${business.street}, in Google Maps (nieuw tabblad)`}
-              >
-                <picture>
-                  <source
-                    media="(max-width: 650px)"
-                    srcSet={assetPath('/home3/maps/mouline-mobile.svg')}
-                  />
-                  <img
-                    src={assetPath('/home3/maps/mouline-desktop.svg')}
-                    width="1000"
-                    height="460"
-                    loading="lazy"
-                    decoding="async"
-                    alt="Stratenkaart rond Mouline, aan de Kapelsesteenweg vlak bij de kruising met de Molenweg en Schriek"
-                  />
-                </picture>
-                <span className="map-marker" aria-hidden="true">
-                  <span>Mouline</span>
-                  <svg width="28" height="36" viewBox="0 0 28 36">
-                    <path
-                      d="M14 34C11 28 2 20 2 14a12 12 0 0 1 24 0c0 6-9 14-12 20Z"
-                      fill="currentColor"
-                      stroke="var(--paper)"
-                      strokeWidth="2"
-                    />
-                    <circle cx="14" cy="14" r="4" fill="var(--paper)" />
-                  </svg>
-                </span>
-              </a>
-              <a
-                className="map-attribution"
-                href="https://www.openstreetmap.org/copyright"
-                target="_blank"
-                rel="noreferrer"
-              >
-                © OpenStreetMap-bijdragers
-              </a>
-            </div>
-          </section>
-        </div>
+        <ContactSection
+          intent={intent}
+          onIntentChange={setIntent}
+          requestOpen={requestOpen}
+          onRequestOpenChange={setRequestOpen}
+        />
       </main>
       <footer className="site-footer">
         <div className="footer-inner container">
           <a href="#home" aria-label="Mouline, naar boven">
             <img
-              src={assetPath('/home3/images/logo-cream.svg')}
+              src={assetPath('/home3/images/logo-ink.svg')}
               width="110"
               height="78"
               alt="Foodbar Mouline"

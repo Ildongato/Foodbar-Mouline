@@ -36,8 +36,11 @@ pnpm preview:pages
 
 Open de preview op `http://127.0.0.1:4173/Foodbar-Mouline/`.
 `dist-pages/` bevat uitsluitend de openbare statische website.
-GitHub Pages ondersteunt geen serverroutes: het formulier maakt een e-mailaanvraag klaar
-om zelf te versturen. De reviewsectie toont drie handmatig gecontroleerde Google-citaten
+GitHub Pages ondersteunt geen serverroutes. Home en Home2 maken daarom een
+e-mailaanvraag klaar om zelf te versturen. Home3 gebruikt rechtstreekse verzending
+via de bestaande PHP-hosting; activering en de openbare endpoint-instelling staan in
+[hosting/README.md](hosting/README.md). Tot deze koppeling actief is, meldt Home3
+dat verzending niet beschikbaar is. De reviewsectie toont drie handmatig gecontroleerde Google-citaten
 met sterren, directe bronlinks en een raadpleegdatum. API-sleutels worden niet
 meegebouwd. De bestaande serverroutes blijven beschikbaar bij hosting met serverondersteuning.
 

@@ -59,29 +59,31 @@ function CategoryMenu({ mode }: { mode: MenuMode }) {
   function selectCategory(value: string) {
     if (value === category) return;
     const nav = navRef.current;
-    const header = parseFloat(
-      getComputedStyle(document.documentElement).getPropertyValue('--header'),
-    );
+    // Read the resolved sticky offset so category changes use the same
+    // compact header height as CSS at every breakpoint.
+    const stickyTop = nav ? parseFloat(getComputedStyle(nav).top) : 0;
     const before = nav?.getBoundingClientRect();
-    const wasSticky = !!before && before.top <= header + 2;
+    const wasSticky = !!before && before.top <= stickyTop + 2;
     // Commit before measuring: a shorter panel can release the sticky navigation.
     flushSync(() => setCategory(value));
     if (!nav || !wasSticky) return;
-    const panel = nav.parentElement?.querySelector<HTMLElement>(
-      '.category-content:not([hidden])',
-    );
-    const after = nav.getBoundingClientRect();
-    const panelTop = panel?.getBoundingClientRect().top;
-    const contentHasPassed =
-      panelTop !== undefined && panelTop < after.bottom - 8;
-    if (after.top < header || contentHasPassed) {
+    // Let native scroll anchoring settle after the panel height changes.
+    requestAnimationFrame(() => {
+      if (!nav.isConnected) return;
+      const panel = nav.parentElement?.querySelector<HTMLElement>(
+        '.category-content:not([hidden])',
+      );
+      const after = nav.getBoundingClientRect();
+      const panelTop = panel?.getBoundingClientRect().top;
+      const contentHasPassed =
+        panelTop !== undefined && panelTop < after.bottom - 8;
       const root = nav.parentElement;
-      if (root)
+      if (root && (Math.abs(after.top - stickyTop) > 1 || contentHasPassed))
         window.scrollTo({
-          top: window.scrollY + root.getBoundingClientRect().top - header,
+          top: window.scrollY + root.getBoundingClientRect().top - stickyTop,
           behavior: 'instant',
         });
-    }
+    });
   }
   return (
     <Tabs
@@ -156,7 +158,11 @@ export default function MenuSection({
         <TabsContent value="onsite" keepMounted className="mode-panel">
           <div className="mode-note">
             <span>Ontbijt tot 11u. Lunch vanaf 11u.</span>
-            <a href="#contact" onClick={onReserve} className="text-link">
+            <a
+              href="#contact-request"
+              onClick={onReserve}
+              className="text-link"
+            >
               Een tafel aanvragen <ArrowUpRight size={16} />
             </a>
           </div>
