@@ -1,4 +1,6 @@
 import { Star } from 'lucide-react';
+import type { CSSProperties } from 'react';
+import { assetPath } from '@/lib/hosting';
 import selection from '@/lib/data/google-reviews.json';
 
 export default function GuestReviews() {
@@ -8,7 +10,14 @@ export default function GuestReviews() {
       className="reviews-section"
       aria-labelledby="reviews-title"
     >
-      <div className="container review-content">
+      <div
+        className="container review-content"
+        style={
+          {
+            '--review-mill-image': `url("${assetPath('/home3/images/mouline-house-outline.svg')}")`,
+          } as CSSProperties
+        }
+      >
         <h2 id="reviews-title">Wat onze gasten zeggen.</h2>
         <div className="review-excerpts">
           {selection.reviews.map((review) => (
@@ -25,7 +34,7 @@ export default function GuestReviews() {
                 ))}
               </div>
               <blockquote cite={review.googleMapsUri}>
-                {review.text.text}
+                &ldquo;{review.text.text}&rdquo;
               </blockquote>
               <figcaption>
                 <a

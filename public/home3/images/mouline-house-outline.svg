@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+  <title>Mouline — origineel huis en wieken in lijn</title>
+  <!-- Converted from Mouline_01_Huis.ai. Original path geometry, transforms and
+       drawing order retained; contours strengthened for the oversized menu crop. -->
+  <defs>
+    <mask id="linework" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="1000" style="mask-type:luminance">
+      <path transform="matrix(1,0,0,-1,768.3653,476.8045)" d="M0 0-114.782 222.391H-421.932L-536.715 0H-482.911L-536.715-516.52H-353.35V-294.13H-183.365V-516.52H0L-53.804 0Z" fill="#000"/>
+      <path transform="matrix(1,0,0,-1,768.3653,476.8045)" d="M0 0-114.782 222.391H-421.932L-536.715 0H-482.911L-536.715-516.52H-353.35V-294.13H-183.365V-516.52H0L-53.804 0H0Z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="miter"/>
+      <path transform="matrix(1,0,0,-1,285.4548,476.8048)" d="M0 0H429.107Z" fill="#000"/>
+      <path transform="matrix(1,0,0,-1,285.4547,476.8045)" d="M0 0H429.106 0Z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="miter"/>
+      <path transform="matrix(1,0,0,-1,0,1000)" d="M585.001 6.675H415.016V229.06601H585.001Z" fill="#000"/>
+      <path transform="matrix(1,0,0,-1,0,1000)" d="M585.001 6.675H415.016V229.06601H585.001Z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="miter"/>
+      <path transform="matrix(1,0,0,-1,557.2242,624.3958)" d="M0 0C0-31.6-25.617-57.216-57.216-57.216-88.816-57.216-114.432-31.6-114.432 0-114.432 31.6-88.816 57.216-57.216 57.216-25.617 57.216 0 31.6 0 0" fill="#000"/>
+      <path transform="matrix(1,0,0,-1,557.2242,624.3958)" d="M0 0C0-31.6-25.617-57.216-57.216-57.216-88.816-57.216-114.432-31.6-114.432 0-114.432 31.6-88.816 57.216-57.216 57.216-25.617 57.216 0 31.6 0 0Z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="miter"/>
+      <path transform="matrix(1,0,0,-1,523.6723,363.10633)" d="M0 0C0-13.069-10.595-23.664-23.664-23.664-36.733-23.664-47.328-13.069-47.328 0-47.328 13.069-36.733 23.664-23.664 23.664-10.595 23.664 0 13.069 0 0" fill="#000"/>
+      <path transform="matrix(1,0,0,-1,523.6723,363.10633)" d="M0 0C0-13.069-10.595-23.664-23.664-23.664-36.733-23.664-47.328-13.069-47.328 0-47.328 13.069-36.733 23.664-23.664 23.664-10.595 23.664 0 13.069 0 0Z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="miter"/>
+      <path transform="matrix(1,0,0,-1,418.638,254.40271)" d="M0 0-49.192-50.613-308.679 160.307-186.988 247.727Z" fill="#000"/>
+      <path transform="matrix(1,0,0,-1,418.638,254.40271)" d="M0 0-49.192-50.613-308.679 160.307-186.988 247.727 0 0Z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="miter"/>
+      <path transform="matrix(1,0,0,-1,486.5122,343.6855)" d="M0 0-67.874 89.283Z" fill="#000"/>
+      <path transform="matrix(1,0,0,-1,486.5122,343.6855)" d="M0 0-67.874 89.283 0 0Z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="miter"/>
+      <path transform="matrix(1,0,0,-1,387.0971,434.54389)" d="M0 0 41.707-56.939-209.507-277.646-275.425-143.088Z" fill="#000"/>
+      <path transform="matrix(1,0,0,-1,387.0971,434.54389)" d="M0 0 41.707-56.939-209.507-277.646-275.425-143.088 0 0Z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="miter"/>
+      <path transform="matrix(1,0,0,-1,486.4429,382.49824)" d="M0 0-99.346-52.046Z" fill="#000"/>
+      <path transform="matrix(1,0,0,-1,486.4429,382.49824)" d="M0 0-99.346-52.046 0 0Z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="miter"/>
+      <path transform="matrix(1,0,0,-1,581.3619,254.40271)" d="M0 0 49.192-50.613 308.679 160.307 186.988 247.727Z" fill="#000"/>
+      <path transform="matrix(1,0,0,-1,581.3619,254.40271)" d="M0 0 49.192-50.613 308.679 160.307 186.988 247.727 0 0Z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="miter"/>
+      <path transform="matrix(1,0,0,-1,513.4877,343.6855)" d="M0 0 67.874 89.283Z" fill="#000"/>
+      <path transform="matrix(1,0,0,-1,513.4877,343.6855)" d="M0 0 67.874 89.283 0 0Z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="miter"/>
+      <path transform="matrix(1,0,0,-1,612.9028,434.54389)" d="M0 0-41.707-56.939 209.508-277.646 275.425-143.088Z" fill="#000"/>
+      <path transform="matrix(1,0,0,-1,612.9028,434.54389)" d="M0 0-41.707-56.939 209.508-277.646 275.425-143.088 0 0Z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="miter"/>
+      <path transform="matrix(1,0,0,-1,513.5571,382.49824)" d="M0 0 99.346-52.046Z" fill="#000"/>
+      <path transform="matrix(1,0,0,-1,513.5571,382.49824)" d="M0 0 99.346-52.046 0 0Z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="miter"/>
+    </mask>
+  </defs>
+  <rect width="1000" height="1000" fill="#fff" mask="url(#linework)"/>
+</svg>

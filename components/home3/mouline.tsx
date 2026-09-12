@@ -1,6 +1,6 @@
 'use client';
 /* oxlint-disable nextjs/no-img-element -- Local WebP srcsets and SVGs must also work in the static Pages entry without an image server. */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import {
   ArrowUpRight,
@@ -24,6 +24,7 @@ import MenuSection from './menu-section';
 import ContactSection from './contact-section';
 import GuestReviews from './guest-reviews';
 import HeaderMill from './header-mill';
+import HeroSlideshow from './hero-slideshow';
 import GallerySection from './gallery-section';
 import TodayHours from './today-hours';
 import CulinaryIcon from './culinary-icon';
@@ -46,6 +47,13 @@ const links = [
 const primaryLinks = links.filter(([, id]) =>
   ['menu', 'over-ons', 'fotos', 'catering'].includes(id),
 );
+const expandedLinks = [
+  ['Over ons', 'over-ons'],
+  ['Menu', 'menu'],
+  ['Catering', 'catering'],
+  ['Galerij', 'fotos'],
+  ['Contact', 'contact'],
+];
 function Photo({
   name,
   alt,
@@ -75,6 +83,8 @@ export default function MoulineHome3() {
     useHeroScroll(heroRef);
   const [active, setActive] = useState('home');
   const [mobileOpen, setMobileOpen] = useState(false);
+  const menuTrigger = useRef<HTMLButtonElement | null>(null);
+  const menuDestination = useRef<string | null>(null);
   const [mode, setMode] = useState<MenuMode>('onsite');
   const [intent, setIntent] = useState<Intent>('Reservatie');
   const [requestOpen, setRequestOpen] = useState(false);
@@ -244,8 +254,37 @@ export default function MoulineHome3() {
               </a>
             ))}
           </nav>
-          <Dialog open={mobileOpen} onOpenChange={setMobileOpen}>
+          <Dialog
+            open={mobileOpen}
+            onOpenChange={setMobileOpen}
+            onOpenChangeComplete={(open) => {
+              if (open || !menuDestination.current) return;
+              const id = menuDestination.current;
+              menuDestination.current = null;
+              // Wait for the dialog's scroll lock to release after its exit transition.
+              requestAnimationFrame(() => {
+                window.location.hash = id;
+                const section = document.getElementById(id);
+                section?.scrollIntoView({ block: 'start' });
+                if (section) {
+                  const previousTabIndex = section.getAttribute('tabindex');
+                  section.tabIndex = -1;
+                  section.focus({ preventScroll: true });
+                  section.addEventListener(
+                    'blur',
+                    () => {
+                      if (previousTabIndex === null)
+                        section.removeAttribute('tabindex');
+                      else section.setAttribute('tabindex', previousTabIndex);
+                    },
+                    { once: true },
+                  );
+                }
+              });
+            }}
+          >
             <DialogTrigger
+              ref={menuTrigger}
               className="mobile-trigger"
               aria-label="Navigatiemenu openen"
             >
@@ -254,51 +293,52 @@ export default function MoulineHome3() {
             <DialogContent
               className="mobile-menu translate-x-0 translate-y-0"
               showCloseButton={false}
+              finalFocus={() =>
+                menuDestination.current ? false : menuTrigger.current
+              }
             >
-              <div className="mobile-menu-top">
-                <a
-                  href="#home"
-                  aria-label="Mouline, naar boven"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Mouline
-                </a>
-                <DialogClose
-                  className="icon-button"
-                  aria-label="Navigatiemenu sluiten"
-                >
-                  <X size={26} />
-                </DialogClose>
-              </div>
               <DialogTitle className="sr-only">Navigatie</DialogTitle>
               <DialogDescription className="sr-only">
                 Navigeer naar een onderdeel van de Mouline-website.
               </DialogDescription>
-              <nav aria-label="Mobiele navigatie">
-                {links.map(([label, id]) => (
-                  <a
-                    href={`#${id}`}
-                    key={id}
-                    onClick={() => {
-                      if (id === 'menu') chooseMenu('onsite');
-                      else setMobileOpen(false);
+              <DialogClose
+                className="icon-button mobile-menu-close"
+                aria-label="Navigatiemenu sluiten"
+              >
+                <X size={28} strokeWidth={1.25} />
+              </DialogClose>
+              <div className="mobile-menu-composition">
+                <nav aria-label="Uitgebreide navigatie">
+                  {expandedLinks.map(([label, id]) => (
+                    <a
+                      href={`#${id}`}
+                      key={id}
+                      aria-current={active === id ? 'location' : undefined}
+                      onClick={(event) => {
+                        if (
+                          event.metaKey ||
+                          event.ctrlKey ||
+                          event.shiftKey ||
+                          event.altKey
+                        )
+                          return;
+                        event.preventDefault();
+                        menuDestination.current = id;
+                        if (id === 'menu') setMode('onsite');
+                        setMobileOpen(false);
+                      }}
+                    >
+                      {label}
+                    </a>
+                  ))}
+                </nav>
+                <div className="mobile-menu-art" aria-hidden="true">
+                  <span
+                    style={{
+                      maskImage: `url("${assetPath('/home3/images/mouline-house-outline.svg')}")`,
                     }}
-                  >
-                    {label}
-                    <ArrowUpRight size={20} />
-                  </a>
-                ))}
-              </nav>
-              <div className="mobile-menu-bottom">
-                <a
-                  className="button button-ink"
-                  href="#menu"
-                  onClick={() => chooseMenu('takeaway')}
-                >
-                  Takeawaykaart <ArrowUpRight size={17} />
-                </a>
-                <a href={business.phoneHref}>{business.phone}</a>
-                <span>{business.street}</span>
+                  />
+                </div>
               </div>
             </DialogContent>
           </Dialog>
@@ -346,18 +386,7 @@ export default function MoulineHome3() {
               <p className="hero-location">Ekeren</p>
             </div>
           </div>
-          <div className="hero-frame container">
-            <img
-              src={assetPath('/images/header-salade-b3624dd6-1280.webp')}
-              srcSet={`${assetPath('/images/header-salade-b3624dd6-640.webp')} 640w, ${assetPath('/images/header-salade-b3624dd6-1280.webp')} 1280w`}
-              sizes="(max-width: 650px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 56px), (max-width: 1392px) 92vw, 1280px"
-              width="1280"
-              height="853"
-              alt="Salade met zalm, avocado en verse groenten bij Foodbar Mouline"
-              fetchPriority="high"
-              loading="eager"
-            />
-          </div>
+          <HeroSlideshow />
           <aside
             ref={informationRef}
             className="practical container"
@@ -375,7 +404,7 @@ export default function MoulineHome3() {
               href="#menu"
               onClick={() => chooseMenu('takeaway')}
             >
-              <CulinaryIcon categoryId="link" />
+              <CulinaryIcon categoryId="takeaway" />
               <span>
                 Takeaway <strong>bestel voor 11u</strong>
               </span>
@@ -398,88 +427,82 @@ export default function MoulineHome3() {
           >
             <div className="about-photo">
               <img
-                src={assetPath('/images/aangenaam-mouline-128dae27-941.webp')}
-                srcSet={`${assetPath('/images/aangenaam-mouline-128dae27-640.webp')} 640w, ${assetPath('/images/aangenaam-mouline-128dae27-941.webp')} 941w`}
-                sizes="(max-width: 650px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 56px), (max-width: 1392px) 40vw, 520px"
+                src={assetPath('/images/home3-caroline-941.webp')}
+                srcSet={`${assetPath('/images/home3-caroline-640.webp')} 640w, ${assetPath('/images/home3-caroline-941.webp')} 941w`}
+                sizes="(max-width: 650px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 56px), (max-width: 1408px) 40vw, 550px"
                 width="941"
                 height="1672"
                 loading="lazy"
                 decoding="async"
-                alt="Een vrouw begroet je met een glimlach en een opgestoken hand bij Mouline"
+                alt="Caroline begroet je met een glimlach en een opgestoken hand bij Mouline"
               />
             </div>
-            <div className="about-copy">
-              <h2 id="about-title">Over Mouline</h2>
-              <p className="about-intro">
-                Ik ben Caroline. Na mijn opleiding als kok en kelner aan
-                Spermali in Brugge droomde ik ervan om ooit mijn eigen zaak te
-                openen. In 2019 werd die droom werkelijkheid met Mouline.
-              </p>
-              <p>
-                Elke dag staan verse producten, huisgemaakte bereidingen en een
-                warm onthaal centraal. Ook bij takeaway vinden we het belangrijk
-                dat het vlot gaat, zonder in te boeten op kwaliteit of
-                vriendelijkheid.
-              </p>
+            <div className="about-content">
+              <div className="about-copy">
+                <h2 id="about-title">Over Mouline</h2>
+                <p className="about-intro">
+                  Ik ben Caroline. Na mijn opleiding als kok en kelner aan
+                  Spermali in Brugge droomde ik ervan om ooit mijn eigen zaak te
+                  openen. In 2019 werd die droom werkelijkheid met Mouline.
+                </p>
+                <p>
+                  Elke dag staan verse producten, huisgemaakte bereidingen en
+                  een warm onthaal centraal. Ook bij takeaway vinden we het
+                  belangrijk dat het vlot gaat, zonder in te boeten op kwaliteit
+                  of vriendelijkheid.
+                </p>
+              </div>
+              <ul className="about-values">
+                <li>
+                  <div className="about-value-heading">
+                    <Sprout size={20} strokeWidth={1.5} aria-hidden="true" />
+                    <h3>Vers</h3>
+                  </div>
+                  <p>
+                    Dagelijkse levering van verse producten, zorgvuldig gekozen
+                    voor onze gerechten.
+                  </p>
+                </li>
+                <li>
+                  <div className="about-value-heading">
+                    <Soup size={20} strokeWidth={1.5} aria-hidden="true" />
+                    <h3>Huisgemaakt</h3>
+                  </div>
+                  <p>
+                    Onze smeersalades maken we zelf, met aandacht voor smaak en
+                    kwaliteit.
+                  </p>
+                </li>
+                <li>
+                  <div className="about-value-heading">
+                    <Croissant size={20} strokeWidth={1.5} aria-hidden="true" />
+                    <h3>Van bij de bakker</h3>
+                  </div>
+                  <p>
+                    Voor onze patisserie werken we samen met een bakker die elke
+                    dag vers levert.
+                  </p>
+                </li>
+                <li>
+                  <div className="about-value-heading">
+                    <Heart size={20} strokeWidth={1.5} aria-hidden="true" />
+                    <h3>Gastvrij</h3>
+                  </div>
+                  <p>
+                    Een vlotte uithaal, persoonlijke service en vooral een
+                    vriendelijk onthaal voor elke klant.
+                  </p>
+                </li>
+              </ul>
             </div>
           </section>
-        </div>
-        <div className="about-values-section">
-          <div className="container">
-            <ul className="about-values">
-              <li>
-                <div className="about-value-heading">
-                  <Sprout size={20} strokeWidth={1.5} aria-hidden="true" />
-                  <h3>Vers</h3>
-                </div>
-                <p>
-                  Dagelijkse levering van verse producten, zorgvuldig gekozen
-                  voor onze gerechten.
-                </p>
-              </li>
-              <li>
-                <div className="about-value-heading">
-                  <Soup size={20} strokeWidth={1.5} aria-hidden="true" />
-                  <h3>Huisgemaakt</h3>
-                </div>
-                <p>
-                  Onze smeersalades maken we zelf, met aandacht voor smaak en
-                  kwaliteit.
-                </p>
-              </li>
-              <li>
-                <div className="about-value-heading">
-                  <Croissant size={20} strokeWidth={1.5} aria-hidden="true" />
-                  <h3>Van bij de bakker</h3>
-                </div>
-                <p>
-                  Voor onze patisserie werken we samen met een bakker die elke
-                  dag vers levert.
-                </p>
-              </li>
-              <li>
-                <div className="about-value-heading">
-                  <Heart size={20} strokeWidth={1.5} aria-hidden="true" />
-                  <h3>Gastvrij</h3>
-                </div>
-                <p>
-                  Een vlotte uithaal, persoonlijke service en vooral een
-                  vriendelijk onthaal voor elke klant.
-                </p>
-              </li>
-            </ul>
-          </div>
         </div>
         <GallerySection />
         <GuestReviews />
         <section id="catering" className="catering-section">
           <div className="catering-inner container">
             <div className="catering-copy">
-              <h2>
-                Van ontbijtmeeting
-                <br />
-                tot volle tafel.
-              </h2>
+              <h2>Catering</h2>
               <p>
                 Ontbijt, broodjes en hapjes voor vergaderingen, recepties en
                 andere momenten.

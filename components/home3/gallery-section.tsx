@@ -47,7 +47,7 @@ export default function GallerySection() {
       <div className="gallery-chapter">
         <section id="fotos" className="gallery-section container">
           <div className="section-heading">
-            <h2>Aan tafel en achter de toog.</h2>
+            <h2>Mouline in beeld</h2>
             <button
               type="button"
               className="text-link gallery-more"
@@ -57,7 +57,7 @@ export default function GallerySection() {
                 setLightbox(0);
               }}
             >
-              Meer sfeer bekijken <ArrowUpRight size={16} aria-hidden="true" />
+              Bekijk alle foto&apos;s <ArrowUpRight size={16} aria-hidden="true" />
             </button>
           </div>
           <div className="photo-grid">

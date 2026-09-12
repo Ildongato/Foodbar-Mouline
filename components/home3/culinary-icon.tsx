@@ -7,6 +7,7 @@ type CulinaryCategory =
   | 'warm'
   | 'zoet'
   | 'dranken'
+  | 'takeaway'
   | 'klok'
   | 'link';
 
@@ -18,6 +19,7 @@ const categoryIcons: Record<string, CulinaryCategory> = {
   warm: 'warm',
   zoet: 'zoet',
   dranken: 'dranken',
+  takeaway: 'takeaway',
   klok: 'klok',
   link: 'link',
 };
@@ -25,6 +27,9 @@ const categoryIcons: Record<string, CulinaryCategory> = {
 // One pen family: rounded 1.5-unit strokes, open silhouettes and a few inner lines.
 const drawings: Record<CulinaryCategory, ReactNode> = {
   link: <path d="M6 18 18 6M6 6h12v12" />,
+  takeaway: (
+    <path d="M5.5 8.5h13l1 12h-15l1-12ZM9 9V6a3 3 0 0 1 6 0v3" />
+  ),
   klok: (
     <>
       <circle cx="12" cy="12" r="8.5" />
