@@ -48,10 +48,10 @@ const primaryLinks = links.filter(([, id]) =>
   ['menu', 'over-ons', 'fotos', 'catering'].includes(id),
 );
 const expandedLinks = [
-  ['Over ons', 'over-ons'],
   ['Menu', 'menu'],
-  ['Catering', 'catering'],
+  ['Over ons', 'over-ons'],
   ['Galerij', 'fotos'],
+  ['Catering', 'catering'],
   ['Contact', 'contact'],
 ];
 function Photo({
