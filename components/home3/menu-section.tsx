@@ -15,7 +15,7 @@ function Item({ item }: { item: MenuItem }) {
         {item.description && <p>{item.description}</p>}
       </div>
       <span className={`dish-price ${!item.price ? 'price-question' : ''}`}>
-        {item.price ?? 'Vraag naar de meerprijs'}
+        {item.price ?? item.pricePlaceholder ?? 'Vraag naar de meerprijs'}
       </span>
     </div>
   );

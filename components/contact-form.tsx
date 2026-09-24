@@ -1,5 +1,6 @@
 'use client';
-import { useState, useEffect, useRef, type FormEvent } from 'react';
+/* oxlint-disable jsx-a11y/prefer-tag-over-role -- Status regions contain headings/paragraphs; output only permits phrasing content. */
+import { useState, useEffect, useRef, type SubmitEvent } from 'react';
 import { ArrowUpRight, Check, LoaderCircle } from 'lucide-react';
 import {
   NativeSelect,
@@ -14,18 +15,26 @@ import {
 } from '@/lib/contact';
 import { business, localDate } from '@/lib/business';
 import { contactEndpoint, staticHosting } from '@/lib/hosting';
+import {
+  ContactDeliveryError,
+  isFormspreeEndpoint,
+  sendContact,
+} from '@/lib/contact-delivery';
 export default function ContactForm({
   intent,
   onIntentChange,
   variant = 'default',
   delivery = 'auto',
+  demo = false,
 }: {
   intent: Intent;
   onIntentChange: (intent: Intent) => void;
   variant?: 'default' | 'editorial';
   delivery?: 'auto' | 'direct';
+  demo?: boolean;
 }) {
   const useEmailDraft = staticHosting && delivery !== 'direct';
+  const endpoint = delivery === 'direct' ? contactEndpoint : '/api/contact';
   const [values, setValues] = useState<ContactValues>(emptyContact);
   const [errors, setErrors] = useState<
     Partial<Record<keyof ContactValues, string>>
@@ -35,20 +44,26 @@ export default function ContactForm({
   >('idle');
   const [feedback, setFeedback] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
   const idempotency = useRef('');
   useEffect(() => {
+    // Preserve entered details when an external catering/reservation CTA changes intent.
+    // oxlint-disable-next-line react/react-compiler
     setValues((v) => ({ ...v, intent }));
     setErrors({});
     setState('idle');
     idempotency.current = '';
   }, [intent]);
+  useEffect(() => {
+    if (state === 'success') successRef.current?.focus({ preventScroll: true });
+  }, [state]);
   function update(key: keyof ContactValues, value: string) {
     setValues((v) => ({ ...v, [key]: value }));
     setErrors((e) => ({ ...e, [key]: undefined }));
     if (state === 'error' || state === 'draft') setState('idle');
     idempotency.current = '';
   }
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (state === 'sending') return;
     const invalid = validateContact(values);
@@ -68,36 +83,19 @@ export default function ContactForm({
     }
     setState('sending');
     setFeedback('');
+    if (demo) {
+      // Demonstrate the existing loading/success UI without calling any mail service.
+      await new Promise((resolve) => setTimeout(resolve, 650));
+      setState('success');
+      return;
+    }
     idempotency.current ||= crypto.randomUUID();
     try {
-      const endpoint = delivery === 'direct' ? contactEndpoint : '/api/contact';
-      if (!endpoint)
-        throw new Error(
-          'Online versturen is nog niet beschikbaar. Je gegevens blijven ingevuld. Bel Mouline op 03 326 06 30.',
-        );
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Idempotency-Key': idempotency.current,
-        },
-        body: JSON.stringify(values),
-        signal: AbortSignal.timeout(15000),
-      });
-      const result = (await response.json()) as {
-        message: string;
-        errors?: Partial<Record<keyof ContactValues, string>>;
-      };
-      if (!response.ok) {
-        if (result.errors) setErrors(result.errors);
-        throw new Error(
-          result.message ||
-            'Versturen lukt even niet. Probeer opnieuw of bel ons.',
-        );
-      }
+      const message = await sendContact(endpoint, values, idempotency.current);
       setState('success');
-      setFeedback(result.message);
+      setFeedback(message);
     } catch (error) {
+      if (error instanceof ContactDeliveryError) setErrors(error.fields);
       setState('error');
       setFeedback(
         delivery === 'direct' &&
@@ -161,6 +159,8 @@ export default function ContactForm({
     <div className="form-area">
       <form
         ref={formRef}
+        action={demo ? undefined : endpoint || undefined}
+        method="POST"
         onSubmit={submit}
         noValidate
         aria-label="Contactaanvraag"
@@ -211,10 +211,24 @@ export default function ContactForm({
           </div>
         )}
         {state === 'success' ? (
-          <div className="form-success" role="status" tabIndex={-1}>
-            <Check size={30} />
-            <h3>Bedankt voor je aanvraag.</h3>
-            <p>{feedback}</p>
+          <div
+            ref={successRef}
+            className="form-success"
+            role="status"
+            aria-live="polite"
+            tabIndex={-1}
+          >
+            <Check size={30} aria-hidden="true" />
+            <h3>
+              {delivery === 'direct'
+                ? 'Aanvraag verzonden'
+                : 'Bedankt voor je aanvraag.'}
+            </h3>
+            <p>
+              {delivery === 'direct'
+                ? 'Bedankt, we nemen zo snel mogelijk contact met je op.'
+                : feedback}
+            </p>
             <button
               type="button"
               className="text-link"
@@ -271,7 +285,7 @@ export default function ContactForm({
               <label htmlFor="website">Laat dit veld leeg</label>
               <input
                 id="website"
-                name="website"
+                name={isFormspreeEndpoint(endpoint) ? '_gotcha' : 'website'}
                 value={values.website}
                 onChange={(e) => update('website', e.target.value)}
                 tabIndex={-1}
@@ -292,8 +306,9 @@ export default function ContactForm({
             )}
             {(state === 'error' || state === 'draft') && (
               <div
+                role="status"
                 className={state === 'draft' ? 'form-email' : 'form-error'}
-                role={state === 'draft' ? 'status' : 'alert'}
+                aria-live="polite"
               >
                 <p>{feedback}</p>
                 {delivery === 'direct' ? (

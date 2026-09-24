@@ -116,18 +116,11 @@
         "source": "https://www.mouline.be/m-ontbijt.html"
       },
       {
-        "name": "Potje vleessalade",
-        "price": "€ 2,60",
-        "sourceName": "Potje vleessalade",
-        "sourcePrice": "€2,60",
-        "source": "https://www.mouline.be/m-ontbijt.html"
-      },
-      {
-        "name": "Potje spek",
-        "price": "€ 2,00",
-        "sourceName": "Potje spek",
-        "sourcePrice": "€2,00",
-        "source": "https://www.mouline.be/m-ontbijt.html"
+        "name": "Supplement spek",
+        "price": "€ 4,00",
+        "sourceName": "+ SPEK",
+        "sourcePrice": "€4,00",
+        "source": "Klantcorrectie 2026-09-24"
       },
       {
         "name": "Koffiekoekje (mini)",
@@ -229,11 +222,13 @@
         "source": "https://www.mouline.be/m-lunch.html"
       },
       {
-        "name": "Vleessalade",
-        "price": "€ 6,80",
-        "sourceName": "Vleessalade",
-        "sourcePrice": "€6,80",
-        "source": "https://www.mouline.be/m-lunch.html"
+        "name": "Garnaalsla",
+        "price": null,
+        "sourceName": "Garnaalsla",
+        "sourcePrice": "",
+        "source": "Klantcorrectie 2026-09-24",
+        "pricePlaceholder": "",
+        "todo": "Prijs ter plaatse nog te bevestigen; vul uitsluitend price in."
       },
       {
         "name": "Spek",

@@ -1,12 +1,28 @@
 'use client';
 /* oxlint-disable nextjs/no-img-element -- The map is a local SVG in the static Pages build. */
-import { useRef } from 'react';
+import { useRef, useSyncExternalStore } from 'react';
 import { flushSync } from 'react-dom';
 import { ArrowUpRight, Phone, MapPin, PenLine, X } from 'lucide-react';
 import ContactForm from '../contact-form';
 import { business } from '@/lib/business';
 import { type Intent } from '@/lib/contact';
 import { assetPath } from '@/lib/hosting';
+import { contactDemoEnabled } from '@/lib/contact-delivery';
+
+// Keep the approved demo explicit and independently switchable from delivery setup.
+function subscribeFormDemo(callback: () => void) {
+  window.addEventListener('popstate', callback);
+  return () => window.removeEventListener('popstate', callback);
+}
+function formDemoSnapshot() {
+  return (
+    contactDemoEnabled ||
+    new URLSearchParams(window.location.search).get('formDemo') === '1'
+  );
+}
+function formDemoServerSnapshot() {
+  return contactDemoEnabled;
+}
 
 export default function ContactSection({
   intent,
@@ -21,6 +37,11 @@ export default function ContactSection({
 }) {
   const requestRef = useRef<HTMLElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const formDemo = useSyncExternalStore(
+    subscribeFormDemo,
+    formDemoSnapshot,
+    formDemoServerSnapshot,
+  );
 
   function showRequest() {
     flushSync(() => onRequestOpenChange(true));
@@ -189,6 +210,7 @@ export default function ContactSection({
             onIntentChange={onIntentChange}
             variant="editorial"
             delivery="direct"
+            demo={formDemo}
           />
         </section>
       </section>

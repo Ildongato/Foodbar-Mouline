@@ -9,13 +9,6 @@ export type GalleryPhoto = {
 
 export const galleryPhotos = [
   {
-    id: 'koffie-aan-de-toog',
-    alt: 'Een medewerker maakt koffie achter de toog van Mouline',
-    width: 1080,
-    height: 1080,
-    position: '50% 42%',
-  },
-  {
     id: 'koffie-detail',
     alt: 'Een kop koffie met een klein rood hartje ernaast',
     width: 1440,
@@ -37,13 +30,6 @@ export const galleryPhotos = [
     position: '50% 50%',
   },
   {
-    id: 'team',
-    alt: 'Twee medewerkers achter de toog van Mouline',
-    width: 1440,
-    height: 1440,
-    position: '50% 34%',
-  },
-  {
     id: 'broodje-bereiden',
     alt: 'Een vers broodje wordt belegd aan de gekoelde toonbank',
     width: 1440,
@@ -56,13 +42,6 @@ export const galleryPhotos = [
     width: 1440,
     height: 1800,
     position: '50% 50%',
-  },
-  {
-    id: 'gebak-aan-de-toog',
-    alt: 'Medewerkers serveren huisgemaakt gebak aan de toog',
-    width: 1536,
-    height: 1536,
-    position: '50% 52%',
   },
   {
     id: 'zalmsalade',
@@ -84,13 +63,6 @@ export const galleryPhotos = [
     width: 1080,
     height: 1081,
     position: '50% 50%',
-  },
-  {
-    id: 'vers-uit-de-keuken',
-    alt: 'Een medewerker toont een versgebakken taart in de foodbar',
-    width: 1512,
-    height: 1512,
-    position: '50% 48%',
   },
   {
     id: 'quiche',
@@ -135,13 +107,6 @@ export const galleryPhotos = [
     position: '50% 38%',
   },
   {
-    id: 'caroline',
-    alt: 'Caroline begroet je met een glimlach bij Mouline',
-    width: 720,
-    height: 1280,
-    position: '50% 32%',
-  },
-  {
     id: 'caroline-aan-het-werk',
     alt: 'Caroline bereidt een vers broodje achter de toog',
     width: 1505,
@@ -178,7 +143,7 @@ export const gallerySets = [
       'koffie-detail',
       'taart',
       'broodje-bereiden',
-      'team',
+      'caroline-aan-het-werk',
     ],
   },
   {
@@ -189,7 +154,7 @@ export const gallerySets = [
       'verse-groenten',
       'pannenkoek-fruit',
       'quiche',
-      'gebak-aan-de-toog',
+      'broodje-bereiden',
     ],
   },
   {
@@ -199,8 +164,8 @@ export const gallerySets = [
       'interieur',
       'bloemen',
       'pannenkoek-fruit',
-      'koffie-aan-de-toog',
-      'vers-uit-de-keuken',
+      'ontbijttafel',
+      'caroline-aan-het-werk',
     ],
   },
 ] as const satisfies readonly GallerySet[];

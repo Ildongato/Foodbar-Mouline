@@ -26,6 +26,8 @@ import GuestReviews from './guest-reviews';
 import HeaderMill from './header-mill';
 import HeroSlideshow from './hero-slideshow';
 import GallerySection from './gallery-section';
+import ClosureAnnouncement from './closure-notice';
+import Jobs from './jobs';
 import TodayHours from './today-hours';
 import CulinaryIcon from './culinary-icon';
 import { usePageMotion } from './use-page-motion';
@@ -42,16 +44,18 @@ const links = [
   ['Reviews', 'reviews'],
   ['Foto’s', 'fotos'],
   ['Catering', 'catering'],
+  ['Vacatures', 'vacatures'],
   ['Contact', 'contact'],
 ];
 const primaryLinks = links.filter(([, id]) =>
-  ['menu', 'over-ons', 'fotos', 'catering'].includes(id),
+  ['menu', 'over-ons', 'fotos', 'catering', 'vacatures'].includes(id),
 );
 const expandedLinks = [
   ['Menu', 'menu'],
   ['Over ons', 'over-ons'],
   ['Galerij', 'fotos'],
   ['Catering', 'catering'],
+  ['Vacatures', 'vacatures'],
   ['Contact', 'contact'],
 ];
 function Photo({
@@ -230,6 +234,7 @@ export default function MoulineHome3() {
   }, []);
   return (
     <>
+      <ClosureAnnouncement />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -382,7 +387,7 @@ export default function MoulineHome3() {
               </span>
             </h1>
             <div className="hero-caption">
-              <p className="hero-founded">(Sinds 2018)</p>
+              <p className="hero-founded">(Sinds 2019)</p>
               <p className="hero-location">Ekeren</p>
             </div>
           </div>
@@ -526,6 +531,7 @@ export default function MoulineHome3() {
               sizes="(max-width: 800px) 100vw, 50vw"
             />
           </div>
+          <Jobs />
         </section>
         <ContactSection
           intent={intent}

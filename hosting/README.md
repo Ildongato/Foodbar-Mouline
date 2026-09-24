@@ -1,6 +1,6 @@
 # Rechtstreeks contact via de bestaande Mouline-hosting
 
-Home3 gebruikt `Verstuur je aanvraag`. De vaste ontvanger is **info@mouline.be**.
+De definitieve website gebruikt `Verstuur je aanvraag`. De vaste ontvanger is **info@mouline.be**.
 De huidige website draait op PHP; deze aparte koppeling behoudt het oude formulier.
 
 ## Activeren (nog niet uitgevoerd)
@@ -18,9 +18,10 @@ De huidige website draait op PHP; deze aparte koppeling behoudt het oude formuli
    inclusief Reply-To, en klik op beantwoorden. Een succesvolle `mail()`-aanroep
    betekent dat de hosting de mail heeft aangenomen, niet dat bezorging bewezen is.
 
-Zonder ingestelde URL geeft Home3 een duidelijke foutmelding na een verzendpoging;
-het opent geen mailprogramma en simuleert geen verzending. Home en Home2 behouden
-hun bestaande gedrag. De oude Node/Resend-route blijft ongemoeid.
+De goedgekeurde tijdelijke demomodus staat aan via `contactDemoEnabled` in
+`lib/contact-delivery.ts`. Zet deze flag na aansluiting op `false`. Zonder ingestelde
+URL geeft de echte verzendroute een foutmelding en blijven de gegevens ingevuld.
+De bestaande Node/Resend-route blijft beschikbaar voor serverhosting.
 
 ## Behoud
 

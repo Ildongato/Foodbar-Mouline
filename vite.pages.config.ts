@@ -29,8 +29,6 @@ export default defineConfig(({ mode }) => {
       rolldownOptions: {
         input: {
           home: `${project}static-site/index.html`,
-          home2: `${project}static-site/home2/index.html`,
-          home3: `${project}static-site/home3/index.html`,
         },
       },
     },

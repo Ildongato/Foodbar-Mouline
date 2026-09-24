@@ -79,23 +79,22 @@ export function restaurantSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Restaurant',
+    '@id': `${business.url}#restaurant`,
     name: business.name,
     url: business.url,
     logo: `${imageBase}images/logo.svg`,
     image: `${imageBase}images/interieur.jpg`,
     telephone: business.telephone,
     email: business.email,
-    ...(business.addressVerified && business.postalCode && business.city
-      ? {
-          address: {
-            '@type': 'PostalAddress',
-            streetAddress: business.street,
-            postalCode: business.postalCode,
-            addressLocality: business.city,
-            addressCountry: business.country,
-          },
-        }
-      : {}),
+    // Technical metadata only: official contact page rechecked on 2026-09-24.
+    // Preserve the visible address and its existing editorial verification flag.
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: business.street,
+      postalCode: '2180',
+      addressLocality: 'Ekeren',
+      addressCountry: business.country,
+    },
     openingHoursSpecification: business.openingHours
       .filter((h) => h.opens && h.closes)
       .map((h) => ({
@@ -106,6 +105,7 @@ export function restaurantSchema() {
       })),
     servesCuisine: ['Ontbijt', 'Lunch'],
     menu: `${business.url}#menu`,
+    hasMenu: `${business.url}#menu`,
     sameAs: [business.instagram],
   };
 }

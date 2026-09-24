@@ -4,6 +4,7 @@ export type MenuMode = 'onsite' | 'takeaway';
 export interface MenuItem {
   name: string;
   price: string | null;
+  pricePlaceholder?: string;
   description?: string;
   source: string;
   sourceName: string;
