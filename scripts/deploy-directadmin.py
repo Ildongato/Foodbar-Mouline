@@ -50,7 +50,8 @@ class Transport:
         result = subprocess.run(
             ['curl', '-q', '--config', '-', '--ssl-reqd', '--tlsv1.2', '--silent',
              '--show-error', '--connect-timeout', '20', '--max-time', '90',
-             '--globoff', '--ftp-skip-pasv-ip', *options],
+             '--globoff', '--ftp-skip-pasv-ip',
+             *(['--cacert', os.environ['MOULINE_FTP_CA_FILE']] if os.environ.get('MOULINE_FTP_CA_FILE') else []), *options],
             input=config.encode(), stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         )
         if result.returncode:

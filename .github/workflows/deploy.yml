@@ -47,6 +47,11 @@ jobs:
           MOULINE_FTP_USERNAME: ${{ secrets.MOULINE_FTP_USERNAME }}
           MOULINE_FTP_PASSWORD: ${{ secrets.MOULINE_FTP_PASSWORD }}
           MOULINE_FTP_REMOTE_PATH: ${{ secrets.MOULINE_FTP_REMOTE_PATH }}
-        run: python3 scripts/deploy-directadmin.py
+        run: |
+          # The FTP server omits its intermediates. Validate the official CA chain
+          # against Ubuntu's existing trust store; never disable TLS verification.
+          openssl verify -CAfile /etc/ssl/certs/ca-certificates.crt -untrusted hosting/certificates/sectigo-r46-usertrust.pem hosting/certificates/sectigo-dv-r36.pem
+          cat /etc/ssl/certs/ca-certificates.crt hosting/certificates/sectigo-dv-r36.pem hosting/certificates/sectigo-r46-usertrust.pem > "$RUNNER_TEMP/mouline-ca.pem"
+          MOULINE_FTP_CA_FILE="$RUNNER_TEMP/mouline-ca.pem" python3 scripts/deploy-directadmin.py
       - name: Testsite via HTTPS controleren
         run: node scripts/check-directadmin-live.mjs
