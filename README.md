@@ -34,7 +34,7 @@ Echte verzending vereist `NEXT_PUBLIC_CONTACT_ENDPOINT`, lokaal en in de GitHub 
 - `lib/closures.ts`: uitzonderlijke sluitingen en demoflag.
 - `components/home3/jobs.tsx`: de twee vacatures; de navigatie gebruikt `#vacatures`.
 
-De prijs voor Garnaalsla ter plaatse moet nog worden bevestigd en is bewust leeg. De takeawaykaart blijft onafhankelijk. Canonical en sitemap verwijzen naar `https://www.mouline.be/`; de GitHub-weergave blijft `noindex, follow` totdat de definitieve domeinhosting is bevestigd.
+Garnaalsla ter plaatse kost € 8,40, bevestigd op 25 september 2026. De takeawaykaart blijft onafhankelijk (€ 6,80). Canonical en sitemap verwijzen naar `https://www.mouline.be/`; de GitHub-weergave blijft `noindex, follow` totdat de definitieve domeinhosting is bevestigd.
 
 ## Controle
 

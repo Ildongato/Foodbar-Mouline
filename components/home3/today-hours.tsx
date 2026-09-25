@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { business, compactOpeningHours, todayHours } from '@/lib/business';
+import { compactOpeningHours, todayHours } from '@/lib/business';
 import CulinaryIcon from './culinary-icon';
 
 export default function TodayHours() {
@@ -21,8 +21,6 @@ export default function TodayHours() {
             <>
               Vandaag <strong>{today.display}</strong>
             </>
-          ) : today.unverified ? (
-            <a href={business.phoneHref}>Vandaag: bel voor de openingsuren</a>
           ) : (
             <strong>Vandaag gesloten</strong>
           )

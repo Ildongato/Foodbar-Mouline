@@ -27,6 +27,13 @@
         "source": "https://www.mouline.be/m-takeaway.html"
       },
       {
+        "name": "Oude kaas",
+        "price": "€ 5,00",
+        "sourceName": "Oude kaas",
+        "sourcePrice": "€5,00",
+        "source": "Klantcorrectie 2026-09-25"
+      },
+      {
         "name": "Gezond",
         "price": "€ 5,00",
         "sourceName": "Gezond",

@@ -1299,7 +1299,11 @@ textarea {
 .hours dd {
   text-align: right;
 }
-.hours a {
+.contact-hours-note {
+  margin-top: var(--space-1);
+  font-size: 14px;
+}
+.contact-hours-note a {
   text-decoration: underline;
   text-underline-offset: 4px;
 }

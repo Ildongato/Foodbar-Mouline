@@ -3,7 +3,7 @@ import { staticHosting } from './hosting';
 /** Single source for business information. Checked against official pages on 2026-09-07.
  * TODO CLIENT VERIFICATION: 2180 Ekeren vs 2930 Brasschaat. No postal code/locality
  * is emitted until confirmed. Ekeren in editorial copy is the client-requested area.
- * TODO CLIENT VERIFICATION: Sunday hours and holiday exceptions are unpublished.
+ * Weekend closure confirmed by the client on 2026-09-25.
  */
 export const business = {
   name: 'Foodbar Mouline',
@@ -39,19 +39,11 @@ export const business = {
       display: '8u tot 16u',
     },
     {
-      label: 'Zaterdag',
-      days: ['Saturday'],
+      label: 'Zaterdag en zondag',
+      days: ['Saturday', 'Sunday'],
       opens: null,
       closes: null,
       display: 'Gesloten',
-    },
-    {
-      label: 'Zondag',
-      days: ['Sunday'],
-      opens: null,
-      closes: null,
-      display: 'Bel voor de openingsuren',
-      unverified: true,
     },
   ],
   source: 'https://www.mouline.be/contact.html',

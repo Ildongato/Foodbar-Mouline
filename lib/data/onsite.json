@@ -79,11 +79,11 @@
         "source": "https://www.mouline.be/m-ontbijt.html"
       },
       {
-        "name": "Havermoutpannenkoek met fruit",
+        "name": "Pancakes met fruit",
         "price": "€ 12,80",
-        "sourceName": "Havermoutpannenkoek met fruit",
+        "sourceName": "Pancakes met fruit",
         "sourcePrice": "€12,80",
-        "source": "https://www.mouline.be/m-ontbijt.html"
+        "source": "Klantcorrectie 2026-09-25"
       }
     ],
     "extras": [
@@ -102,18 +102,11 @@
         "source": "https://www.mouline.be/m-ontbijt.html"
       },
       {
-        "name": "Potje préparé",
-        "price": "€ 2,20",
-        "sourceName": "Potje prepare",
-        "sourcePrice": "€2,20",
-        "source": "https://www.mouline.be/m-ontbijt.html"
-      },
-      {
-        "name": "Potje tonijnsla",
-        "price": "€ 2,40",
-        "sourceName": "Potje tonijnsla",
-        "sourcePrice": "€2,40",
-        "source": "https://www.mouline.be/m-ontbijt.html"
+        "name": "Potje smeersalade",
+        "price": "€ 2,60",
+        "sourceName": "Potje smeersalade",
+        "sourcePrice": "€2,60",
+        "source": "Klantcorrectie 2026-09-25"
       },
       {
         "name": "Supplement spek",
@@ -180,6 +173,13 @@
         "source": "https://www.mouline.be/m-lunch.html"
       },
       {
+        "name": "Oude kaas",
+        "price": "€ 6,20",
+        "sourceName": "Oude kaas",
+        "sourcePrice": "€6,20",
+        "source": "Klantcorrectie 2026-09-25"
+      },
+      {
         "name": "Kip curry",
         "price": "€ 6,40",
         "sourceName": "Kip Curry",
@@ -223,12 +223,10 @@
       },
       {
         "name": "Garnaalsla",
-        "price": null,
+        "price": "€ 8,40",
         "sourceName": "Garnaalsla",
-        "sourcePrice": "",
-        "source": "Klantcorrectie 2026-09-24",
-        "pricePlaceholder": "",
-        "todo": "Prijs ter plaatse nog te bevestigen; vul uitsluitend price in."
+        "sourcePrice": "€8,40",
+        "source": "Klantcorrectie 2026-09-25"
       },
       {
         "name": "Spek",
@@ -268,12 +266,12 @@
         "source": "https://www.mouline.be/m-lunch.html"
       },
       {
-        "name": "Italliene",
+        "name": "Italienne",
         "price": "€ 8,40",
         "description": "pesto, tomaat, ham, mozzarella, sla",
-        "sourceName": "Italliene",
+        "sourceName": "Italienne",
         "sourcePrice": "€8,40",
-        "source": "https://www.mouline.be/m-lunch.html"
+        "source": "Klantcorrectie 2026-09-25"
       },
       {
         "name": "Caeser",
@@ -330,10 +328,10 @@
       },
       {
         "name": "+ glutenvrij (10 min extra)",
-        "price": "€ 3,50",
+        "price": "€ 2,00",
         "sourceName": "+ Glutenvrij (10 min extra)",
-        "sourcePrice": "€3,50",
-        "source": "https://www.mouline.be/m-lunch.html"
+        "sourcePrice": "€2,00",
+        "source": "Klantcorrectie 2026-09-25"
       }
     ]
   },
@@ -409,26 +407,26 @@
         "source": "https://www.mouline.be/m-lunch.html"
       },
       {
-        "name": "Croques vuistje",
+        "name": "Croque vuistje",
         "price": "€ 7,60",
-        "sourceName": "Croques Vuistje",
+        "sourceName": "Croque vuistje",
         "sourcePrice": "€7,60",
-        "source": "https://www.mouline.be/m-lunch.html"
+        "source": "Klantcorrectie 2026-09-25"
       },
       {
-        "name": "Croques monsieur",
+        "name": "Croque monsieur",
         "price": "€ 11,80",
-        "sourceName": "Croques Monsieur",
+        "sourceName": "Croque monsieur",
         "sourcePrice": "€11,80",
-        "source": "https://www.mouline.be/m-lunch.html"
+        "source": "Klantcorrectie 2026-09-25"
       },
       {
-        "name": "Croques madame",
+        "name": "Croque madame",
         "price": "€ 12,60",
         "description": "+ Dubbele croque €2,00 + Ketchup / mayonnaise €0,80",
-        "sourceName": "Croques Madame",
+        "sourceName": "Croque madame",
         "sourcePrice": "€12,60",
-        "source": "https://www.mouline.be/m-lunch.html"
+        "source": "Klantcorrectie 2026-09-25"
       },
       {
         "name": "Toast zalm, avocado & eitje",

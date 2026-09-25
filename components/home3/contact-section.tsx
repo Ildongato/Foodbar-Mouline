@@ -100,16 +100,13 @@ export default function ContactSection({
               {business.openingHours.map((row) => (
                 <div key={row.label}>
                   <dt>{row.label}</dt>
-                  <dd>
-                    {row.unverified ? (
-                      <a href={business.phoneHref}>{row.display}</a>
-                    ) : (
-                      row.display
-                    )}
-                  </dd>
+                  <dd>{row.display}</dd>
                 </div>
               ))}
             </dl>
+            <p className="contact-hours-note">
+              <a href={business.phoneHref}>Bel voor openingsuren</a>
+            </p>
             <p className="contact-urgent">
               Voor een aanvraag voor vandaag bel je ons het best even.
             </p>
