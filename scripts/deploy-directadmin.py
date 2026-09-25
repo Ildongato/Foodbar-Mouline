@@ -55,8 +55,10 @@ class Transport:
             input=config.encode(), stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         )
         if result.returncode:
-            # Do not print curl stderr/config: no credentials or server internals in logs.
-            raise RuntimeError('FTPS operation failed (curl exit %d); no deletion performed' % result.returncode)
+            # Curl's non-verbose error is useful for connectivity diagnosis. Never
+            # emit configuration or credentials, even if curl includes input text.
+            detail = result.stderr.decode('utf-8', errors='replace').replace(self.password, '[redacted]').strip()
+            raise RuntimeError('FTPS operation failed (curl exit %d): %s; no deletion performed' % (result.returncode, detail[:300]))
         return result.stdout
 
     def inventory(self, path):
