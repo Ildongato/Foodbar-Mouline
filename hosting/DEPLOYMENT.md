@@ -43,6 +43,9 @@ Build lokaal: `MOULINE_BUILD_TARGET=directadmin pnpm build:pages`.
 Resultaat: `dist-directadmin/`. De bestaande Pages-build blijft apart in `dist-pages/`.
 De testsite gebruikt `/nieuw/` voor assets en `/nieuw/api/contact.php` voor formulieren.
 De testsite heeft `noindex`; de canonical blijft het uiteindelijke domein.
+De eigen `/nieuw/.htaccess` stuurt HTTP-verzoeken met status 308 door naar
+`https://www.mouline.be`, met behoud van pad, query en methode. De livecontrole
+verifieert dit voor beide domeinvarianten. De oude productie-root blijft ongewijzigd.
 
 ## Formulieren
 

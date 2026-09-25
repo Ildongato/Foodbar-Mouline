@@ -3,6 +3,13 @@ import { createHash } from 'node:crypto';
 const origin = 'https://www.mouline.be';
 const base = origin + '/nieuw/';
 const get = (url, options = {}) => fetch(url, { signal: AbortSignal.timeout(20000), ...options });
+for (const host of ['mouline.be', 'www.mouline.be']) {
+  for (const path of ['/nieuw/?https-check=1', '/nieuw/api/contact.php']) {
+    const redirect = await get('http://' + host + path, { redirect: 'manual' });
+    assert.equal(redirect.status, 308, 'HTTP must redirect to HTTPS');
+    assert.equal(redirect.headers.get('location'), origin + path);
+  }
+}
 const response = await get(base);
 assert.equal(response.status, 200);
 assert.match(response.headers.get('x-robots-tag'), /noindex/);
@@ -25,4 +32,4 @@ for (const [method, headers, body, expected] of [
   assert.equal(result.status, expected);
   assert.equal((await result.json()).ok, false);
 }
-console.log(`HTTPS test passed: exact uploaded homepage, ${assets.length} assets, PHP execution and validation/origin/content-type rejection. No email sent.`);
+console.log(`HTTPS test passed: HTTP redirects, exact uploaded homepage, ${assets.length} assets, PHP execution and validation/origin/content-type rejection. No email sent.`);
