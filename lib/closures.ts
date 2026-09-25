@@ -1,5 +1,5 @@
-/** Temporary visual preview. Set to false to use only the actual calendar. */
-export const closureDemoEnabled = true;
+/** Only show notices on the configured holidays, vacation and bridge days. */
+export const closureDemoEnabled = false;
 
 export const closureConfig = {
   timeZone: 'Europe/Brussels',

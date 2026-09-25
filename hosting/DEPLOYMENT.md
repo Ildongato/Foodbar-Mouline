@@ -68,7 +68,8 @@ getest worden. Het testresultaat staat in het opleverrapport.
 DNS, MX, nameservers, mailrouting, mailboxen, root-redirects, oude HTML, oude assets,
 bestaande backups en eventuele productie-.htaccess blijven ongewijzigd.
 GitHub Pages houdt zijn bestaande aparte workflow. Geen huisstijl/layoutwijzigingen.
-De bestaande vakantie-popupconfiguratie wordt in deze technische migratie niet veranderd.
+De vakantie-popup gebruikt uitsluitend de ingestelde feestdagen, vakantie en brugdagen;
+de visuele demomodus is uitgeschakeld.
 
 ## Rollback en latere productie
 
