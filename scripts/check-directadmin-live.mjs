@@ -9,7 +9,7 @@ assert.match(response.headers.get('x-robots-tag'), /noindex/);
 const html = await response.text();
 const manifest = await (await get(base + 'deployment-manifest.json')).json();
 assert.equal(createHash('sha256').update(html).digest('hex'), manifest.files['index.html']);
-const assets = [...new Set([...html.matchAll(/\/nieuw\/((?:assets|images|fonts)\/[A-Za-z0-9_./-]+)/g)].map(m=>m[1]))];
+const assets = Object.keys(manifest.files).filter(path => /\.(?:js|css|png|jpg|jpeg|webp|svg|ico|woff|woff2|ttf|pdf)$/i.test(path));
 for (let index = 0; index < assets.length; index += 5) {
   await Promise.all(assets.slice(index, index + 5).map(async path => {
     assert.equal((await get(base + path, {method:'HEAD'})).status, 200, path);

@@ -50,7 +50,7 @@ class Transport:
         result = subprocess.run(
             ['curl', '-q', '--config', '-', '--ssl-reqd', '--tlsv1.2', '--silent',
              '--show-error', '--connect-timeout', '20', '--max-time', '90',
-             '--globoff', '--ftp-skip-pasv-ip',
+             '--globoff', '--ftp-skip-pasv-ip', '--retry', '2', '--retry-delay', '2',
              *(['--cacert', os.environ['MOULINE_FTP_CA_FILE']] if os.environ.get('MOULINE_FTP_CA_FILE') else []), *options],
             input=config.encode(), stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         )
@@ -112,6 +112,7 @@ def main():
     remote = {}
     owned = set()
     previous_hashes = {}
+    previous_complete = False
     if 'nieuw' in before:
         if before['nieuw'].get('type') != 'dir':
             raise ValueError('Test directory must be a real directory, never a symlink')
@@ -135,6 +136,7 @@ def main():
                 raise ValueError('Invalid ownership manifest')
             owned = set(previous['files'])
             previous_hashes = previous['files']
+            previous_complete = previous.get('status') == 'complete'
         for relative in files:
             if relative in remote and relative not in owned:
                 raise ValueError('Refusing to overwrite an unowned remote file: ' + relative)
@@ -142,19 +144,33 @@ def main():
     if args.check_only:
         print('Read-only check completed; no uploads performed.')
         return
-    # Assets and PHP first, homepage last. Retain all previous hashed assets for rollback.
-    for relative in sorted(files, key=lambda p: (p == 'index.html', p)):
-        ftp.upload(relative, files[relative])
+    hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in files.items()}
     manifest = {
         'schema': 1, 'target': TARGET, 'commit': os.environ.get('GITHUB_SHA', 'manual'),
-        'files': {**previous_hashes, **{name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in files.items()}},
+        'status': 'deploying', 'files': {**previous_hashes, **hashes},
     }
-    # Keep manifest outside the build so it cannot recursively include itself.
+    # Claim only previously audited, non-conflicting build paths before uploading.
+    # A failed first upload can then be safely resumed without deleting anything.
     import tempfile
     with tempfile.TemporaryDirectory() as scratch:
         path = Path(scratch) / MANIFEST
         path.write_text(json.dumps(manifest, indent=2) + '\n')
         ftp.upload(MANIFEST, path)
+        uploaded = 0
+        for relative in sorted(files, key=lambda p: (p == 'index.html', p)):
+            unchanged = (previous_complete and relative in remote
+                         and previous_hashes.get(relative) == hashes[relative]
+                         and remote[relative].get('size') == str(files[relative].stat().st_size))
+            if unchanged and relative != 'index.html':
+                continue
+            ftp.upload(relative, files[relative])
+            uploaded += 1
+            if uploaded % 20 == 0:
+                print('Uploaded build files:', uploaded, flush=True)
+        manifest['status'] = 'complete'
+        path.write_text(json.dumps(manifest, indent=2) + '\n')
+        ftp.upload(MANIFEST, path)
+    print('Uploaded', uploaded, 'files; unchanged owned assets retained.', flush=True)
     after = ftp.inventory(PARENT)
     for listing in (before, after):
         listing.pop('nieuw', None)

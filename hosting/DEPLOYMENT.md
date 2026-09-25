@@ -9,7 +9,10 @@ is de beveiligde FTP-toegang en de bestaande productiemap alleen-lezen gecontrol
 De actuele host is **web0152.zxcs.be**, IP **185.220.172.6**, explicit FTPS op poort 21.
 Het TLS-certificaat is geldig voor die host. De oude overdrachtsnotitie bevat een ander IP.
 `ftp.mouline.be` wijst naar dezelfde server, maar heeft geen passend FTP TLS-hostcertificaat.
-Certificaatvalidatie wordt nooit uitgeschakeld.
+Certificaatvalidatie wordt nooit uitgeschakeld. De server levert niet alle
+tussencertificaten; de workflow vult uitsluitend de geverifieerde publieke Sectigo-keten
+aan. Zie `hosting/certificates/README.md`. De geldigheid wordt tegen bestaande
+systeemroots gecontroleerd; er wordt geen nieuwe root vertrouwd.
 
 FTP-pad: `/domains/mouline.be/public_html/nieuw/`.
 Fysiek serverpad: `/home/mouline/domains/mouline.be/public_html/nieuw/`.
@@ -21,7 +24,10 @@ Test-URL: https://www.mouline.be/nieuw/
 De workflow controleert TypeScript, formulierlogica, PHP, doelmapbeveiliging en assetpaden.
 Daarna uploadt curl via explicit FTPS. Alle bestanden blijven binnen `/nieuw/`.
 Er is geen verwijdering, mirror of productie-cutover. Bestaande hashed assets blijven bewaard.
-Een ownershipmanifest voorkomt het overschrijven van onbekende bestanden.
+Een ownershipmanifest voorkomt het overschrijven van onbekende bestanden. Het wordt
+voor de upload geschreven, zodat een onderbroken upload veilig hervat kan worden.
+Ongewijzigde, eerder succesvol geüploade assets worden hergebruikt. Tijdelijke
+verbindingsfouten krijgen maximaal twee nieuwe pogingen.
 De productie-directory-inventaris en SHA-256 van de productiehomepage worden voor/na vergeleken.
 Een HTTPS-controle verifieert de nieuwe homepage, assets en PHP-validatie zonder mail te sturen.
 
@@ -69,8 +75,9 @@ De bestaande vakantie-popupconfiguratie wordt in deze technische migratie niet v
 Testrollback: revert de relevante codecommit op `main` of start de workflow van een
 bekende eerdere release. De workflow overschrijft alleen beheerde testbestanden; oude
 assets blijven staan. Onbekende bestanden of een ontbrekend manifest stoppen de upload.
-Bij een onderbroken eerste upload: eerst de gedeeltelijke bestanden vergelijken met de
-build en eigendom vaststellen; niet blind verwijderen of bescherming uitschakelen.
+Bij een onderbroken upload met geldig manifest: start de workflow opnieuw. Zonder
+manifest: eerst de gedeeltelijke bestanden vergelijken met de build en eigendom
+vaststellen; niet blind verwijderen of bescherming uitschakelen.
 
 Productie is NIET onderdeel van deze workflow. Voor cutover zijn aparte expliciete
 Goedkeuring en een volledige download/export van public_html noodzakelijk, inclusief

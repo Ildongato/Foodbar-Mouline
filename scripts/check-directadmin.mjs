@@ -16,7 +16,7 @@ async function checkTree(dir) {
     const text = await readFile(new URL(path, root), 'utf8');
     assert.doesNotMatch(text, /["'(]\/Foodbar-Mouline\//);
     // Covers rendered src/srcset/href, CSS URLs and JS asset literals.
-    for (const match of text.matchAll(/\/nieuw\/((?:assets|images|fonts)\/[A-Za-z0-9_./-]+)/g)) {
+    for (const match of text.matchAll(/\/nieuw\/([A-Za-z0-9_./-]+)/g)) {
       await access(new URL(match[1], root)); checked++;
     }
   }
