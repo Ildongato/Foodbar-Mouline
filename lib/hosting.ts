@@ -11,3 +11,6 @@ export const contactEndpoint =
 export function assetPath(path: string) {
   return `${basePath}${path}`;
 }
+
+export const siteAssetUrl = process.env.NEXT_PUBLIC_SITE_ASSET_URL ||
+  (staticHosting ? 'https://ildongato.github.io/Foodbar-Mouline/' : 'https://www.mouline.be/');

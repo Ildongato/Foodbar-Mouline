@@ -1,4 +1,4 @@
-import { staticHosting } from './hosting';
+import { siteAssetUrl } from './hosting';
 
 /** Single source for business information. Checked against official pages on 2026-09-07.
  * TODO CLIENT VERIFICATION: 2180 Ekeren vs 2930 Brasschaat. No postal code/locality
@@ -65,9 +65,7 @@ export function localDate(date = new Date()) {
   }).format(date);
 }
 export function restaurantSchema() {
-  const imageBase = staticHosting
-    ? 'https://ildongato.github.io/Foodbar-Mouline/'
-    : business.url;
+  const imageBase = siteAssetUrl;
   return {
     '@context': 'https://schema.org',
     '@type': 'Restaurant',

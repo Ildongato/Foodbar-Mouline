@@ -1,7 +1,8 @@
 import type { ContactValues } from './contact';
 
 /** Approved temporary client demo. Disable when the real endpoint is connected. */
-export const contactDemoEnabled = true;
+export const contactDemoAllowed = process.env.NEXT_PUBLIC_CONTACT_DEMO_ALLOWED !== 'false';
+export const contactDemoEnabled = contactDemoAllowed;
 
 export function isFormspreeEndpoint(endpoint: string) {
   return /^https:\/\/formspree\.io\/f\/[a-z0-9]+\/?$/i.test(endpoint);
@@ -65,9 +66,9 @@ export async function sendContact(
       | Partial<Record<keyof ContactValues, string>>
       | { field?: string; message?: string }[];
   };
-  if (!response.ok || (formspree && result.ok !== true)) {
+  if (!response.ok || result?.ok !== true) {
     const fields: Partial<Record<keyof ContactValues, string>> = {};
-    if (Array.isArray(result.errors)) {
+    if (Array.isArray(result?.errors)) {
       for (const error of result.errors) {
         if (
           error.field &&
@@ -77,11 +78,11 @@ export async function sendContact(
           fields[error.field as keyof ContactValues] =
             'Controleer dit veld en probeer opnieuw.';
       }
-    } else if (result.errors) Object.assign(fields, result.errors);
+    } else if (result?.errors) Object.assign(fields, result.errors);
     throw new ContactDeliveryError(
       formspree
         ? 'Versturen lukt even niet. Je gegevens blijven ingevuld. Probeer opnieuw of bel Mouline.'
-        : result.message ||
+        : result?.message ||
             'Versturen lukt even niet. Je gegevens blijven ingevuld. Probeer opnieuw of bel ons.',
       fields,
     );

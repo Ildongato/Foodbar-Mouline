@@ -226,7 +226,7 @@ export default function ContactForm({
             </h3>
             <p>
               {delivery === 'direct'
-                ? 'Bedankt, we nemen zo snel mogelijk contact met je op.'
+                ? feedback || 'Bedankt, we nemen zo snel mogelijk contact met je op.'
                 : feedback}
             </p>
             <button

@@ -2,9 +2,10 @@ import assert from 'node:assert/strict';
 import { readFile, access, readdir } from 'node:fs/promises';
 import vm from 'node:vm';
 
-const output = new URL('../dist-pages/', import.meta.url);
+const directAdmin = process.env.MOULINE_BUILD_TARGET === 'directadmin';
+const output = new URL(directAdmin ? '../dist-directadmin/' : '../dist-pages/', import.meta.url);
 const html = await readFile(new URL('index.html', output), 'utf8');
-const base = '/Foodbar-Mouline/';
+const base = directAdmin ? '/nieuw/' : '/Foodbar-Mouline/';
 assert.match(html, /Over Mouline/);
 assert.match(html, /Mouline in beeld/);
 assert.match(html, /Werken bij Mouline/);

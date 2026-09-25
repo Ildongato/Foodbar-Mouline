@@ -1,0 +1,52 @@
+name: Testsite naar bestaande Mouline-hosting
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mouline-directadmin-nieuw
+  cancel-in-progress: false
+
+jobs:
+  deploy-testsite:
+    name: Build, controle en uitsluitend /nieuw/ uploaden
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      MOULINE_BUILD_TARGET: directadmin
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22'
+      - name: Dependencies installeren
+        run: |
+          npm install --global pnpm@11.19.0
+          pnpm install --frozen-lockfile
+      - name: Typecheck en formuliertests
+        run: |
+          pnpm exec tsc --noEmit
+          node scripts/check-closures-and-contact.mjs
+          php -l hosting/mouline-contact.php
+          python3 scripts/check-contact-php.py
+          python3 scripts/check-deploy-safety.py
+      - name: Testsite bouwen en paden controleren
+        run: |
+          pnpm build:pages
+          node scripts/check-pages.mjs
+          node scripts/check-directadmin.mjs
+      - name: Upload via FTPS zonder verwijderingen
+        env:
+          MOULINE_FTP_HOST: ${{ secrets.MOULINE_FTP_HOST }}
+          MOULINE_FTP_PORT: ${{ secrets.MOULINE_FTP_PORT }}
+          MOULINE_FTP_USERNAME: ${{ secrets.MOULINE_FTP_USERNAME }}
+          MOULINE_FTP_PASSWORD: ${{ secrets.MOULINE_FTP_PASSWORD }}
+          MOULINE_FTP_REMOTE_PATH: ${{ secrets.MOULINE_FTP_REMOTE_PATH }}
+        run: python3 scripts/deploy-directadmin.py
+      - name: Testsite via HTTPS controleren
+        run: node scripts/check-directadmin-live.mjs

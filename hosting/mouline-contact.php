@@ -1,6 +1,6 @@
 <?php
-// Upload only this file to assets/php/mouline-contact.php on Mouline's PHP hosting.
-// The old contact.php remains untouched. Requires PHP 8.1+ and configured mail().
+// Test deployment only: public_html/nieuw/api/contact.php.
+// Production files remain untouched. Requires PHP 8.1+ and configured mail().
 declare(strict_types=1);
 namespace MoulineContact;
 
@@ -10,17 +10,20 @@ const RECIPIENT = 'info@mouline.be';
 const ALLOWED_ORIGINS = [
     'https://www.mouline.be',
     'https://mouline.be',
-    'https://ildongato.github.io',
-    'http://127.0.0.1:4173',
-    'http://localhost:4173',
 ];
 
 function reply(array $body, int $status = 200): never
 {
+    $body['ok'] ??= false;
     http_response_code($status);
     echo json_encode($body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
 }
+
+set_exception_handler(function (\Throwable $error): void {
+    error_log('[mouline-contact] unexpected_server_error');
+    reply(['message' => 'Versturen lukt even niet. Je gegevens blijven ingevuld. Bel ons even.'], 503);
+});
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -42,7 +45,7 @@ if ($method !== 'POST') {
     header('Allow: POST, OPTIONS');
     reply(['message' => 'Gebruik het contactformulier om een aanvraag te versturen.'], 405);
 }
-if (stripos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== 0) {
+if (!preg_match('/^application\/json(?:\s*;\s*charset=utf-8)?$/iD', trim($_SERVER['CONTENT_TYPE'] ?? ''))) {
     reply(['message' => 'Ongeldige aanvraag.'], 415);
 }
 $raw = file_get_contents('php://input', false, null, 0, 16001);
@@ -59,7 +62,7 @@ if (!is_array($data)) {
     reply(['message' => 'Ongeldige aanvraag.'], 400);
 }
 foreach ($keys as $key) {
-    if (!isset($data[$key]) || !is_string($data[$key])) {
+    if (!isset($data[$key]) || !is_string($data[$key]) || str_contains($data[$key], "\0")) {
         reply(['message' => 'Vul alle vereiste velden in.'], 400);
     }
 }
@@ -122,7 +125,7 @@ if ($data['intent'] === 'Reservatie') $payload['Uur'] = $data['time'];
 if ($data['intent'] === 'Catering') $payload['Type gelegenheid'] = trim($data['occasion']);
 $payload['Bericht'] = trim($data['message']);
 $fingerprint = hash('sha256', json_encode($payload));
-$success = ['message' => $data['intent'] === 'Reservatie'
+$success = ['ok' => true, 'message' => $data['intent'] === 'Reservatie'
     ? 'Bedankt. Je aanvraag is verstuurd naar Mouline. Je reservatie is definitief zodra Mouline ze heeft bevestigd.'
     : 'Bedankt. Je aanvraag is verstuurd naar Mouline. We nemen contact met je op.'];
 
@@ -130,13 +133,19 @@ $success = ['message' => $data['intent'] === 'Reservatie'
 // A lock prevents two simultaneous retries from sending the same request twice.
 umask(0077);
 $statePath = sys_get_temp_dir() . '/mouline-contact-' . hash('sha256', __FILE__) . '.json';
-$handle = fopen($statePath, 'c+');
+$handle = @fopen($statePath, 'c+');
 if (!$handle || !flock($handle, LOCK_EX)) {
+    error_log('[mouline-contact] storage_unavailable');
     reply(['message' => 'Versturen is even niet beschikbaar. Je gegevens blijven ingevuld. Bel ons even.'], 503);
 }
 $stored = stream_get_contents($handle);
 $state = $stored === '' ? ['requests' => [], 'rate' => []] : json_decode($stored, true);
 if (!is_array($state) || !is_array($state['requests'] ?? null) || !is_array($state['rate'] ?? null)) {
+    reply(['message' => 'Versturen is even niet beschikbaar. Bel ons even.'], 503);
+}
+// Reject storage corruption and bound bookkeeping without exposing visitor data.
+if (count($state['requests']) > 10000 || count($state['rate']) > 10000) {
+    error_log('[mouline-contact] storage_capacity');
     reply(['message' => 'Versturen is even niet beschikbaar. Bel ons even.'], 503);
 }
 $now = time();
@@ -153,7 +162,7 @@ if ($previous) {
 }
 $client = hash('sha256', __FILE__ . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
 $rate = $state['rate'][$client] ?? ['time' => $now, 'count' => 0];
-if ($rate['count'] >= 10) {
+if ($rate['count'] >= 10 || array_sum(array_column($state['rate'], 'count')) >= 200) {
     header('Retry-After: 900');
     reply(['message' => 'Je hebt meerdere aanvragen verstuurd. Probeer later opnieuw of bel ons.'], 429);
 }
@@ -167,8 +176,10 @@ function saveState($handle, array $state): bool
     return ftruncate($handle, 0) && fwrite($handle, $json) === strlen($json) && fflush($handle);
 }
 if (!saveState($handle, $state)) {
+    error_log('[mouline-contact] storage_write_failed');
     reply(['message' => 'Versturen is even niet beschikbaar. Bel ons even.'], 503);
 }
+$payload['Referentie'] = $key;
 $text = implode("\r\n\r\n", array_map(fn ($label, $value) => $label . ': ' . $value, array_keys($payload), $payload));
 $subject = '=?UTF-8?B?' . base64_encode($data['intent'] . ' via de Mouline-website') . '?=';
 $headers = [
@@ -177,9 +188,10 @@ $headers = [
     'MIME-Version' => '1.0',
     'Content-Type' => 'text/plain; charset=UTF-8',
     'Content-Transfer-Encoding' => 'base64',
+    'X-Mouline-Request' => $key,
 ];
 try {
-    $sent = mail(RECIPIENT, $subject, chunk_split(base64_encode($text), 76, "\r\n"), $headers);
+    $sent = @mail(RECIPIENT, $subject, chunk_split(base64_encode($text), 76, "\r\n"), $headers, '-finfo@mouline.be');
 } catch (\Throwable $error) {
     $sent = false;
 }
@@ -192,6 +204,7 @@ $saved = saveState($handle, $state);
 flock($handle, LOCK_UN);
 fclose($handle);
 if (!$sent || !$saved) {
+    error_log('[mouline-contact] ' . (!$sent ? 'mail_rejected' : 'delivery_state_unconfirmed') . ' request=' . substr($requestKey, 0, 12));
     reply(['message' => 'We konden de verzending niet bevestigen. Je gegevens blijven ingevuld. Bel ons even.'], 502);
 }
 reply($success);

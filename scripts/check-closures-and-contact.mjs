@@ -139,3 +139,14 @@ assert.deepEqual(values, original);
 console.log(
   'Passed: statutory holidays, timezone and vacation boundaries, bridge-day ranges, demo isolation, Formspree POST/Reply-To/honeypot, success/error and input preservation. No email sent.',
 );
+
+// Own-host endpoint must explicitly acknowledge delivery; HTTP 200 alone is insufficient.
+for (const response of [{}, {ok:false}]) {
+  await assert.rejects(delivery.sendContact('/nieuw/api/contact.php', values, 'request-id', async()=>Response.json(response)), /Versturen lukt/);
+}
+assert.equal(await delivery.sendContact('/nieuw/api/contact.php', values, 'request-id', async(url, request)=>{
+  assert.equal(request.headers['Idempotency-Key'], 'request-id');
+  assert.equal(JSON.parse(request.body).website, '');
+  return Response.json({ok:true, message:'Ontvangen door server'});
+}), 'Ontvangen door server');
+console.log('Own-host delivery acknowledgement and idempotency header passed.');

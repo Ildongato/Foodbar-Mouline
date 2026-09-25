@@ -7,7 +7,7 @@ import ContactForm from '../contact-form';
 import { business } from '@/lib/business';
 import { type Intent } from '@/lib/contact';
 import { assetPath } from '@/lib/hosting';
-import { contactDemoEnabled } from '@/lib/contact-delivery';
+import { contactDemoAllowed, contactDemoEnabled } from '@/lib/contact-delivery';
 
 // Keep the approved demo explicit and independently switchable from delivery setup.
 function subscribeFormDemo(callback: () => void) {
@@ -16,8 +16,8 @@ function subscribeFormDemo(callback: () => void) {
 }
 function formDemoSnapshot() {
   return (
-    contactDemoEnabled ||
-    new URLSearchParams(window.location.search).get('formDemo') === '1'
+    contactDemoAllowed && (contactDemoEnabled ||
+    new URLSearchParams(window.location.search).get('formDemo') === '1')
   );
 }
 function formDemoServerSnapshot() {

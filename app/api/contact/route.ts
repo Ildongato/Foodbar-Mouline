@@ -88,6 +88,7 @@ export async function POST(request: Request) {
         502,
       );
     return reply({
+      ok: true,
       message:
         values.intent === 'Reservatie'
           ? 'Bedankt. We hebben je aanvraag ontvangen. Je reservatie is definitief zodra Mouline ze heeft bevestigd.'

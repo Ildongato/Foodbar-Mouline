@@ -46,3 +46,9 @@ node scripts/check-pages.mjs
 ```
 
 De build rendert inhoud vooraf naar HTML. Lokale WebP-afbeeldingen en WOFF2-fonts gebruiken het Pages-basispad. Navigatie en lightbox ondersteunen toetsenbordbediening, focusherstel en reduced motion. Zie [SITE-UPDATE-2026-09-24.md](SITE-UPDATE-2026-09-24.md) voor de details en nog benodigde configuratie.
+
+## Bestaande DirectAdmin-hosting
+
+De geïsoleerde testdeployment en echte PHP-formulieren staan beschreven in
+[hosting/DEPLOYMENT.md](hosting/DEPLOYMENT.md). Pushes naar `main` publiceren alleen
+naar `https://www.mouline.be/nieuw/`; de bestaande productie-root blijft intact.
