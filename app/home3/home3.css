@@ -80,7 +80,7 @@
   box-sizing: border-box;
 }
 html {
-  scroll-padding-top: calc(var(--header) + 12px);
+  scroll-padding-top: calc(var(--header-compact) + 12px);
 }
 body {
   margin: 0;
@@ -283,7 +283,8 @@ textarea {
   min-height: 60px;
   background: transparent;
   z-index: 40;
-  transition: height var(--nav-duration) ease;
+  /* Fixed geometry prevents a resize/scroll feedback loop. */
+  pointer-events: none;
 }
 .site-header::before {
   content: '';
@@ -296,8 +297,19 @@ textarea {
   box-shadow: 0 2px 8px color-mix(in srgb, var(--ink) 5%, transparent);
   transition: opacity var(--nav-duration) ease;
 }
-.site-header[data-compact='true'] {
-  height: var(--header-compact);
+.site-header[data-compact='true']::before {
+  bottom: calc(var(--header) - var(--header-compact));
+}
+.header-inner > * {
+  pointer-events: auto;
+}
+.header-inner > :is(nav, .mobile-trigger, .header-cta) {
+  transition: transform var(--interaction) var(--ease);
+}
+.site-header[data-compact='true']
+  .header-inner
+  > :is(nav, .mobile-trigger, .header-cta) {
+  transform: translateY(calc((var(--header-compact) - var(--header)) / 2));
 }
 .site-header[data-compact='true']::before {
   opacity: 1;
@@ -340,17 +352,62 @@ textarea {
 .brand {
   position: absolute;
   --mill-size: var(--hero-mill-size);
-  left: calc(50% - var(--mill-size) / 2);
-  top: calc(50% + var(--mill-y) - var(--mill-size) * 0.58);
+  --mill-start-y: calc(
+    var(--header) + var(--hero-pad) + var(--hero-row) / 2 -
+      var(--hero-mill-lift) - var(--mill-size) * 0.58
+  );
+  left: 50%;
+  top: 0;
   width: var(--mill-size);
   aspect-ratio: 50 / 58;
   color: var(--brand);
-  /* Matches the hero slot before JS measures it. At the end --mill-y is zero. */
-  --mill-y: calc(
-    var(--header) / 2 + var(--hero-pad) + var(--hero-row) / 2 -
-      var(--hero-mill-lift)
-  );
+  transform-origin: 50% 0;
+  transform: translate3d(-50%, var(--mill-start-y), 0);
 }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-frame[data-depth-motion='native'] .hero-photo-layer,
+  .about-photo[data-depth-motion='native'] .about-photo-layer {
+    animation: hero-depth 1s linear both;
+    animation-timeline: scroll(root block);
+    animation-range: var(--hero-depth-start, 0px) var(--hero-depth-distance);
+  }
+  .brand[data-scroll-motion='native'] {
+    animation: mill-dock 1s linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0px var(--mill-distance);
+  }
+  .hero-wordmark[data-scroll-motion='native'] .hero-word {
+    animation: wordmark-scroll 1s linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0px var(--mill-distance);
+  }
+}
+@keyframes hero-depth {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, var(--hero-depth-end), 0);
+  }
+}
+@keyframes mill-dock {
+  from {
+    transform: translate3d(-50%, var(--mill-start-y), 0) scale(1);
+  }
+  to {
+    transform: translate3d(-50%, var(--mill-end-y), 0)
+      scale(var(--mill-end-scale));
+  }
+}
+@keyframes wordmark-scroll {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 .nav-mill {
   display: block;
   width: 100%;
@@ -496,6 +553,13 @@ textarea {
   inset: 0;
   object-fit: cover;
   object-position: var(--hero-image-position, 50% 56%);
+}
+.hero-photo-layer,
+.about-photo-layer {
+  position: absolute;
+  inset: -8% 0;
+  transform: translate3d(0, var(--hero-parallax, 0px), 0);
+  pointer-events: none;
 }
 .hero-slide {
   opacity: 0;
@@ -947,11 +1011,15 @@ textarea {
 .about-copy {
   min-width: 0;
 }
-.about-photo img {
-  width: 100%;
-  height: auto;
+.about-photo {
+  position: relative;
   aspect-ratio: 1;
   border-radius: var(--hero-radius);
+  overflow: clip;
+}
+.about-photo img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   /* Preserve the full width for the greeting hand; anchor the crop above the face. */
   object-position: 50% 18%;
@@ -1824,8 +1892,8 @@ textarea {
   gap: 0;
   opacity: 1;
   transition:
-    opacity 360ms var(--ease),
-    transform 360ms var(--ease);
+    opacity 240ms var(--ease),
+    transform 240ms var(--ease);
 }
 .mobile-menu[data-starting-style],
 .mobile-menu[data-ending-style] {
@@ -1833,7 +1901,7 @@ textarea {
   transform: translateY(-12px);
 }
 .mobile-menu[data-ending-style] {
-  transition-duration: 240ms;
+  transition-duration: 180ms;
 }
 .mobile-menu-close {
   position: absolute;
@@ -1872,8 +1940,8 @@ textarea {
   opacity: 1;
   transform: none;
   transition:
-    opacity 420ms var(--ease) 60ms,
-    transform 420ms var(--ease) 60ms,
+    opacity 240ms var(--ease),
+    transform 240ms var(--ease),
     color 180ms ease;
 }
 .mobile-menu[data-starting-style] nav a {
@@ -2331,7 +2399,7 @@ textarea {
   .about-photo {
     order: 2;
   }
-  .about-photo img {
+  .about-photo {
     aspect-ratio: 4/3;
   }
   .about-values {
@@ -2367,6 +2435,9 @@ textarea {
   }
 }
 @media (max-width: 650px) {
+  .dish-copy p {
+    white-space: pre-line;
+  }
   .hero {
     padding-bottom: 24px;
   }
@@ -2660,33 +2731,13 @@ textarea {
   }
 }
 
-/* Existing chapter reveals remain independent of the hero scroll sequence. */
-@media (prefers-reduced-motion: no-preference) {
-  .category-content:not([hidden]),
-  .mode-note,
-  .takeaway-note {
-    animation: opening-fade var(--interaction) var(--ease);
-  }
-  [data-motion='pending'] {
-    opacity: 0;
-  }
-  [data-motion='pending'],
-  [data-motion='revealing'] {
-    overflow-anchor: none;
-  }
-  [data-motion]:focus-within {
-    opacity: 1;
-  }
-}
-@keyframes opening-fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
+/* Content is always visible. Only intentional control/state changes animate. */
 @media (prefers-reduced-motion: reduce) {
+  .hero-photo-layer,
+  .about-photo-layer {
+    inset: 0;
+    transform: none;
+  }
   .hero-slide[data-entering='true'] {
     animation: none;
   }

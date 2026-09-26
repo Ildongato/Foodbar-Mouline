@@ -5,6 +5,7 @@ import { flushSync } from 'react-dom';
 import { ArrowUpRight, Phone, MapPin, PenLine, X } from 'lucide-react';
 import ContactForm from '../contact-form';
 import { business } from '@/lib/business';
+import { navigateToSection } from './section-navigation';
 import { type Intent } from '@/lib/contact';
 import { assetPath } from '@/lib/hosting';
 import { contactDemoAllowed, contactDemoEnabled } from '@/lib/contact-delivery';
@@ -45,8 +46,7 @@ export default function ContactSection({
 
   function showRequest() {
     flushSync(() => onRequestOpenChange(true));
-    requestRef.current?.scrollIntoView({ block: 'start' });
-    requestRef.current?.focus({ preventScroll: true });
+    navigateToSection('contact-request');
   }
 
   function closeRequest() {

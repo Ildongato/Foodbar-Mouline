@@ -30,9 +30,10 @@ import ClosureAnnouncement from './closure-notice';
 import Jobs from './jobs';
 import TodayHours from './today-hours';
 import CulinaryIcon from './culinary-icon';
-import { usePageMotion } from './use-page-motion';
+import { navigateToSection, useSectionNavigation } from './section-navigation';
 import { useHeroScroll } from './use-hero-scroll';
 import { useHeroFit } from './use-hero-fit';
+import { usePhotoDepth } from './use-photo-depth';
 import { business, restaurantSchema } from '@/lib/business';
 import { type MenuMode } from '@/lib/menu';
 import { type Intent } from '@/lib/contact';
@@ -81,7 +82,9 @@ function Photo({
   );
 }
 export default function MoulineHome3() {
-  usePageMotion();
+  useSectionNavigation();
+  const aboutPhotoRef = useRef<HTMLDivElement>(null);
+  usePhotoDepth(aboutPhotoRef, 'viewport');
   const { heroRef, informationRef } = useHeroFit();
   const { headerRef, navSlotRef, millRef, wordmarkRef, slotRef } =
     useHeroScroll(heroRef);
@@ -134,7 +137,7 @@ export default function MoulineHome3() {
       if (window.location.hash !== '#contact-request') return;
       setRequestOpen(true);
       requestAnimationFrame(() => {
-        document.getElementById('contact-request')?.scrollIntoView();
+        navigateToSection('contact-request', false);
       });
     };
     followRequest();
@@ -182,7 +185,7 @@ export default function MoulineHome3() {
             setMode(value);
             setMobileOpen(false);
           });
-          document.getElementById('menu')?.scrollIntoView();
+          navigateToSection('menu');
           return { mode: value, section: 'menu', orderPlaced: false };
         },
       },
@@ -214,7 +217,7 @@ export default function MoulineHome3() {
             setRequestOpen(true);
             setMobileOpen(false);
           });
-          document.getElementById('contact-request')?.scrollIntoView();
+          navigateToSection('contact-request', false);
           document
             .getElementById('contact-request')
             ?.focus({ preventScroll: true });
@@ -261,31 +264,9 @@ export default function MoulineHome3() {
           </nav>
           <Dialog
             open={mobileOpen}
-            onOpenChange={setMobileOpen}
-            onOpenChangeComplete={(open) => {
-              if (open || !menuDestination.current) return;
-              const id = menuDestination.current;
-              menuDestination.current = null;
-              // Wait for the dialog's scroll lock to release after its exit transition.
-              requestAnimationFrame(() => {
-                window.location.hash = id;
-                const section = document.getElementById(id);
-                section?.scrollIntoView({ block: 'start' });
-                if (section) {
-                  const previousTabIndex = section.getAttribute('tabindex');
-                  section.tabIndex = -1;
-                  section.focus({ preventScroll: true });
-                  section.addEventListener(
-                    'blur',
-                    () => {
-                      if (previousTabIndex === null)
-                        section.removeAttribute('tabindex');
-                      else section.setAttribute('tabindex', previousTabIndex);
-                    },
-                    { once: true },
-                  );
-                }
-              });
+            onOpenChange={(open) => {
+              if (open) menuDestination.current = null;
+              setMobileOpen(open);
             }}
           >
             <DialogTrigger
@@ -329,8 +310,13 @@ export default function MoulineHome3() {
                           return;
                         event.preventDefault();
                         menuDestination.current = id;
-                        if (id === 'menu') setMode('onsite');
-                        setMobileOpen(false);
+                        flushSync(() => {
+                          if (id === 'menu') setMode('onsite');
+                          setMobileOpen(false);
+                        });
+                        // Base UI releases its scroll lock in the next task.
+                        // Navigate alongside the exit fade, not after it finishes.
+                        window.setTimeout(() => navigateToSection(id), 0);
                       }}
                     >
                       {label}
@@ -430,17 +416,19 @@ export default function MoulineHome3() {
             className="about-section container"
             aria-labelledby="about-title"
           >
-            <div className="about-photo">
-              <img
-                src={assetPath('/images/home3-caroline-941.webp')}
-                srcSet={`${assetPath('/images/home3-caroline-640.webp')} 640w, ${assetPath('/images/home3-caroline-941.webp')} 941w`}
-                sizes="(max-width: 650px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 56px), (max-width: 1408px) 40vw, 550px"
-                width="941"
-                height="1672"
-                loading="lazy"
-                decoding="async"
-                alt="Caroline begroet je met een glimlach en een opgestoken hand bij Mouline"
-              />
+            <div className="about-photo" ref={aboutPhotoRef}>
+              <div className="about-photo-layer">
+                <img
+                  src={assetPath('/images/home3-caroline-941.webp')}
+                  srcSet={`${assetPath('/images/home3-caroline-640.webp')} 640w, ${assetPath('/images/home3-caroline-941.webp')} 941w`}
+                  sizes="(max-width: 650px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 56px), (max-width: 1408px) 40vw, 550px"
+                  width="941"
+                  height="1672"
+                  loading="lazy"
+                  decoding="async"
+                  alt="Caroline begroet je met een glimlach en een opgestoken hand bij Mouline"
+                />
+              </div>
             </div>
             <div className="about-content">
               <div className="about-copy">

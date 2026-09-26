@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { Pause, Play } from 'lucide-react';
 import { assetPath } from '@/lib/hosting';
+import { usePhotoDepth } from './use-photo-depth';
 
 const photos = [
   {
@@ -53,6 +54,7 @@ const sizes =
 
 export default function HeroSlideshow() {
   const frame = useRef<HTMLElement>(null);
+  usePhotoDepth(frame);
   const images = useRef<(HTMLImageElement | null)[]>([]);
   const progress = useRef<HTMLSpanElement>(null);
   const timer = useRef<Animation | null>(null);
@@ -180,43 +182,45 @@ export default function HeroSlideshow() {
       }}
       onPointerLeave={() => setHovered(false)}
     >
-      {photos.map((photo, index) => (
-        <img
-          key={photo.src}
-          ref={(image) => {
-            images.current[index] = image;
-          }}
-          className="hero-slide"
-          data-active={slide.current === index}
-          data-previous={slide.previous === index}
-          data-entering={slide.current === index && slide.previous !== -1}
-          style={
-            {
-              '--hero-image-position': photo.position,
-              '--hero-image-position-mobile': photo.mobilePosition,
-            } as CSSProperties
-          }
-          src={assetPath(photo.src)}
-          srcSet={photo.srcSet
-            .split(', ')
-            .map((source) => assetPath(source))
-            .join(', ')}
-          sizes={sizes}
-          width={photo.width}
-          height={photo.height}
-          alt={photo.alt}
-          aria-hidden={slide.current !== index}
-          fetchPriority={index === 0 ? 'high' : 'low'}
-          loading="eager"
-          decoding="async"
-          onLoad={(event) => {
-            void markLoaded(index, event.currentTarget);
-          }}
-          onError={(event) => {
-            void markLoaded(index, event.currentTarget);
-          }}
-        />
-      ))}
+      <div className="hero-photo-layer">
+        {photos.map((photo, index) => (
+          <img
+            key={photo.src}
+            ref={(image) => {
+              images.current[index] = image;
+            }}
+            className="hero-slide"
+            data-active={slide.current === index}
+            data-previous={slide.previous === index}
+            data-entering={slide.current === index && slide.previous !== -1}
+            style={
+              {
+                '--hero-image-position': photo.position,
+                '--hero-image-position-mobile': photo.mobilePosition,
+              } as CSSProperties
+            }
+            src={assetPath(photo.src)}
+            srcSet={photo.srcSet
+              .split(', ')
+              .map((source) => assetPath(source))
+              .join(', ')}
+            sizes={sizes}
+            width={photo.width}
+            height={photo.height}
+            alt={photo.alt}
+            aria-hidden={slide.current !== index}
+            fetchPriority={index === 0 ? 'high' : 'low'}
+            loading="eager"
+            decoding="async"
+            onLoad={(event) => {
+              void markLoaded(index, event.currentTarget);
+            }}
+            onError={(event) => {
+              void markLoaded(index, event.currentTarget);
+            }}
+          />
+        ))}
+      </div>
       <div className="hero-photo-controls">
         <fieldset className="hero-photo-pagination">
           <legend className="sr-only">Kies een foto</legend>

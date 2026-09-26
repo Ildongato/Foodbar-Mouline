@@ -423,7 +423,7 @@
       {
         "name": "Croque madame",
         "price": "€ 12,60",
-        "description": "+ Dubbele croque €2,00 + Ketchup / mayonnaise €0,80",
+        "description": "+ Dubbele croque €2,00\n+ Ketchup / mayonnaise €0,80",
         "sourceName": "Croque madame",
         "sourcePrice": "€12,60",
         "source": "Klantcorrectie 2026-09-25"

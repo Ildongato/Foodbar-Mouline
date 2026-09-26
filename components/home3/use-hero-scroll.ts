@@ -1,7 +1,8 @@
 import { useLayoutEffect, useRef, type RefObject } from 'react';
 
-/** One SVG moves between measured positions, at its actual rendered size.
- * Avoid scaling a composited bitmap of the animated vector artwork. */
+/** Stable endpoints: scrolling only transforms the original SVG, never its layout.
+ * Native scroll timelines follow iOS momentum without waiting for JS scroll events.
+ * Older browsers use the exact same geometry in a single animation-frame update. */
 export function useHeroScroll(heroRef: RefObject<HTMLElement | null>) {
   const headerRef = useRef<HTMLElement>(null);
   const navSlotRef = useRef<HTMLSpanElement>(null);
@@ -20,86 +21,117 @@ export function useHeroScroll(heroRef: RefObject<HTMLElement | null>) {
 
     const words = wordmark.querySelectorAll<HTMLElement>('.hero-word');
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const nativeScroll =
+      CSS.supports('animation-timeline: scroll(root block)') &&
+      CSS.supports('animation-range: 0px 100px');
     let frame = 0;
     let distance = 1;
     let startY = 0;
-    let startSize = 1;
-    let finalSize = 1;
-    let snapAt = 0;
+    let endY = 0;
+    let endScale = 1;
     let landingEnd = 0;
     let disposed = false;
 
     const paint = () => {
       frame = 0;
+      // Clamp Safari's elastic overscroll so neither endpoint can drift.
       const scroll = Math.max(0, window.scrollY);
       const progress = preference.matches
-        ? Number(scroll >= snapAt)
+        ? Number(scroll >= distance)
         : Math.min(1, scroll / distance);
-      // No easing lag: the shared element follows scroll in both directions.
-      mill.style.setProperty('--mill-y', `${startY * (1 - progress)}px`);
-      mill.style.setProperty(
-        '--mill-size',
-        `${startSize + (finalSize - startSize) * progress}px`,
-      );
+      if (!nativeScroll || preference.matches) {
+        const y = startY + (endY - startY) * progress;
+        const scale = 1 + (endScale - 1) * progress;
+        mill.style.transform = `translate3d(-50%, ${y}px, 0) scale(${scale})`;
+        words.forEach((word) => {
+          word.style.opacity = `${1 - progress}`;
+        });
+      }
       const compact = scroll >= landingEnd;
       if (header.dataset.compact !== String(compact))
         header.dataset.compact = String(compact);
-      for (const word of words) {
-        word.style.opacity = preference.matches ? '1' : `${1 - progress}`;
-      }
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(paint);
     };
     const measure = () => {
       cancelAnimationFrame(frame);
-      const nav = navSlot.getBoundingClientRect();
-      const destinationY = nav.top + nav.height / 2;
+      // These slots never animate. Do not observe the changing header / SVG.
       const origin = slot.getBoundingClientRect();
-      const originY = origin.top + window.scrollY + origin.height / 2;
-      startY = originY - destinationY;
-      distance = Math.max(120, startY + origin.height * 0.3);
-      startSize = origin.width;
-      finalSize = nav.width;
-      snapAt = Math.max(1, originY - destinationY * 2);
-      // Keep navigation legible as the photo replaces the gradient behind it.
-      // Use the reserved height so compacting cannot change this threshold.
-      const reservedHeader = hero.getBoundingClientRect().top + window.scrollY;
+      const nav = navSlot.getBoundingClientRect();
+      const fullHeader = header.getBoundingClientRect().height;
+      const compactHeader = Math.max(60, fullHeader - 12);
+      startY = origin.top + window.scrollY;
+      endY = (compactHeader - nav.height) / 2;
+      endScale = nav.width / origin.width;
+      const originCenter = startY + origin.height / 2;
+      // Dock before the wordmark passes the navigation, also on small phones.
+      distance = Math.max(1, originCenter - compactHeader / 2);
       const photo = hero.querySelector<HTMLElement>('.hero-frame');
-      landingEnd =
+      landingEnd = Math.max(
+        0,
         (photo ?? hero).getBoundingClientRect().top +
-        window.scrollY -
-        reservedHeader;
+          window.scrollY -
+          fullHeader,
+      );
+      mill.style.setProperty('--mill-size', `${origin.width}px`);
+      mill.style.setProperty('--mill-start-y', `${startY}px`);
+      mill.style.setProperty('--mill-end-y', `${endY}px`);
+      mill.style.setProperty('--mill-end-scale', `${endScale}`);
+      for (const element of [mill, wordmark]) {
+        element.style.setProperty('--mill-distance', `${distance}px`);
+        element.dataset.scrollMotion = nativeScroll ? 'native' : 'fallback';
+      }
+      mill.style.removeProperty('transform');
+      words.forEach((word) => word.style.removeProperty('opacity'));
       paint();
     };
-
+    const restore = () => {
+      measure();
+      // History restoration may apply its scroll position after pageshow.
+      schedule();
+    };
+    const visibility = () => {
+      if (document.visibilityState === 'visible') restore();
+    };
     measure();
     const resize = new ResizeObserver(measure);
     resize.observe(navSlot);
     resize.observe(slot);
-    resize.observe(header);
     resize.observe(hero);
     window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('scrollend', schedule);
     window.addEventListener('resize', measure);
-    window.addEventListener('pageshow', measure);
+    window.addEventListener('pageshow', restore);
+    document.addEventListener('visibilitychange', visibility);
     preference.addEventListener('change', measure);
     void document.fonts.ready.then(() => {
-      if (!disposed) measure();
+      if (!disposed) restore();
     });
     return () => {
       disposed = true;
       cancelAnimationFrame(frame);
       resize.disconnect();
       window.removeEventListener('scroll', schedule);
+      window.removeEventListener('scrollend', schedule);
       window.removeEventListener('resize', measure);
-      window.removeEventListener('pageshow', measure);
+      window.removeEventListener('pageshow', restore);
+      document.removeEventListener('visibilitychange', visibility);
       preference.removeEventListener('change', measure);
-      mill.style.removeProperty('--mill-y');
-      mill.style.removeProperty('--mill-size');
+      for (const name of [
+        '--mill-size',
+        '--mill-start-y',
+        '--mill-end-y',
+        '--mill-end-scale',
+        '--mill-distance',
+        'transform',
+      ])
+        mill.style.removeProperty(name);
+      wordmark.style.removeProperty('--mill-distance');
+      delete mill.dataset.scrollMotion;
+      delete wordmark.dataset.scrollMotion;
       delete header.dataset.compact;
-      words.forEach((word) => {
-        word.style.removeProperty('opacity');
-      });
+      words.forEach((word) => word.style.removeProperty('opacity'));
     };
   }, [heroRef]);
 
