@@ -15,11 +15,11 @@ RewriteRule ^ https://www.mouline.be%{REQUEST_URI} [R=308,L]
 RewriteRule ^(?:nieuw|\.well-known)(?:/|$) - [L]
 
 # Audited former public pages: keep useful incoming links, retire old content.
-RewriteRule ^(?:contact|contact-reservatie)\.html$ /#contact [R=301,L,NE]
-RewriteRule ^gallery\.html$ /#fotos [R=301,L,NE]
-RewriteRule ^m-(?:catering|vergaderingen)\.html$ /#catering [R=301,L,NE]
-RewriteRule ^(?:ontbijt|m-(?:lunch|ontbijt|takeaway))\.html$ /#menu [R=301,L,NE]
-RewriteRule ^privacy\.html$ /#contact [R=301,L,NE]
+RewriteRule ^(?:contact|contact-reservatie)\.html$ https://www.mouline.be/#contact [R=301,L,NE]
+RewriteRule ^gallery\.html$ https://www.mouline.be/#fotos [R=301,L,NE]
+RewriteRule ^m-(?:catering|vergaderingen)\.html$ https://www.mouline.be/#catering [R=301,L,NE]
+RewriteRule ^(?:ontbijt|m-(?:lunch|ontbijt|takeaway))\.html$ https://www.mouline.be/#menu [R=301,L,NE]
+RewriteRule ^privacy\.html$ https://www.mouline.be/#contact [R=301,L,NE]
 
 # Only the new application's public folders/files may be served from the root.
 # This denies BU* folders, _original files and old assets (including old PHP).
