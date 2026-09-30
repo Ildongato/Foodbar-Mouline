@@ -7,7 +7,13 @@ const project = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig(({ mode }) => {
   const directAdmin = process.env.MOULINE_BUILD_TARGET === 'directadmin';
-  const base = directAdmin ? '/nieuw/' : '/Foodbar-Mouline/';
+  const production =
+    directAdmin && process.env.MOULINE_DEPLOY_ENV === 'production';
+  const base = directAdmin
+    ? production
+      ? '/'
+      : '/nieuw/'
+    : '/Foodbar-Mouline/';
   const publicEnv = loadEnv(mode, project, 'NEXT_PUBLIC_');
   return {
     root: `${project}static-site`,
@@ -18,12 +24,20 @@ export default defineConfig(({ mode }) => {
     define: {
       'process.env.NEXT_PUBLIC_STATIC_HOST': JSON.stringify('true'),
       'process.env.NEXT_PUBLIC_BASE_PATH': JSON.stringify(base.slice(0, -1)),
-      'process.env.NEXT_PUBLIC_CONTACT_DEMO_ALLOWED': JSON.stringify(directAdmin ? 'false' : 'true'),
-      'process.env.NEXT_PUBLIC_SITE_ASSET_URL': JSON.stringify(directAdmin ? 'https://www.mouline.be/nieuw/' : 'https://ildongato.github.io/Foodbar-Mouline/'),
+      'process.env.NEXT_PUBLIC_CONTACT_DEMO_ALLOWED': JSON.stringify(
+        directAdmin ? 'false' : 'true',
+      ),
+      'process.env.NEXT_PUBLIC_SITE_ASSET_URL': JSON.stringify(
+        directAdmin
+          ? `https://www.mouline.be${base}`
+          : 'https://ildongato.github.io/Foodbar-Mouline/',
+      ),
       'process.env.NEXT_PUBLIC_CONTACT_ENDPOINT': JSON.stringify(
-        directAdmin ? '/nieuw/api/contact.php' : process.env.NEXT_PUBLIC_CONTACT_ENDPOINT ||
-          publicEnv.NEXT_PUBLIC_CONTACT_ENDPOINT ||
-          '',
+        directAdmin
+          ? `${base}api/contact.php`
+          : process.env.NEXT_PUBLIC_CONTACT_ENDPOINT ||
+              publicEnv.NEXT_PUBLIC_CONTACT_ENDPOINT ||
+              '',
       ),
     },
     css: { postcss: { plugins: [tailwindcss({ base: project })] } },

@@ -1,0 +1,38 @@
+# Production root only. No files are removed; old pages redirect and legacy assets
+# remain recoverable but inaccessible. /nieuw/ retains its own configuration.
+Options -Indexes
+DirectoryIndex index.html
+RewriteEngine On
+
+# TLS is terminated by the existing hosting proxy.
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !^https$ [NC]
+RewriteRule ^ https://www.mouline.be%{REQUEST_URI} [R=308,L]
+RewriteCond %{HTTP_HOST} !^www\.mouline\.be$ [NC]
+RewriteRule ^ https://www.mouline.be%{REQUEST_URI} [R=308,L]
+
+# Do not alter staging or certificate-renewal paths.
+RewriteRule ^(?:nieuw|\.well-known)(?:/|$) - [L]
+
+# Audited former public pages: keep useful incoming links, retire old content.
+RewriteRule ^(?:contact|contact-reservatie)\.html$ /#contact [R=301,L,NE]
+RewriteRule ^gallery\.html$ /#fotos [R=301,L,NE]
+RewriteRule ^m-(?:catering|vergaderingen)\.html$ /#catering [R=301,L,NE]
+RewriteRule ^(?:ontbijt|m-(?:lunch|ontbijt|takeaway))\.html$ /#menu [R=301,L,NE]
+RewriteRule ^privacy\.html$ /#contact [R=301,L,NE]
+
+# Only the new application's public folders/files may be served from the root.
+# This denies BU* folders, _original files and old assets (including old PHP).
+RewriteRule ^assets/(?:home-[A-Za-z0-9_-]+\.(?:js|css)|[A-Za-z0-9_-]+\.woff2?)$ - [L]
+RewriteRule ^(?:images|fonts|maps|brand|home1|home2|home3)/ - [L]
+RewriteRule ^api/contact\.php$ - [L]
+RewriteRule ^(?:|index\.html|favicon\.png|favicon\.ico|apple-touch-icon\.png|robots\.txt|sitemap\.xml|deployment-manifest\.json)$ - [L]
+RewriteRule ^ - [R=404,L]
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  <FilesMatch "^(index\.html|deployment-manifest\.json)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>

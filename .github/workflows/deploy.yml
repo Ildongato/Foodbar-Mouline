@@ -1,4 +1,4 @@
-name: Testsite naar bestaande Mouline-hosting
+name: Productie naar bestaande Mouline-hosting
 
 on:
   push:
@@ -9,16 +9,17 @@ permissions:
   contents: read
 
 concurrency:
-  group: mouline-directadmin-nieuw
+  group: mouline-directadmin-production
   cancel-in-progress: false
 
 jobs:
-  deploy-testsite:
-    name: Build, controle en uitsluitend /nieuw/ uploaden
+  deploy-production:
+    name: Build, controle en productie uploaden
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
       MOULINE_BUILD_TARGET: directadmin
+      MOULINE_DEPLOY_ENV: production
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
@@ -35,7 +36,7 @@ jobs:
           php -l hosting/mouline-contact.php
           python3 scripts/check-contact-php.py
           python3 scripts/check-deploy-safety.py
-      - name: Testsite bouwen en paden controleren
+      - name: Productiesite bouwen en paden controleren
         run: |
           pnpm build:pages
           node scripts/check-pages.mjs
@@ -53,5 +54,5 @@ jobs:
           openssl verify -CAfile /etc/ssl/certs/ca-certificates.crt -untrusted hosting/certificates/sectigo-r46-usertrust.pem hosting/certificates/sectigo-dv-r36.pem
           cat /etc/ssl/certs/ca-certificates.crt hosting/certificates/sectigo-dv-r36.pem hosting/certificates/sectigo-r46-usertrust.pem > "$RUNNER_TEMP/mouline-ca.pem"
           MOULINE_FTP_CA_FILE="$RUNNER_TEMP/mouline-ca.pem" python3 scripts/deploy-directadmin.py
-      - name: Testsite via HTTPS controleren
+      - name: Productiesite via HTTPS controleren
         run: node scripts/check-directadmin-live.mjs

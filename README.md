@@ -1,6 +1,6 @@
 # Foodbar Mouline
 
-De goedgekeurde Mouline-website staat op [ildongato.github.io/Foodbar-Mouline](https://ildongato.github.io/Foodbar-Mouline/). Er is één ontwerp. De oude `/home1/`, `/home2/` en `/home3/`-links sturen door naar de hoofdlink met behoud van queryparameters en ankers.
+De goedgekeurde Mouline-website staat op [www.mouline.be](https://www.mouline.be/). Er is één ontwerp. De oude `/home1/`, `/home2/` en `/home3/`-links sturen door naar de hoofdlink met behoud van queryparameters en ankers.
 
 ## Starten en publiceren
 
@@ -21,7 +21,7 @@ De statische preview staat standaard op `http://127.0.0.1:4173/Foodbar-Mouline/`
 - `closureDemoEnabled` in `lib/closures.ts`: toont de sluitingsmelding als demo. Met `false` volgt de melding alleen de ingestelde feestdagen, brugdagen en vakantie in de tijdzone Europe/Brussels.
 - `contactDemoEnabled` in `lib/contact-delivery.ts`: het formulier toont validatie, laadstatus en bevestiging zonder e-mail te verzenden. Deze flag staat op `true` met goedkeuring van de klant. De zichtbare testtekst is op verzoek verwijderd. Zet op `false` na aansluiting en controle van de echte mailkoppeling. Een expliciete `?formDemo=1`-link blijft dan beschikbaar voor visuele tests.
 
-Echte verzending vereist `NEXT_PUBLIC_CONTACT_ENDPOINT`, lokaal en in de GitHub Actions Variables. De adapter ondersteunt Formspree en de eigen hosting. Zie [hosting/README.md](hosting/README.md) voor de bestaande PHP-optie. Er is nog geen endpoint ingesteld. Zonder endpoint en met de demo uit meldt het formulier dat verzending niet beschikbaar is; een reservatie wordt nooit automatisch bevestigd.
+Echte verzending vereist `NEXT_PUBLIC_CONTACT_ENDPOINT`, lokaal en in de GitHub Actions Variables. De adapter ondersteunt Formspree en de eigen hosting. Zie [hosting/README.md](hosting/README.md) voor de bestaande PHP-optie. De DirectAdmin-build gebruikt de eigen PHP-handler `/api/contact.php`; demo is daar altijd uitgeschakeld. Zonder endpoint en met de demo uit meldt het formulier dat verzending niet beschikbaar is; een reservatie wordt nooit automatisch bevestigd.
 
 ## Inhoud en vormgeving
 
@@ -50,5 +50,5 @@ De build rendert inhoud vooraf naar HTML. Lokale WebP-afbeeldingen en WOFF2-font
 ## Bestaande DirectAdmin-hosting
 
 De geïsoleerde testdeployment en echte PHP-formulieren staan beschreven in
-[hosting/DEPLOYMENT.md](hosting/DEPLOYMENT.md). Pushes naar `main` publiceren alleen
-naar `https://www.mouline.be/nieuw/`; de bestaande productie-root blijft intact.
+[hosting/DEPLOYMENT.md](hosting/DEPLOYMENT.md). Pushes naar `main` publiceren naar `https://www.mouline.be/` via de bestaande FTPS-hosting.
+`/nieuw/` blijft intact als vergelijkingsversie. Zie [productie en rollback](hosting/PRODUCTION-RELEASE-2026-09-30.md).

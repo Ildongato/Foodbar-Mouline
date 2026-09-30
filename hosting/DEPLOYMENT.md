@@ -1,4 +1,12 @@
-# Mouline: geïsoleerde testdeployment
+# Mouline: productiedeployment
+
+Sinds de goedgekeurde overstap van 30 september 2026 publiceert
+`.github/workflows/deploy.yml` naar **https://www.mouline.be/**.
+Zie [het productierapport en rollbackplan](PRODUCTION-RELEASE-2026-09-30.md).
+De onderstaande stagingdocumentatie beschrijft de eerdere inrichting;
+`/nieuw/` blijft als bevroren vergelijkingsversie aanwezig.
+
+## Historische testdeployment (25 september 2026)
 
 ## Omgeving en audit
 

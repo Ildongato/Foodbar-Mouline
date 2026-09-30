@@ -3,9 +3,16 @@ import { readFile, access, readdir } from 'node:fs/promises';
 import vm from 'node:vm';
 
 const directAdmin = process.env.MOULINE_BUILD_TARGET === 'directadmin';
-const output = new URL(directAdmin ? '../dist-directadmin/' : '../dist-pages/', import.meta.url);
+const output = new URL(
+  directAdmin ? '../dist-directadmin/' : '../dist-pages/',
+  import.meta.url,
+);
 const html = await readFile(new URL('index.html', output), 'utf8');
-const base = directAdmin ? '/nieuw/' : '/Foodbar-Mouline/';
+const base = directAdmin
+  ? process.env.MOULINE_DEPLOY_ENV === 'production'
+    ? '/'
+    : '/nieuw/'
+  : '/Foodbar-Mouline/';
 assert.match(html, /Over Mouline/);
 assert.match(html, /Mouline in beeld/);
 assert.match(html, /Werken bij Mouline/);
@@ -18,13 +25,19 @@ assert.match(html, /id="vacatures"/);
 
 // Moving the entry point must not break local images, fonts or bundles.
 for (const [, url] of html.matchAll(/(?:src|href)="([^"#]+)"/g)) {
-  if (url.startsWith(base)) await access(new URL(url.slice(base.length), output));
+  if (url.startsWith(base))
+    await access(new URL(url.slice(base.length), output));
 }
 const assets = await readdir(new URL('assets/', output));
 assert(!assets.some((name) => /^home[23]-/.test(name)));
 
 // Every retired URL keeps incoming section links and explicit demo parameters.
-for (const path of ['home1/index.html', 'home2/index.html', 'home3/index.html', 'home3/jobs-preview.html']) {
+for (const path of [
+  'home1/index.html',
+  'home2/index.html',
+  'home3/index.html',
+  'home3/jobs-preview.html',
+]) {
   const redirect = await readFile(new URL(path, output), 'utf8');
   assert.doesNotMatch(redirect, /id="root"/);
   assert.match(redirect, /noindex, follow/);
@@ -36,10 +49,14 @@ for (const path of ['home1/index.html', 'home2/index.html', 'home3/index.html', 
       location: {
         search: '?formDemo=1',
         hash: '#vacatures',
-        replace: (value) => { destination = value; },
+        replace: (value) => {
+          destination = value;
+        },
       },
     },
   });
   assert.equal(destination, `${base}?formDemo=1#vacatures`);
 }
-console.log('Approved homepage, local assets and all legacy redirects verified.');
+console.log(
+  'Approved homepage, local assets and all legacy redirects verified.',
+);

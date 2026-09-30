@@ -1,6 +1,6 @@
 <?php
-// Test deployment only: public_html/nieuw/api/contact.php.
-// Production files remain untouched. Requires PHP 8.1+ and configured mail().
+// Shared hosting handler for production and staging.
+// Requires PHP 8.1+ and the existing configured mail() transport.
 declare(strict_types=1);
 namespace MoulineContact;
 
