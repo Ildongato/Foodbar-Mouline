@@ -18,7 +18,8 @@ RewriteRule ^(?:nieuw|\.well-known)(?:/|$) - [L]
 RewriteRule ^(?:contact|contact-reservatie)\.html$ https://www.mouline.be/#contact [R=301,L,NE]
 RewriteRule ^gallery\.html$ https://www.mouline.be/#fotos [R=301,L,NE]
 RewriteRule ^m-(?:catering|vergaderingen)\.html$ https://www.mouline.be/#catering [R=301,L,NE]
-RewriteRule ^(?:ontbijt|m-(?:lunch|ontbijt|takeaway))\.html$ https://www.mouline.be/#menu [R=301,L,NE]
+RewriteRule ^m-takeaway\.html$ https://www.mouline.be/?menu=takeaway#menu [R=301,L,NE]
+RewriteRule ^(?:ontbijt|m-(?:lunch|ontbijt))\.html$ https://www.mouline.be/#menu [R=301,L,NE]
 RewriteRule ^privacy\.html$ https://www.mouline.be/#contact [R=301,L,NE]
 
 # Only the new application's public folders/files may be served from the root.

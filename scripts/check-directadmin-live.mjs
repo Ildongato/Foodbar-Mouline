@@ -65,21 +65,21 @@ if (production) {
     'does-not-exist-release-check',
   ])
     assert.equal((await get(base + path)).status, 404, path);
-  for (const [path, anchor] of [
-    ['contact.html', 'contact'],
-    ['contact-reservatie.html', 'contact'],
-    ['gallery.html', 'fotos'],
-    ['m-catering.html', 'catering'],
-    ['ontbijt.html', 'menu'],
-    ['m-lunch.html', 'menu'],
-    ['m-ontbijt.html', 'menu'],
-    ['m-takeaway.html', 'menu'],
-    ['m-vergaderingen.html', 'catering'],
-    ['privacy.html', 'contact'],
+  for (const [path, destination] of [
+    ['contact.html', '#contact'],
+    ['contact-reservatie.html', '#contact'],
+    ['gallery.html', '#fotos'],
+    ['m-catering.html', '#catering'],
+    ['ontbijt.html', '#menu'],
+    ['m-lunch.html', '#menu'],
+    ['m-ontbijt.html', '#menu'],
+    ['m-takeaway.html', '?menu=takeaway#menu'],
+    ['m-vergaderingen.html', '#catering'],
+    ['privacy.html', '#contact'],
   ]) {
     const result = await get(base + path, { redirect: 'manual' });
     assert.equal(result.status, 301);
-    assert.equal(result.headers.get('location'), base + '#' + anchor);
+    assert.equal(result.headers.get('location'), base + destination);
   }
   assert.equal((await get(origin + '/nieuw/')).status, 200);
 }

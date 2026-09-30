@@ -97,6 +97,20 @@ export default function MoulineHome3() {
   const [requestOpen, setRequestOpen] = useState(false);
   const [privacy, setPrivacy] = useState(false);
   useEffect(() => {
+    // Legacy Google links carry the menu choice through their redirect.
+    // Read after hydration so the static HTML and first client render agree.
+    const followMenuLink = () => {
+      setMode(
+        new URLSearchParams(window.location.search).get('menu') === 'takeaway'
+          ? 'takeaway'
+          : 'onsite',
+      );
+    };
+    followMenuLink();
+    window.addEventListener('popstate', followMenuLink);
+    return () => window.removeEventListener('popstate', followMenuLink);
+  }, []);
+  useEffect(() => {
     // Navigation observation is optional; content never depends on an observer.
     const observer =
       typeof IntersectionObserver === 'undefined'
@@ -118,6 +132,10 @@ export default function MoulineHome3() {
   function chooseMenu(next: MenuMode) {
     setMode(next);
     setMobileOpen(false);
+    const url = new URL(window.location.href);
+    if (next === 'takeaway') url.searchParams.set('menu', next);
+    else url.searchParams.delete('menu');
+    window.history.replaceState(window.history.state, '', url);
   }
   function openContact(next: Intent) {
     // Reveal the mobile panel before the link's native anchor navigation.
@@ -182,8 +200,7 @@ export default function MoulineHome3() {
           if (value !== 'onsite' && value !== 'takeaway')
             throw new Error('mode must be onsite or takeaway');
           flushSync(() => {
-            setMode(value);
-            setMobileOpen(false);
+            chooseMenu(value);
           });
           navigateToSection('menu');
           return { mode: value, section: 'menu', orderPlaced: false };
@@ -311,7 +328,7 @@ export default function MoulineHome3() {
                         event.preventDefault();
                         menuDestination.current = id;
                         flushSync(() => {
-                          if (id === 'menu') setMode('onsite');
+                          if (id === 'menu') chooseMenu('onsite');
                           setMobileOpen(false);
                         });
                         // Base UI releases its scroll lock in the next task.
@@ -406,7 +423,7 @@ export default function MoulineHome3() {
         <div className="menu-chapter">
           <MenuSection
             mode={mode}
-            onModeChange={setMode}
+            onModeChange={chooseMenu}
             onReserve={() => openContact('Reservatie')}
           />
         </div>
