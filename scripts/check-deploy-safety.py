@@ -142,3 +142,40 @@ with patch.object(deploy, 'PRODUCTION', True), patch.object(deploy, 'TARGET', de
         except ValueError: pass
     run.assert_not_called()
 print('Production transport: physical target normalized, staging writes and environment/target mismatches blocked.')
+
+# Exercise the real upload transport. An interrupted/corrupt transfer or refused
+# rename must leave the existing homepage intact; replacement has no empty window.
+with tempfile.TemporaryDirectory() as scratch:
+    source = Path(scratch) / 'index.html'
+    source.write_bytes(b'COMPLETE NEW HOMEPAGE')
+    for failure in ['transfer', 'verification', 'rename', None]:
+        destination = deploy.TARGET + 'index.html'
+        remote = {destination: b'EXISTING LIVE HOMEPAGE'}
+        calls = []
+        def request(path, *options):
+            calls.append((path, options))
+            assert remote[destination] == b'EXISTING LIVE HOMEPAGE'
+            assert not any('DELE ' in option for option in options)
+            if '--upload-file' in options:
+                assert path != destination
+                remote[path] = b'PARTIAL' if failure in ['transfer', 'verification'] else source.read_bytes()
+                if failure == 'transfer': raise RuntimeError('Interrupted transfer')
+                return b''
+            if '--quote' in options:
+                old = options[options.index('--quote') + 1].removeprefix('RNFR ')
+                new = options[options.index('--quote', 1) + 1].removeprefix('RNTO ')
+                assert new == destination and remote[old] == source.read_bytes()
+                if failure == 'rename': raise RuntimeError('Rename refused')
+                remote[new] = remote.pop(old)
+                return b''
+            return remote[path]
+        with patch.dict('os.environ', settings), patch.object(deploy.Transport, 'request', side_effect=request):
+            try:
+                deploy.Transport().upload('index.html', source)
+                assert failure is None
+            except RuntimeError:
+                assert failure is not None
+        assert remote[destination] == (b'EXISTING LIVE HOMEPAGE' if failure else source.read_bytes())
+        if failure in ['transfer', 'verification']:
+            assert not any('--quote' in options for _, options in calls)
+print('Atomic upload passed: incomplete bytes, corrupt uploads and rename failure preserve the existing homepage; successful replacement is verified first.')

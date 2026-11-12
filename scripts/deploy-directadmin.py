@@ -9,6 +9,7 @@ from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import sys
+import uuid
 from urllib.parse import quote
 
 PARENT = '/domains/mouline.be/public_html/'
@@ -81,7 +82,15 @@ class Transport:
     def upload(self, relative, path):
         if not safe_relative(relative) or (PRODUCTION and relative.split('/')[0] == 'nieuw'):
             raise ValueError('Invalid build path')
-        self.request(TARGET + relative, '--ftp-create-dirs', '--upload-file', str(path))
+        # Keep the currently served file intact throughout transfer and verification.
+        # Rename within the same directory only once the complete bytes match.
+        # If the server refuses replacement, stop; never delete the live file first.
+        temporary = TARGET + relative + '.upload-' + uuid.uuid4().hex
+        self.request(temporary, '--ftp-create-dirs', '--upload-file', str(path))
+        if self.request(temporary) != Path(path).read_bytes():
+            raise RuntimeError('Temporary upload verification failed: ' + relative)
+        self.request(TARGET, '--quote', 'RNFR ' + temporary,
+                     '--quote', 'RNTO ' + TARGET + relative, '--list-only')
 
 
 def safe_relative(path):

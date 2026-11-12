@@ -31,7 +31,7 @@ Echte verzending vereist `NEXT_PUBLIC_CONTACT_ENDPOINT`, lokaal en in de GitHub 
 - `lib/data/onsite.json` en `lib/data/takeaway.json`: strikt gescheiden menukaarten.
 - `lib/home3-gallery.ts`: vijftien galerijfoto’s en gecureerde sessiesets van zes beelden. Het wuivende portret van Caroline staat uitsluitend bij Over Mouline.
 - `lib/data/google-reviews.json`: handmatig gecontroleerde Google-citaten met bronlinks.
-- `lib/closures.ts`: uitzonderlijke sluitingen en demoflag.
+- `lib/closures.ts`: uitzonderlijke sluitingen en demoflag. Brugdagen worden jaarlijks berekend: maandag vóór een feestdag op dinsdag, vrijdag na een feestdag op donderdag. Feestdagen op andere weekdagen voegen geen brugdag toe.
 - `components/home3/jobs.tsx`: de twee vacatures; de navigatie gebruikt `#vacatures`.
 
 Garnaalsla ter plaatse kost € 8,40, bevestigd op 25 september 2026. De takeawaykaart blijft onafhankelijk (€ 6,80). Canonical en sitemap verwijzen naar `https://www.mouline.be/`; de GitHub-weergave blijft `noindex, follow` totdat de definitieve domeinhosting is bevestigd.

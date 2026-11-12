@@ -47,9 +47,31 @@ assert.deepEqual(calendar.closureReasons('2026-07-18'), []);
 assert(calendar.closureReasons('2026-07-19').includes('Jaarlijkse vakantie'));
 assert(calendar.closureReasons('2031-07-30').includes('Jaarlijkse vakantie'));
 assert.deepEqual(calendar.closureReasons('2026-07-31'), []);
-assert(calendar.closureReasons('2026-11-12').includes('Brugdag'));
-assert(calendar.closureReasons('2027-05-07').includes('Brugdag'));
-assert.deepEqual(calendar.closureReasons('2027-11-12'), []);
+// Regression: Wednesday 11 November closes only that day, never Thursday 12th.
+assert.deepEqual(calendar.closureReasons('2026-11-10'), []);
+assert.deepEqual(calendar.closureReasons('2026-11-11'), ['Wapenstilstand']);
+assert.deepEqual(calendar.closureReasons('2026-11-12'), []);
+assert.deepEqual(calendar.closureReasons('2026-11-13'), []);
+assert.equal(calendar.closureDemoEnabled, false);
+assert.equal(calendar.getClosureNotice(new Date('2026-11-12T09:24:00Z')), null);
+assert.deepEqual(calendar.getClosureNotice(new Date('2026-11-11T12:00:00Z')), {
+  title: 'Even gesloten',
+  message: 'Mouline is vandaag gesloten.',
+  detail: 'Wapenstilstand · 11 november 2026',
+});
+// Brussels midnight: the holiday ends at 23:00 UTC in November.
+assert(calendar.getClosureNotice(new Date('2026-11-11T22:59:59Z')));
+assert.equal(calendar.getClosureNotice(new Date('2026-11-11T23:00:00Z')), null);
+// Tuesday -> Monday bridge; Thursday -> Friday bridge, including movable holidays.
+for (const date of ['2025-11-10', '2027-11-12', '2026-05-15', '2027-05-07', '2026-01-02', '2029-12-31'])
+  assert(calendar.closureReasons(date).includes('Brugdag'), date);
+// No added day for Monday, Wednesday, Friday, Saturday or Sunday holidays.
+for (const date of ['2024-11-08', '2024-11-12', '2025-11-12', '2026-12-24', '2026-12-28', '2026-08-14', '2026-08-17', '2026-10-30', '2026-11-02'])
+  assert.deepEqual(calendar.closureReasons(date), [], date);
+const tuesdayBridge = calendar.getClosureNotice(new Date('2025-11-10T12:00:00Z'));
+assert.match(tuesdayBridge.detail, /10 november 2025 t.e.m. 11 november 2025/);
+const newYearBridge = calendar.getClosureNotice(new Date('2029-12-31T12:00:00Z'));
+assert.match(newYearBridge.detail, /31 december 2029 t.e.m. 1 januari 2030/);
 assert.equal(
   calendar.brusselsDate(new Date('2026-12-31T23:30:00Z')),
   '2027-01-01',

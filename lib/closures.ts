@@ -4,10 +4,6 @@ export const closureDemoEnabled = false;
 export const closureConfig = {
   timeZone: 'Europe/Brussels',
   annualVacation: { start: '07-19', end: '07-30' },
-  exceptions: [
-    { date: '2026-11-12', reason: 'Brugdag' },
-    { date: '2027-05-07', reason: 'Brugdag' },
-  ],
 };
 
 const fixedHolidays = [
@@ -60,7 +56,17 @@ export function statutoryHolidays(year: number) {
 
 export function closureReasons(date: string): string[] {
   const monthDay = date.slice(5);
-  const { annualVacation, exceptions } = closureConfig;
+  const { annualVacation } = closureConfig;
+  // Client rule: Monday before a Tuesday holiday, Friday after a Thursday holiday.
+  // Look up the adjacent date's year too, so New Year's Day is handled correctly.
+  const weekday = new Date(`${date}T12:00:00Z`).getUTCDay();
+  const adjacentDate =
+    weekday === 1 ? shiftDate(date, 1) : weekday === 5 ? shiftDate(date, -1) : null;
+  const bridgeDay =
+    adjacentDate !== null &&
+    statutoryHolidays(Number(adjacentDate.slice(0, 4))).some(
+      (holiday) => holiday.date === adjacentDate,
+    );
   return [
     ...(monthDay >= annualVacation.start && monthDay <= annualVacation.end
       ? ['Jaarlijkse vakantie']
@@ -68,7 +74,7 @@ export function closureReasons(date: string): string[] {
     ...statutoryHolidays(Number(date.slice(0, 4)))
       .filter((holiday) => holiday.date === date)
       .map((holiday) => holiday.reason),
-    ...exceptions.filter((day) => day.date === date).map((day) => day.reason),
+    ...(bridgeDay ? ['Brugdag'] : []),
   ];
 }
 

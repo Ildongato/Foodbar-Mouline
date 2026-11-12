@@ -6,6 +6,12 @@ Zie [het productierapport en rollbackplan](PRODUCTION-RELEASE-2026-09-30.md).
 De onderstaande stagingdocumentatie beschrijft de eerdere inrichting;
 `/nieuw/` blijft als bevroren vergelijkingsversie aanwezig.
 
+Sinds 12 november 2026 wordt elk gewijzigd bestand eerst onder een unieke tijdelijke
+naam geüpload en volledig teruggelezen. Pas bij identieke inhoud vervangt een
+server-side rename het doelbestand. Bij een upload-, verificatie- of renamefout
+blijft het bestaande doelbestand staan; er is geen delete-fallback. De homepage
+wordt nog steeds als laatste vervangen, nadat alle bijbehorende assets klaarstaan.
+
 ## Historische testdeployment (25 september 2026)
 
 ## Omgeving en audit
