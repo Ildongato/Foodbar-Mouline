@@ -1,9 +1,27 @@
-/** Only show notices on the configured holidays, vacation and bridge days. */
+/** Date-limited announcements plus configured holidays, vacation and bridge days. */
 export const closureDemoEnabled = false;
 
 export const closureConfig = {
   timeZone: 'Europe/Brussels',
   annualVacation: { start: '07-19', end: '07-30' },
+  announcements: [
+    {
+      start: '2026-11-12',
+      end: '2026-11-13',
+      hours: {
+        date: '2026-11-13',
+        opens: '08:00',
+        closes: '14:00',
+        display: '8u tot 14u · enkel uithaal',
+      },
+      notice: {
+        title: 'Vrijdag enkel uithaal',
+        message:
+          'Wegens een familiaal overlijden zijn we vrijdag 13 november enkel open voor uithaal van 8u tot 14u. Sorry voor het ongemak en bedankt voor uw begrip!',
+        detail: 'Vrijdag 13 november 2026 · 8u–14u',
+      },
+    },
+  ],
 };
 
 const fixedHolidays = [
@@ -89,6 +107,14 @@ export function brusselsDate(now: Date) {
   return `${get('year')}-${get('month')}-${get('day')}`;
 }
 
+export function getTemporaryOpeningHours(now: Date) {
+  const date = brusselsDate(now);
+  return (
+    closureConfig.announcements.find(({ hours }) => hours.date === date)?.hours ??
+    null
+  );
+}
+
 function formatDate(date: string) {
   return new Intl.DateTimeFormat('nl-BE', {
     timeZone: closureConfig.timeZone,
@@ -113,6 +139,10 @@ export function getClosureNotice(
         'Mouline is vandaag gesloten. We zien je graag terug vanaf morgen.',
       detail: `Demo · Uitzonderlijke sluiting · ${formatDate(date)}`,
     };
+  const announcement = closureConfig.announcements.find(
+    ({ start, end }) => date >= start && date <= end,
+  );
+  if (announcement) return announcement.notice;
   const reasons = closureReasons(date);
   if (!reasons.length) return null;
   let start = date;

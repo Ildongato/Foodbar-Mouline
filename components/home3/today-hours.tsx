@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react';
 import { compactOpeningHours, todayHours } from '@/lib/business';
+import { getTemporaryOpeningHours } from '@/lib/closures';
 import CulinaryIcon from './culinary-icon';
 
 export default function TodayHours() {
-  const [today, setToday] = useState<ReturnType<typeof todayHours>>();
+  const [today, setToday] = useState<{ opens: string | null; display: string }>();
 
   useEffect(() => {
-    const updateDay = () => setToday(todayHours());
+    const updateDay = () => {
+      const now = new Date();
+      const hours = todayHours(now);
+      const temporaryHours = getTemporaryOpeningHours(now);
+      setToday(hours && temporaryHours ? { ...hours, ...temporaryHours } : hours);
+    };
     updateDay();
     const timer = setInterval(updateDay, 60_000);
     return () => clearInterval(timer);

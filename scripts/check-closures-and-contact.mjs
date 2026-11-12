@@ -53,7 +53,6 @@ assert.deepEqual(calendar.closureReasons('2026-11-11'), ['Wapenstilstand']);
 assert.deepEqual(calendar.closureReasons('2026-11-12'), []);
 assert.deepEqual(calendar.closureReasons('2026-11-13'), []);
 assert.equal(calendar.closureDemoEnabled, false);
-assert.equal(calendar.getClosureNotice(new Date('2026-11-12T09:24:00Z')), null);
 assert.deepEqual(calendar.getClosureNotice(new Date('2026-11-11T12:00:00Z')), {
   title: 'Even gesloten',
   message: 'Mouline is vandaag gesloten.',
@@ -61,7 +60,35 @@ assert.deepEqual(calendar.getClosureNotice(new Date('2026-11-11T12:00:00Z')), {
 });
 // Brussels midnight: the holiday ends at 23:00 UTC in November.
 assert(calendar.getClosureNotice(new Date('2026-11-11T22:59:59Z')));
-assert.equal(calendar.getClosureNotice(new Date('2026-11-11T23:00:00Z')), null);
+// The one-off announcement is informational, not a full-day closure.
+const takeawayNotice = {
+  title: 'Vrijdag enkel uithaal',
+  message:
+    'Wegens een familiaal overlijden zijn we vrijdag 13 november enkel open voor uithaal van 8u tot 14u. Sorry voor het ongemak en bedankt voor uw begrip!',
+  detail: 'Vrijdag 13 november 2026 · 8u–14u',
+};
+for (const instant of [
+  '2026-11-11T23:00:00Z', // Thursday 00:00 in Brussels
+  '2026-11-12T09:24:00Z',
+  '2026-11-12T23:00:00Z', // Friday 00:00 in Brussels
+  '2026-11-13T07:00:00Z',
+  '2026-11-13T13:00:00Z', // Still displayed after takeaway hours, as requested
+  '2026-11-13T22:59:59Z',
+])
+  assert.deepEqual(calendar.getClosureNotice(new Date(instant)), takeawayNotice, instant);
+assert.equal(calendar.getClosureNotice(new Date('2026-11-13T23:00:00Z')), null);
+assert.equal(calendar.getClosureNotice(new Date('2026-11-14T12:00:00Z')), null);
+assert.equal(calendar.getClosureNotice(new Date('2027-11-13T12:00:00Z')), null);
+assert.equal(calendar.getTemporaryOpeningHours(new Date('2026-11-12T22:59:59Z')), null);
+for (const instant of ['2026-11-12T23:00:00Z', '2026-11-13T12:00:00Z', '2026-11-13T22:59:59Z'])
+  assert.deepEqual(calendar.getTemporaryOpeningHours(new Date(instant)), {
+    date: '2026-11-13',
+    opens: '08:00',
+    closes: '14:00',
+    display: '8u tot 14u · enkel uithaal',
+  });
+assert.equal(calendar.getTemporaryOpeningHours(new Date('2026-11-13T23:00:00Z')), null);
+assert.equal(calendar.getTemporaryOpeningHours(new Date('2027-11-13T12:00:00Z')), null);
 // Tuesday -> Monday bridge; Thursday -> Friday bridge, including movable holidays.
 for (const date of ['2025-11-10', '2027-11-12', '2026-05-15', '2027-05-07', '2026-01-02', '2029-12-31'])
   assert(calendar.closureReasons(date).includes('Brugdag'), date);
